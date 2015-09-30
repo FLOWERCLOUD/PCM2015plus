@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="main_window">
+    <file>Resources/openFile.png</file>
+  </qresource>
+</RCC>
