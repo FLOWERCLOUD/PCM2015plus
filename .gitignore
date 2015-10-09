@@ -245,3 +245,4 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 
+PCM/GeneratedFiles/qrc_main_window.cpp
