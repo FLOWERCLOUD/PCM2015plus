@@ -246,3 +246,6 @@ FakesAssemblies/
 *.opt
 
 PCM/GeneratedFiles/qrc_main_window.cpp
+**/GeneratedFiles/*
+**/GeneratedFiles/Debug/
+**/GeneratedFiles/Release/
