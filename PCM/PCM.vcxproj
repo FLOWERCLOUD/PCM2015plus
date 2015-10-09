@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -164,24 +164,24 @@
     <ClCompile Include="file_io.cpp" />
     <ClCompile Include="gco-v3.0\GCoptimization.cpp" />
     <ClCompile Include="GCop.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_caculateNorm.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_DeformaleRegistration.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_caculateNorm.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_DeformaleRegistration.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_dlg_graphcuts.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_dlg_graphcuts.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_dlg_Jlinkage.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_dlg_Jlinkage.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_dlg_propagate.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_LayerDialog.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_maching_state.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_propagate_withThread.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_trajectory_classifier.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_dlg_propagate.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_LayerDialog.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_maching_state.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_propagate_withThread.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_trajectory_classifier.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -190,19 +190,19 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_dlg_graphcuts.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_dlg_graphcuts.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_dlg_Jlinkage.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_dlg_Jlinkage.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_dlg_propagate.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_LayerDialog.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_maching_state.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_propagate_withThread.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_trajectory_classifier.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_dlg_propagate.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_LayerDialog.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_maching_state.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_propagate_withThread.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_trajectory_classifier.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -220,7 +220,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_paint_canvas.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_paint_canvas.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -238,7 +238,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_paint_canvas.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_paint_canvas.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
