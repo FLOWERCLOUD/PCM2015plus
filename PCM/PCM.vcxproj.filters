@@ -56,6 +56,9 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_main_window.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_main_window.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\qrc_main_window.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -67,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_paint_canvas.cpp">
       <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_paint_canvas.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="paint_canvas.cpp">
       <Filter>Visualize</Filter>
@@ -95,6 +101,9 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_trajectory_classifier.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_trajectory_classifier.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
     <ClCompile Include="trajectory_classifier.cpp">
       <Filter>Algorithm</Filter>
     </ClCompile>
@@ -103,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_DeformaleRegistration.cpp">
       <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_DeformaleRegistration.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="spectral_clustering.cpp">
       <Filter>Algorithm</Filter>
@@ -122,8 +134,14 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_dlg_Jlinkage.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_dlg_Jlinkage.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_dlg_graphcuts.cpp">
       <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_dlg_graphcuts.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="co_segmentation.cpp">
       <Filter>Algorithm</Filter>
@@ -176,6 +194,18 @@
     <ClCompile Include="main.cpp">
       <Filter>Visualize</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_caculateNorm.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_dlg_propagate.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_maching_state.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_propagate_withThread.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
     <ClCompile Include="caculateNorm.cpp">
       <Filter>Algorithm</Filter>
     </ClCompile>
@@ -184,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_LayerDialog.cpp">
       <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_LayerDialog.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
