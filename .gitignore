@@ -37,10 +37,10 @@ boost_1_59_0/
 eigen-3-1-4/
 libQGLViewer-2.5.2/
 PCM/GeneratedFiles/
-!glut.*
-!glut32.*
-!glut64.*
-!QGLViewer2.*
+!x64/*/glut.*
+!x64/*/glut32.*
+!x64/*/glut64.*
+!x64/*/QGLViewer2.*
 
 Win32/
 *.txt
