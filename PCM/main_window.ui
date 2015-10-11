@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>main_windowClass</class>
+ <widget class="QMainWindow" name="main_windowClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1122</width>
+    <height>592</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>main_window</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1122</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFiles">
+    <property name="title">
+     <string>Files</string>
+    </property>
+    <addaction name="actionImportFiles"/>
+   </widget>
+   <widget class="QMenu" name="menuPaint">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionSet_Visible"/>
+    <addaction name="actionSet_Invisible"/>
+    <addaction name="actionObject_Color"/>
+    <addaction name="actionVertex_Color"/>
+    <addaction name="actionLabel_Color"/>
+    <addaction name="actionOriginal_Location"/>
+    <addaction name="actionShow_Tracjectory"/>
+    <addaction name="actionDont_Trace"/>
+    <addaction name="actionShow_Graph_WrapBox"/>
+    <addaction name="actionShow_EdgeVertexs"/>
+   </widget>
+   <widget class="QMenu" name="menuSelect">
+    <property name="title">
+     <string>Select</string>
+    </property>
+    <addaction name="actionScene_Mode"/>
+    <addaction name="actionSelect_Mode"/>
+   </widget>
+   <widget class="QMenu" name="menuAlgorithm">
+    <property name="title">
+     <string>Algorithm</string>
+    </property>
+    <addaction name="actionClustering"/>
+    <addaction name="actionRegister"/>
+    <addaction name="actionSpectral_Cluster"/>
+    <addaction name="actionGraphCut"/>
+    <addaction name="actionCalculateNorm"/>
+    <addaction name="actionClusterAll"/>
+    <addaction name="actionVisDistortion"/>
+    <addaction name="actionGCopti"/>
+    <addaction name="actionPlanFit"/>
+    <addaction name="actionPropagate"/>
+   </widget>
+   <addaction name="menuFiles"/>
+   <addaction name="menuPaint"/>
+   <addaction name="menuSelect"/>
+   <addaction name="menuAlgorithm"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionImportFiles"/>
+   <addaction name="actionSet_Visible"/>
+   <addaction name="actionSet_Invisible"/>
+   <addaction name="actionShow_Tracjectory"/>
+   <addaction name="actionDont_Trace"/>
+   <addaction name="separator"/>
+   <addaction name="actionObject_Color"/>
+   <addaction name="actionVertex_Color"/>
+   <addaction name="actionLabel_Color"/>
+   <addaction name="actionOriginal_Location"/>
+   <addaction name="separator"/>
+   <addaction name="actionSelect_Mode"/>
+   <addaction name="actionScene_Mode"/>
+   <addaction name="separator"/>
+   <addaction name="actionClustering"/>
+   <addaction name="actionPropagate"/>
+   <addaction name="separator"/>
+   <addaction name="actionShow_Graph_WrapBox"/>
+   <addaction name="actionShow_EdgeVertexs"/>
+   <addaction name="separator"/>
+   <addaction name="actionButtonback"/>
+   <addaction name="actionButton2stop"/>
+   <addaction name="actionButtonRunOrPause"/>
+   <addaction name="actionButtonadvance"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>200</width>
+     <height>38</height>
+    </size>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <widget class="QTreeWidget" name="treeWidget">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>300</width>
+       <height>431</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>0</height>
+      </size>
+     </property>
+     <column>
+      <property name="text">
+       <string notr="true">1</string>
+      </property>
+     </column>
+    </widget>
+    <widget class="QSpinBox" name="LayerSpinBox">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>430</y>
+       <width>301</width>
+       <height>61</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <action name="actionImportFiles">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/openFile.png</normaloff>Resources/openFile.png</iconset>
+   </property>
+   <property name="text">
+    <string>ImportFiles</string>
+   </property>
+  </action>
+  <action name="actionSet_Visible">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/visible.png</normaloff>Resources/visible.png</iconset>
+   </property>
+   <property name="text">
+    <string>Set Visible</string>
+   </property>
+  </action>
+  <action name="actionSet_Invisible">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/invisible.png</normaloff>Resources/invisible.png</iconset>
+   </property>
+   <property name="text">
+    <string>Set Invisible</string>
+   </property>
+  </action>
+  <action name="actionScene_Mode">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/scene.png</normaloff>Resources/scene.png</iconset>
+   </property>
+   <property name="text">
+    <string>Scene Mode</string>
+   </property>
+  </action>
+  <action name="actionSelect_Mode">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/select.png</normaloff>Resources/select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Select Mode</string>
+   </property>
+  </action>
+  <action name="actionClustering">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/categorize.png</normaloff>Resources/categorize.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clustering</string>
+   </property>
+  </action>
+  <action name="actionObject_Color">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/tree.png</normaloff>Resources/tree.png</iconset>
+   </property>
+   <property name="text">
+    <string>Object Color</string>
+   </property>
+  </action>
+  <action name="actionVertex_Color">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/leaf.png</normaloff>Resources/leaf.png</iconset>
+   </property>
+   <property name="text">
+    <string>Vertex Color</string>
+   </property>
+  </action>
+  <action name="actionLabel_Color">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/label.png</normaloff>Resources/label.png</iconset>
+   </property>
+   <property name="text">
+    <string>Label Color</string>
+   </property>
+  </action>
+  <action name="actionOriginal_Location">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/tree2.png</normaloff>Resources/tree2.png</iconset>
+   </property>
+   <property name="text">
+    <string>Original Location</string>
+   </property>
+  </action>
+  <action name="actionShow_Tracjectory">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/show_trace.png</normaloff>Resources/show_trace.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Tracjectory</string>
+   </property>
+  </action>
+  <action name="actionDont_Trace">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/dont_trace.png</normaloff>Resources/dont_trace.png</iconset>
+   </property>
+   <property name="text">
+    <string>Dont Trace</string>
+   </property>
+  </action>
+  <action name="actionRegister">
+   <property name="text">
+    <string>Register</string>
+   </property>
+  </action>
+  <action name="actionSpectral_Cluster">
+   <property name="text">
+    <string>Spectral Cluster</string>
+   </property>
+  </action>
+  <action name="actionGraphCut">
+   <property name="text">
+    <string>GraphCut</string>
+   </property>
+  </action>
+  <action name="actionCalculateNorm">
+   <property name="text">
+    <string>CalculateNorm</string>
+   </property>
+  </action>
+  <action name="actionClusterAll">
+   <property name="text">
+    <string>ClusterAll</string>
+   </property>
+  </action>
+  <action name="actionVisDistortion">
+   <property name="text">
+    <string>VisDistortion</string>
+   </property>
+  </action>
+  <action name="actionGCopti">
+   <property name="text">
+    <string>GCopti</string>
+   </property>
+  </action>
+  <action name="actionPlanFit">
+   <property name="text">
+    <string>PlanFit</string>
+   </property>
+  </action>
+  <action name="actionShow_Graph_WrapBox">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/nnolinkNode.png</normaloff>Resources/nnolinkNode.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Graph WrapBox</string>
+   </property>
+  </action>
+  <action name="actionShow_EdgeVertexs">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/NoedgeVertexs.png</normaloff>Resources/NoedgeVertexs.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show EdgeVertexs</string>
+   </property>
+  </action>
+  <action name="actionButtonback">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/buttonback.png</normaloff>Resources/buttonback.png</iconset>
+   </property>
+   <property name="text">
+    <string>buttonback</string>
+   </property>
+  </action>
+  <action name="actionButton2stop">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/button2stop.png</normaloff>Resources/button2stop.png</iconset>
+   </property>
+   <property name="text">
+    <string>button2stop</string>
+   </property>
+  </action>
+  <action name="actionButtonRunOrPause">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/buttonstop2run.png</normaloff>Resources/buttonstop2run.png</iconset>
+   </property>
+   <property name="text">
+    <string>buttonstopORrun</string>
+   </property>
+  </action>
+  <action name="actionButtonadvance">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/buttonadvance.png</normaloff>Resources/buttonadvance.png</iconset>
+   </property>
+   <property name="text">
+    <string>buttonadvance</string>
+   </property>
+  </action>
+  <action name="actionPropagate">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/propagate.png</normaloff>Resources/propagate.png</iconset>
+   </property>
+   <property name="text">
+    <string>propagate</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="main_window.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+ <rdmgr>
+  <timestamp type="u64_t">1408162143</timestamp>
+  <hostname>Tao-PC</hostname>
+  <os>windows</os>
+  <product>Intel® Inspector XE 2013 Update 7</product>
+  <buildNumber type="s32_t">304368</buildNumber>
+  <logicalCPUCount type="s32_t">8</logicalCPUCount>
+  <CPUFrequency type="s64_t">3500000000</CPUFrequency>
+  <collectionTimeBegin type="u64_t">1408162143</collectionTimeBegin>
+  <collectionTimeEnd type="u64_t">1408162254</collectionTimeEnd>
+  <variables>
+   <at>mi2</at>
+  </variables>
+ </rdmgr>
+</root>

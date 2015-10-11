@@ -20,7 +20,7 @@
 *.lai
 *.la
 *.a
-#*.lib
+*.lib
 
 # Executables
 *.exe
@@ -37,14 +37,34 @@ boost_1_59_0/
 eigen-3-1-4/
 libQGLViewer-2.5.2/
 PCM/GeneratedFiles/
-!x64/Release/glut.lib
-!x64/Release/glut.dll
-!x64/Release/glut32.lib
-!x64/Release/glut32.dll
-!x64/Release/glut64.lib
-!x64/Release/glut64.dll
-!x64/Release/QGLViewer2.dll
-!x64/Release/QGLViewer2.lib
+
+
+# Build results edit by huayun
+#before
+#[Dd]ebug/
+#[Dd]ebugPublic/
+#[Rr]elease/
+#[Rr]eleases/
+#x64/
+#x86/
+#build/
+#bld/
+#[Bb]in/
+#[Oo]bj/
+#after
+PCM/x64/Debug/
+PCM/x64/Release/
+
+x64/*/*
+!x64/*/glut*
+!x64/*/QGL*
+
+QGLViewer/x64/
+QGLViewer/Win32/
+QGLViewer/GeneratedFiles
+QGLViewer/debug/
+QGLViewer/release/
+
 
 Win32/
 *.txt
@@ -68,17 +88,7 @@ PCM.sdf
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-build/
-bld/
-[Bb]in/
-[Oo]bj/
+
 
 # Visual Studo 2015 cache/options directory
 .vs/
@@ -257,3 +267,12 @@ PCM/GeneratedFiles/qrc_main_window.cpp
 **/GeneratedFiles/*
 **/GeneratedFiles/Debug/
 **/GeneratedFiles/Release/
+
+x64/Release!/glut.lib
+!x64/Release/glut.dll
+!x64/Release/glut32.lib
+!x64/Release/glut32.dll
+!x64/Release/glut64.lib
+!x64/Release/glut64.dll
+!x64/Release/QGLViewer2.dll
+!x64/Release/QGLViewer2.lib
