@@ -37,14 +37,14 @@ boost_1_59_0/
 eigen-3-1-4/
 libQGLViewer-2.5.2/
 PCM/GeneratedFiles/
-!x64\Release\glut.lib
-!x64\Release\glut.dll
-!x64\Release\glut32.lib
-!x64\Release\glut32.dll
-!x64\Release\glut64.lib
-!x64\Release\glut64.dll
-!x64\Release\QGLViewer2.dll
-!x64\Release\QGLViewer2.lib
+!/x64/Release/glut.lib
+!/x64/Release/glut.dll
+!/x64/Release/glut32.lib
+!/x64/Release/glut32.dll
+!/x64/Release/glut64.lib
+!/x64/Release/glut64.dll
+!/x64/Release/QGLViewer2.dll
+!/x64/Release/QGLViewer2.lib
 
 Win32/
 *.txt
