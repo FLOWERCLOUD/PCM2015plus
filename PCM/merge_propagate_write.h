@@ -333,6 +333,95 @@ protected:
 
 			}
 	}
+	void generateStandaraPLY()
+	{
+		SampleSet& smpset =  SampleSet::get_instance();
+		IndexType frameNum = smpset.size();
+
+	
+		
+		ScalarType bottomTox ;
+		ScalarType bottomToy ;
+		ScalarType bottomToz ;
+		ScalarType maxscale = -1;
+		ScalarType wrapboxminx ,wrapboxminy ,wrapboxminz;
+		wrapboxminx = wrapboxminy = wrapboxminz =1000;
+		ScalarType wrapboxmaxx ,wrapboxmaxy ,wrapboxmaxz;
+		wrapboxmaxx = wrapboxmaxy = wrapboxmaxz = -1000;
+		Sample* smp;
+		for( IndexType frameId = 0 ;frameId <frameNum ;++frameId)
+		{
+			smp = &(SampleSet::get_instance()[frameId]);
+			ScalarType xmin ,xmax ,ymin ,ymax , zmin ,zmax;
+			xmin = ymin = zmin = 10000;
+			xmax = ymax = zmax = -10000;
+			for( auto vbitr = smp->begin() ; vbitr != smp->end(); ++vbitr ){
+				ScalarType xtmp = (*vbitr)->x();
+				if( xtmp < xmin ) xmin = xtmp;
+				ScalarType ytmp = (*vbitr)->y();
+				if( ytmp < ymin) ymin = ytmp;
+				ScalarType ztmp = (*vbitr)->z();
+				if( ztmp < zmin )zmin = ztmp;
+
+			}
+			for( auto vbitr = smp->begin() ; vbitr != smp->end(); ++vbitr ){
+				ScalarType xtmp = (*vbitr)->x();
+				if( xtmp > xmax ) xmax = xtmp;
+				ScalarType ytmp = (*vbitr)->y();
+				if( ytmp > ymax) ymax = ytmp;
+				ScalarType ztmp = (*vbitr)->z();
+				if( ztmp > zmax )zmax = ztmp;
+
+			}
+			wrapboxminx = wrapboxminx<xmin? wrapboxminx:xmin;
+			wrapboxminy = wrapboxminy<ymin? wrapboxminy:ymin;
+			wrapboxminz = wrapboxminz<zmin? wrapboxminz:zmin;
+			wrapboxmaxx = wrapboxmaxx> xmax? wrapboxmaxx : xmax;
+			wrapboxmaxy = wrapboxmaxy> ymax? wrapboxmaxy : ymax;
+			wrapboxmaxz = wrapboxmaxz> zmax? wrapboxmaxz : zmax;
+		}
+		/* 映射到 [0 ，1 ]区间*/
+		ScalarType xscale = (wrapboxmaxx - wrapboxminx);
+		ScalarType yscale = (wrapboxmaxy - wrapboxminy);
+		ScalarType zscale = (wrapboxmaxz - wrapboxminz);
+		maxscale =( maxscale=xscale>=yscale?xscale:yscale)>= zscale ? maxscale : zscale;  
+		bottomTox = 0 - wrapboxminx;
+		bottomToy = 0 - wrapboxminy;
+		bottomToz = 0 - wrapboxminz;
+
+		for( IndexType i = 0 ;i<frameNum ;++i){
+			char path[100];
+			strcpy(path ,output_file_path_);
+			char fullPath[250];
+			sprintf( fullPath ,"%s%s%.3d%s",path ,prefix_, i ,".ply");     //必须加入.3d ，使得文件排序正常
+			std::ofstream outfile( fullPath , std::ofstream::out);
+
+			outfile<<"ply"<<std::endl;
+			outfile<<"format ascii 1.0"<<std::endl;
+			IndexType vtxnum = smpset[i].num_vertices();
+			outfile<<"element vertex "<< vtxnum<<std::endl;
+			outfile<<"property   float   x"<<std::endl;
+			outfile<<"property   float   y "<<std::endl;
+			outfile<<"property   float   z "<<std::endl;
+			outfile<<"property   float   nx"<<std::endl;
+			outfile<<"property   float   ny "<<std::endl;
+			outfile<<"property   float   nz "<<std::endl;
+			outfile<<"property   uchar red "<<std::endl;
+			outfile<<"property   uchar   green"<<std::endl;
+			outfile<<"property   uchar  blue"<<std::endl;
+			outfile<<"end_header"<<std::endl;
+			for( auto  vtxbitr = smpset[i].begin() ; vtxbitr != smpset[i].end() ;++vtxbitr ){
+				Vertex& vtx = **vtxbitr;
+				ColorType pClr = getLabelColor( &vtx );
+
+				outfile<< (vtx.x()+ bottomTox)/maxscale <<" "<<(vtx.y()+bottomToy)/maxscale <<" "<< (vtx.z()+ bottomToz)/maxscale<<" "<<vtx.nx()<<" "<<vtx.ny()<<" "<<vtx.nz()<<" "<<pClr(0 ,0)<<" "<<pClr(1,0)<<" "<<pClr(2,0)<<std::endl;
+
+			}
+
+			outfile.close();
+
+		}
+	}
 
 	void generateSamplePly( char* _label_filename )
 	{
@@ -515,6 +604,25 @@ public:
 	void run()
 	{
 		generatePly();
+
+	}
+
+};
+class ProxyStandaraGrayColorPly : public ProxyPly
+{
+public: 
+	ProxyStandaraGrayColorPly( char* plyOutputDir ,char* _prefix ):
+	  ProxyPly(plyOutputDir,_prefix){}
+public:
+	ColorType getLabelColor(void* vtx)
+	{
+		ColorType m( 207,207,207,1);
+		return m;
+
+	}
+	void run()
+	{
+		generateStandaraPLY();
 
 	}
 
@@ -752,7 +860,7 @@ protected:
 
 };
 
-
+#ifdef COMPILE_ALL
 char fandata[30][250] ={
 	"H:\\povay_pointcloud\\point_data\\fans_ply\\",	"H:\\povay_pointcloud\\point_data\\fans_ply\\",	"H:\\povay_pointcloud\\point_data\\fans_ply\\",	
 	"H:\\povay_pointcloud\\point_data\\fans_ply\\",	"H:\\povay_pointcloud\\point_data\\fans_ply\\",	"H:\\povay_pointcloud\\point_data\\fans_ply\\",	
@@ -1294,6 +1402,26 @@ ProxyProOrigAndPly girlAterPropagate0_29_center10(
 	strcat( girlRaiseHandDir[9] ,"Propagation_Info\\Propagation_Info\\centeris10\\corroutput0_29.txt")
 
 	);
+#endif
+char horsenew[30][250] = {
+	"F:\\VisualcamerAndYaobing\\horsebackinter08\\backinter08\\out\\view00\\norm\\" ,
+	"F:\\VisualcamerAndYaobing\\horsebackinter08\\backinter08\\out\\view01\\norm\\" ,
+	"F:\\VisualcamerAndYaobing\\horsebackinter08\\backinter08\\out\\view02\\norm\\" ,
+	"F:\\VisualcamerAndYaobing\\horsebackinter08\\backinter08\\out\\view03\\norm\\" ,
+	"F:\\VisualcamerAndYaobing\\horsebackinter08\\backinter08\\out\\view04\\norm\\" ,
+	"F:\\VisualcamerAndYaobing\\horsebackinter08\\backinter08\\out\\view05\\norm\\" ,
+	"F:\\VisualcamerAndYaobing\\horsebackinter08\\backinter08\\out\\view06\\norm\\" ,
+	"F:\\VisualcamerAndYaobing\\horsebackinter08\\backinter08\\out\\view07\\norm\\" ,
+	"F:\\VisualcamerAndYaobing\\horsebackinter08\\backinter08\\out\\view08\\norm\\" 
+};
+ProxyRedColorPly horsrplyview0( horsenew[0],"horse_view_0_0_addnorm_file_" );
+ProxyRedColorPly horsrplyview1( horsenew[1],"horse_view_0_1_addnorm_file_" );
+ProxyRedColorPly horsrplyview2( horsenew[2],"horse_view_0_2_addnorm_file_" );
+ProxyRedColorPly horsrplyview3( horsenew[3],"horse_view_0_3_addnorm_file_" );
+ProxyRedColorPly horsrplyview4( horsenew[4],"horse_view_0_4_addnorm_file_" );
+ProxyRedColorPly horsrplyview5( horsenew[5],"horse_view_0_5_addnorm_file_" );
+ProxyRedColorPly horsrplyview6( horsenew[6],"horse_view_0_6_addnorm_file_" );
+ProxyRedColorPly horsrplyview7( horsenew[7],"horse_view_0_7_addnorm_file_" );
 
 #ifdef _COMPILE_THIS_
 #endif

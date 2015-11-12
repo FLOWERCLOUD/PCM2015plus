@@ -80,6 +80,9 @@ public:
 		void showTracer();
 		void clearTracer();
 		//add by huayun
+		//snapshot
+		bool saveSnapshot();
+
 
 		bool runOrPause();
 		bool stop();

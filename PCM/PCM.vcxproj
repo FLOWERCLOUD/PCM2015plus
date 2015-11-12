@@ -63,13 +63,14 @@
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <GenerateManifest>false</GenerateManifest>
     <SourcePath>$(QTDIR_64_10)\src;$(SourcePath)</SourcePath>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -101,6 +102,8 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,10 +145,10 @@
     <ClCompile>
       <PreprocessorDefinitions>UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_XML_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(OPENCVDIR)\include\opencv;$(OPENCVDIR)\sources\include\opencv2;$(OPENCVDIR)\build\include;.\GeneratedFiles;.;$(QTDIR_64_10)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR_64_10)\include\QtCore;$(MATLABDIR2012b)\extern\include;$(QTDIR_64_10)\include\QtGui;$(QTDIR_64_10)\include\QtOpenGL;$(QTDIR_64_10)\include\QtWidgets;..;$(QTDIR_64_10)\include\QtXml;..\eigen-3-1-4;$(SolutionDir);$(SolutionDir)boost_1_59_0\boost_1_59_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DebugInformationFormat />
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <MinimalRebuild>false</MinimalRebuild>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -183,6 +186,7 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_LayerDialog.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_maching_state.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_propagate_withThread.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_saveSnapshotDialog.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_trajectory_classifier.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -204,6 +208,7 @@
     <ClCompile Include="GeneratedFiles\Release\moc_LayerDialog.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_maching_state.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_propagate_withThread.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_saveSnapshotDialog.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_trajectory_classifier.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -248,6 +253,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main_window.cpp" />
     <ClCompile Include="paint_canvas.cpp" />
+    <ClCompile Include="saveSnapshotDialog.cpp" />
     <ClCompile Include="select_tool.cpp" />
     <ClCompile Include="spectral_clustering.cpp" />
     <ClCompile Include="trajectory_classifier.cpp" />
@@ -1903,6 +1909,7 @@
     <ClInclude Include="BoostGraph.h" />
     <ClInclude Include="GeneratedFiles\ui_layerDialog.h" />
     <ClInclude Include="GeneratedFiles\ui_papagate_dialog.h" />
+    <ClInclude Include="GeneratedFiles\ui_savesnapshotDialog.h" />
     <ClInclude Include="GlobalObject.h" />
     <ClInclude Include="GraphMatching.h" />
     <ClInclude Include="InOutputDefinition.h" />
@@ -1939,6 +1946,13 @@
     <ClInclude Include="merge_propagate_write.h" />
     <ClInclude Include="merge_write_utilities.h" />
     <ClInclude Include="resource.h" />
+    <CustomBuild Include="saveSnapshotDialog.h">
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR_64_10)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_XML_LIB  "-IC:\Program Files\MATLAB\R2011b\extern\include" "-I.\GeneratedFiles" "-I." "-I$(QTDIR_64_10)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR_64_10)\include\QtCore" "-I$(QTDIR_64_10)\include\QtGui" "-I$(QTDIR_64_10)\include\QtOpenGL" "-I$(QTDIR_64_10)\include\QtWidgets" "-I.\.." "-I$(QTDIR_64_10)\include\QtXml" "-I.\..\eigen-3-1-4" "-IF:\opencv\build\include\opencv" "-IF:\opencv\build\include\opencv2" "-IF:\opencv\build\include"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR_64_10)\bin\moc.exe</AdditionalInputs>
+    </CustomBuild>
+    <ClInclude Include="snapshotsetting.h" />
     <ClInclude Include="traj2AffineModel_distance.h" />
   </ItemGroup>
   <ItemGroup>
@@ -1973,6 +1987,17 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR_64_10)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR_64_10)\bin\uic.exe" -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR_64_10)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="savesnapshotDialog.ui">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR_64_10)\bin\uic.exe" -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR_64_10)\bin\uic.exe" -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR_64_10)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR_64_10)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
   </ItemGroup>

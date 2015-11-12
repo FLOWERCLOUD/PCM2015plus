@@ -32,6 +32,7 @@
      <string>Files</string>
     </property>
     <addaction name="actionImportFiles"/>
+    <addaction name="actionSaveSnapshot"/>
    </widget>
    <widget class="QMenu" name="menuPaint">
     <property name="title">
@@ -361,6 +362,15 @@
    </property>
    <property name="text">
     <string>propagate</string>
+   </property>
+  </action>
+  <action name="actionSaveSnapshot">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/screenshot.png</normaloff>Resources/screenshot.png</iconset>
+   </property>
+   <property name="text">
+    <string>SaveSnapshot</string>
    </property>
   </action>
  </widget>

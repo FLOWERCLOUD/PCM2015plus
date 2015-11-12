@@ -25,6 +25,7 @@
 #include "sample_properity.h"
 #include "multiway_propagation.h"
 #include "maching_state.h"
+#include "saveSnapshotDialog.h"
 using namespace qglviewer;
 using namespace std;
 using namespace ANIMATION;
@@ -230,6 +231,7 @@ void main_window::setSceneToolMode()
 void main_window::createFileMenuAction()
 {
 	connect(ui.actionImportFiles, SIGNAL(triggered()),this, SLOT(openFiles()));
+	connect(ui.actionSaveSnapshot ,SIGNAL(triggered()) , this ,SLOT(saveSnapshot()));
 }
 
 bool main_window::openFile()
@@ -852,5 +854,33 @@ bool main_window::decreaseInterval()
 		Logger<<"lessenduration"<<std::endl;
 		
 	}
+	return false;
+}
+
+bool main_window::saveSnapshot()
+{
+	SaveSnapshotDialog dialog(this);
+
+	dialog.setValues(getCanvas()->ss);
+
+	if (dialog.exec()==QDialog::Accepted)
+	{
+	getCanvas()->ss=dialog.getValues();
+	getCanvas()->saveSnapshot();
+
+	// if user ask to add the snapshot to raster layers
+	/*
+	if(dialog.addToRasters())
+	{
+	  QString savedfile = QString("%1/%2%3.png")
+	.arg(GLA()->ss.outdir).arg(GLA()->ss.basename)
+	.arg(GLA()->ss.counter,2,10,QChar('0'));
+
+	  importRaster(savedfile);
+	}
+	*/
+	return true;
+	}
+
 	return false;
 }

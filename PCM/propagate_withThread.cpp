@@ -14,11 +14,17 @@
 
 void PropagateThread::run()
 {
-	 mergeFile( 
-		 "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\corr\\" ,
-		 "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\twogirlshakehandcorr_0_173.txt" , 
-		 "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\label\\" ,
-		 "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\twogirlshakehandlabel_0_173.txt");
+	
+	ProxyStandaraGrayColorPly pandaOriGrayply(
+		"F:\\VisualcamerAndYaobing\\pink-panther2\\plywithnormandstandard\\",
+		"pandaOriGrayply"
+		);
+
+	 //mergeFile( 
+		// "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\corr\\" ,
+		// "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\twogirlshakehandcorr_0_173.txt" , 
+		// "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\label\\" ,
+		// "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\twogirlshakehandlabel_0_173.txt");
 
 
 	/*IndexType i;
@@ -53,13 +59,13 @@ void PropagateThread::run()
 //	 return;
 	
 	Proxy * mProxy ;
-	mProxy = &twogirl38_50;
+	mProxy = &pandaOriGrayply;
 
-	mProxy->setContext(this);
-	Logger<< "propagate run "<<std::endl;
+	if(mProxy)mProxy->setContext(this);
+	//Logger<< "propagate run "<<std::endl;
 	clock_t old_time = clock();
 
-	mProxy->run();
+	if(mProxy)mProxy->run();
 	
 	Logger<< "propagation time: "<<(size_t)((clock()-old_time)/CLOCKS_PER_SEC)<<"s"<<std::endl;
 
@@ -67,7 +73,7 @@ void PropagateThread::run()
 	//mProxy = &twogirlAfter;
 
 	//mProxy->setContext(this);
-	//Logger<< "propagate run "<<std::endl;
+	Logger<< "propagate run "<<std::endl;
 	//mProxy->run();
 	//mProxy = &twogirlMerge;
 

@@ -19,6 +19,13 @@ PaintCanvas::PaintCanvas(const QGLFormat& format, QWidget *parent):
 	single_operate_tool_(nullptr),
 	show_trajectory_(false)
 {
+	fov = 60;
+	clipRatioFar = 1;
+	clipRatioNear = 1;
+	nearPlane = .2f;
+	farPlane = 5.f;
+	takeSnapTile=false;
+
 	main_window_ = (main_window*)parent;
 
 	camera()->setPosition(qglviewer::Vec(1.0,  1.0, 1.0));	
@@ -32,7 +39,9 @@ void PaintCanvas::draw()
 {
 	glEnable(GL_MULTISAMPLE);
 
-	drawCornerAxis();
+	//setView();
+
+	if(!takeSnapTile) drawCornerAxis();
 
 	//tool mode
 	if (single_operate_tool_!=nullptr && single_operate_tool_->tool_type()!=Tool::EMPTY_TOOL)
@@ -41,8 +50,9 @@ void PaintCanvas::draw()
 		return;
 	}
 
-
+	
 	SampleSet& set = SampleSet::get_instance();
+
 	if ( !set.empty() )
 	{
 		glDisable(GL_MULTISAMPLE);
@@ -174,7 +184,7 @@ void PaintCanvas::draw()
 		}
 		glEnable(GL_MULTISAMPLE);
 	}
-
+	//if(takeSnapTile) pasteTile();
 	//draw line tracer
 	if (show_trajectory_)
 	{
@@ -467,4 +477,234 @@ void PaintCanvas::showSelectedTraj()
 		}
 	}
 	this->show_trajectory_ = true;
+}
+
+void PaintCanvas::pasteTile()
+{
+	QString outfile;
+
+	glPushAttrib(GL_ENABLE_BIT);
+	QImage tileBuffer=grabFrameBuffer(true).mirrored(false,true);
+	if(ss.tiledSave)
+	{
+		outfile=QString("%1/%2_%3-%4.png")
+			.arg(ss.outdir)
+			.arg(ss.basename)
+			.arg(tileCol,2,10,QChar('0'))
+			.arg(tileRow,2,10,QChar('0'));
+		tileBuffer.mirrored(false,true).save(outfile,"PNG");
+	}
+	else
+	{
+		if (snapBuffer.isNull())
+			snapBuffer = QImage(tileBuffer.width() * ss.resolution, tileBuffer.height() * ss.resolution, tileBuffer.format());
+
+		uchar *snapPtr = snapBuffer.bits() + (tileBuffer.bytesPerLine() * tileCol) + ((totalCols * tileRow) * tileBuffer.byteCount());
+		uchar *tilePtr = tileBuffer.bits();
+
+		for (int y=0; y < tileBuffer.height(); y++)
+		{
+			memcpy((void*) snapPtr, (void*) tilePtr, tileBuffer.bytesPerLine());
+			snapPtr+=tileBuffer.bytesPerLine() * totalCols;
+			tilePtr+=tileBuffer.bytesPerLine();
+		}
+	}
+	tileCol++;
+	if (tileCol >= totalCols)
+	{
+		tileCol=0;
+		tileRow++;
+
+		if (tileRow >= totalRows)
+		{
+			if(ss.snapAllLayers)
+			{
+				outfile=QString("%1/%2%3_L%4.png")
+					.arg(ss.outdir).arg(ss.basename)
+					.arg(ss.counter,2,10,QChar('0'))
+					.arg(currSnapLayer,2,10,QChar('0'));
+			} else {
+				outfile=QString("%1/%2%3.png")
+					.arg(ss.outdir).arg(ss.basename)
+					.arg(ss.counter++,2,10,QChar('0'));
+			}
+
+			if(!ss.tiledSave)
+			{
+				bool ret = (snapBuffer.mirrored(false,true)).save(outfile,"PNG");
+				if (ret)
+				{
+					/*this->Logf(GLLogStream::SYSTEM, "Snapshot saved to %s",outfile.toLocal8Bit().constData());*/
+				}
+				else
+				{
+					/*Logf(GLLogStream::WARNING,"Error saving %s",outfile.toLocal8Bit().constData());*/
+				}
+			}
+			takeSnapTile=false;
+			snapBuffer=QImage();
+		}
+	}
+	updateGL();
+	glPopAttrib();
+	
+}
+
+void PaintCanvas::saveSnapshot()
+{
+	//snap all layers
+	currSnapLayer = 0;
+	//number of subparts
+	totalCols = totalRows = ss.resolution;
+	tileRow = tileCol = 0;
+	if(ss.snapAllLayers)
+	{
+		while(currSnapLayer < SampleSet::get_instance().size())
+		{
+			tileRow = tileCol = 0;
+			//SET CURRMESH()
+
+		}
+	}else
+	{
+		takeSnapTile = true;
+		saveSnapshotImp(ss);
+		updateGL();
+	}
+}
+void PaintCanvas::saveSnapshotImp(SnapshotSetting& _ss)
+{
+
+
+	//glPushAttrib(GL_ENABLE_BIT);
+	QImage tileBuffer;
+	tileBuffer =grabFrameBuffer(true).mirrored(false,true);
+	glPushAttrib(GL_ENABLE_BIT);
+	totalCols = totalRows = _ss.resolution;
+	tileRow = tileCol = 0;
+	QString outfile;
+
+
+	//if (snapBuffer.isNull())
+		snapBuffer = QImage( tileBuffer.width() * _ss.resolution, tileBuffer.height() * _ss.resolution, tileBuffer.format());
+
+	
+		for( int tileRow = 0 ; tileRow < totalRows ; ++tileRow)
+		{
+			for( int tileCol = 0 ; tileCol < totalCols ;++tileCol)
+			{
+				preDraw();
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				setTileView( totalCols ,totalRows ,tileCol ,tileRow);
+				glMatrixMode(GL_MODELVIEW);
+				draw();
+				postDraw();
+				tileBuffer =grabFrameBuffer(true).mirrored(false,true);
+
+				uchar *snapPtr = snapBuffer.bits() + (tileBuffer.bytesPerLine() * tileCol) + ((totalCols * tileRow) * tileBuffer.byteCount());
+				uchar *tilePtr = tileBuffer.bits();
+
+				for (int y=0; y < tileBuffer.height(); y++)
+				{
+					memcpy((void*) snapPtr, (void*) tilePtr, tileBuffer.bytesPerLine());
+					snapPtr+=tileBuffer.bytesPerLine() * totalCols;
+					tilePtr+=tileBuffer.bytesPerLine();
+				}
+			
+			}
+
+		}
+
+	outfile=QString("%1/%2%3.png")
+		.arg(_ss.outdir).arg(_ss.basename)
+		.arg(_ss.counter++,2,10,QChar('0'));
+	bool ret = (snapBuffer.mirrored(false,true)).save(outfile,"PNG");
+	takeSnapTile = false;
+	updateGL();
+	glPopAttrib();
+
+
+}
+
+
+void PaintCanvas::setTileView( IndexType totalCols  , IndexType totalRows ,IndexType tileCol ,IndexType tileRow )
+{
+	glViewport(0 ,0 , this->width() ,this->height());
+	GLfloat fApspect = (GLfloat)width()/height();
+	nearPlane =  camera()->zNear();
+	farPlane = camera()->zFar();
+	
+	ScalarType deltaY = 2*nearPlane * tan(camera()->fieldOfView() / 2.0) /totalRows;
+	ScalarType deltaX = deltaY* fApspect;
+	//ScalarType xMin = -this->width()/2.0;
+	//ScalarType yMin = -this->height()/2.0;
+	ScalarType yMin = - nearPlane * tan(camera()->fieldOfView() / 2.0);
+	ScalarType xMin =  yMin* fApspect;
+
+
+
+	if (camera()->type() == qglviewer::Camera::PERSPECTIVE)
+		glFrustum(xMin + tileCol*deltaX, xMin + (tileCol+1)*deltaX, yMin + (tileRow)*deltaY, yMin + (tileRow+1)*deltaY, nearPlane, farPlane);
+	else glOrtho(xMin + tileCol*deltaX, xMin + (tileCol+1)*deltaX, yMin + (tileRow)*deltaY, yMin + (tileRow+1)*deltaY, nearPlane, farPlane);
+	
+}
+void PaintCanvas::setView()
+{
+	glViewport(0 ,0 , this->width() ,this->height());
+	GLfloat fApspect = (GLfloat)width()/height();
+	glMatrixMode(GL_PROJECTION);
+	/*glLoadIdentity();*/
+
+	float viewRatio  =1.75f;
+	float cameraDist = viewRatio /tanf( (float)PI * (fov* .5f) /180.0f);
+	if(fov <5)cameraDist =1000;  //small hack for othographic projection where camera distance is rather meaningless..
+	nearPlane = cameraDist - 2.f* clipRatioNear;
+	farPlane = cameraDist + 10.f* clipRatioFar;
+	if(nearPlane <cameraDist*.1f)nearPlane = cameraDist*.1f;
+	if(!takeSnapTile)
+	{
+		if(fov ==5) glOrtho( -viewRatio*fApspect ,viewRatio* fApspect , -viewRatio ,viewRatio,cameraDist-2.f*clipRatioNear ,cameraDist+2.f*clipRatioFar);
+		/*else gluPerspective(fov , fApspect , nearPlane ,farPlane);*/
+		else 
+		{
+			/*camera()->lookAt( qglviewer::Vec())*/
+		}
+
+	}
+	else setTiledView( fov, viewRatio , fApspect ,nearPlane ,farPlane , cameraDist);
+	glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity;
+	//gluLookAt(0 ,0 , cameraDist , 0 ,0 ,0 ,0 ,1 ,0);
+
+}
+
+void PaintCanvas::setTiledView(GLdouble fovY , float viewRatio , float fAspect , GLdouble zNear ,GLdouble zFar , float cameraDist)
+{
+	if(fovY <=5)
+	{
+		/*GLdouble fLeft = -viewRatio*fAspect;
+		GLdouble fright = viewRatio*fAspect;
+		GLdouble fboo*/
+
+	}else
+	{
+		GLdouble fTop = zNear * tan((float)PI * (fov* .5f) /180.0f);
+		GLdouble fRight = fTop* fAspect;
+		GLdouble fBottom = -fTop;
+		GLdouble fLeft = - fRight;
+		//tile Dimension
+		GLdouble tDimX = fabs( fRight -fLeft)/ totalCols;
+		GLdouble tDimY = fabs(fTop - fBottom)/ totalRows;
+	/*	glFrustum( fLeft + tDimX * tileCol ,fLeft + tDimX*(tileCol+1), 
+			fBottom + tDimY * tileRow , fBottom + tDimY * (tileRow+1) , zNear ,zFar);*/
+
+	}
+}
+
+void PaintCanvas::Logf(int level ,const char* f)
+{
+	if(!main_window_ )return;
+	char buf[4096];
+
 }
