@@ -14,10 +14,14 @@
 
 void PropagateThread::run()
 {
-	ProxyStandaraAjustViewOriColorPly single_standard_ajustview(
-		"D:\\point_data\\qinghuadata\\standard\\single\\",
-		"single_standard_ajustview"
-		);
+	ProxyVisualLabel qinhua_single(
+		"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totLabelSmooth(15_24).txt",
+		"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totCorr(15_24).txt");
+
+	/*ProxyStandaraAjustViewOriColorPly single_standard_ajustview(
+	"D:\\point_data\\qinghuadata\\standard\\single\\",
+	"single_standard_ajustview"
+	);*/
 	//ProxyStandaraAjustViewOriColorPly two_standard_ajustview(
 	//	"D:\\point_data\\qinghuadata\\standard\\two\\",
 	//	"two_standard_ajustview"
@@ -109,7 +113,7 @@ void PropagateThread::run()
 //	 return;
 	
 	Proxy * mProxy ;
-	mProxy = &single_standard_ajustview;
+	mProxy = &qinhua_single;
 
 	if(mProxy)mProxy->setContext(this);
 	//Logger<< "propagate run "<<std::endl;
