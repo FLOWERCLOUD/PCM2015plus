@@ -3,6 +3,7 @@
 
 #include "QGLViewer/qglviewer.h"
 #include "select_tool.h"
+#include "snapshotsetting.h"
 
 
 class main_window;
@@ -24,6 +25,21 @@ public:
 	void setEdgeVertexsShowOrNot(bool b){ show_EdgeVertexs_ = b;}
 
 	void showSelectedTraj();
+	//save screeshot
+	void saveSnapshot();
+	void pasteTile();
+	void setView();
+	void setTiledView(GLdouble fovY , float viewRatio , float fAspect , GLdouble zNear ,GLdouble zFar , float cameraDist);
+	SnapshotSetting ss;
+	ScalarType fov;
+	ScalarType clipRatioFar;
+	ScalarType clipRatioNear;
+	ScalarType nearPlane;
+	ScalarType farPlane;
+	void Logf(int level ,const char* f );
+	
+
+	
 protected:
 	virtual void draw();
 	virtual void init();
@@ -37,9 +53,16 @@ protected:
 
 	// wheel event
 	virtual void wheelEvent(QWheelEvent *e);
+	void saveSnapshotImp(SnapshotSetting& _ss);
+	void setTileView( IndexType totalCols , IndexType totalRows ,IndexType tileCol ,IndexType tileRow );
 private:
 	int				coord_system_region_size_;
 	main_window*	main_window_;
+	//screeshot
+	QImage snapBuffer;
+	bool  takeSnapTile;
+	IndexType tileCol ,tileRow , totalCols ,totalRows;
+	IndexType currSnapLayer;  // snapshot; total number of layers and current layer rendered
 
 
 public:

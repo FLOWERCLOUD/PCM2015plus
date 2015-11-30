@@ -14,11 +14,71 @@
 
 void PropagateThread::run()
 {
-	 mergeFile( 
-		 "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\corr\\" ,
-		 "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\twogirlshakehandcorr_0_173.txt" , 
-		 "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\label\\" ,
-		 "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\twogirlshakehandlabel_0_173.txt");
+	ProxyVisualLabel qinhua_single(
+		"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totLabelSmooth(15_24).txt",
+		"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totCorr(15_24).txt");
+
+	/*ProxyStandaraAjustViewOriColorPly single_standard_ajustview(
+	"D:\\point_data\\qinghuadata\\standard\\single\\",
+	"single_standard_ajustview"
+	);*/
+	//ProxyStandaraAjustViewOriColorPly two_standard_ajustview(
+	//	"D:\\point_data\\qinghuadata\\standard\\two\\",
+	//	"two_standard_ajustview"
+	//	);
+	//
+	//ProxyStandaraGrayColorPly pandaOriGrayply(
+	//	"F:\\VisualcamerAndYaobing\\pink-panther2\\plywithnormandstandard\\",
+	//	"pandaOriGrayply"
+	//	);
+	/*ProxyStandaraOriColorPly cabinetOriGrayply(
+	"D:\\point_data\\plystandard\\cabinet20150904\\",
+	"cabinetGrayply"
+	);*/
+
+	/*ProxyStandaraGrayColorPly carDepthOriGrayply(
+	"D:\\point_data\\plystandard\\carDepth\\",
+	"carDepthGrayply"
+	);*/
+	//ProxyStandaraAjustViewOriColorPly fansOriGrayply(
+	//	"D:\\point_data\\plystandard\\fans_ply\\",
+	//	"fansGrayply"
+	//	);
+	/*ProxyStandaraGrayColorPly fingerOriGrayply(
+	"D:\\point_data\\plystandard\\finger\\",
+	"fingerGrayply"
+	);*/
+	/*ProxyStandaraGrayColorPly girldanceOriGrayply(
+	"D:\\point_data\\plystandard\\girldance\\",
+	"girldanceGrayply"
+	);*/
+	/*ProxyStandaraGrayColorPly horseOriGrayply(
+	"D:\\point_data\\plystandard\\horse\\",
+	"horseGrayply"
+	);*/
+	//ProxyStandaraGrayColorPly mandanceOriGrayply(
+	//"D:\\point_data\\plystandard\\mandance\\",
+	//"mandanceGrayply"
+	//);
+	/*ProxyStandaraGrayColorPly robotDepthOriGrayply(
+	"D:\\point_data\\plystandard\\robotDepth\\",
+	"robotDepthGrayply"
+	);*/
+	/*ProxyStandaraOriColorPly shiqunOriGrayply(
+		"D:\\point_data\\plystandard\\shiqun\\",
+		"shiqunGrayply"
+		);*/
+	//ProxyStandaraGrayColorPly twogirlshakehandOriGrayply(
+	//	"D:\\point_data\\plystandard\\twogirlshakehand\\",
+	//	"twogirlshakehandGrayply"
+	//	);
+
+
+	 //mergeFile( 
+		// "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\corr\\" ,
+		// "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\twogirlshakehandcorr_0_173.txt" , 
+		// "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\label\\" ,
+		// "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\twogirlshakehandlabel_0_173.txt");
 
 
 	/*IndexType i;
@@ -53,13 +113,13 @@ void PropagateThread::run()
 //	 return;
 	
 	Proxy * mProxy ;
-	mProxy = &twogirl38_50;
+	mProxy = &qinhua_single;
 
-	mProxy->setContext(this);
-	Logger<< "propagate run "<<std::endl;
+	if(mProxy)mProxy->setContext(this);
+	//Logger<< "propagate run "<<std::endl;
 	clock_t old_time = clock();
 
-	mProxy->run();
+	if(mProxy)mProxy->run();
 	
 	Logger<< "propagation time: "<<(size_t)((clock()-old_time)/CLOCKS_PER_SEC)<<"s"<<std::endl;
 
@@ -67,7 +127,7 @@ void PropagateThread::run()
 	//mProxy = &twogirlAfter;
 
 	//mProxy->setContext(this);
-	//Logger<< "propagate run "<<std::endl;
+	Logger<< "propagate run "<<std::endl;
 	//mProxy->run();
 	//mProxy = &twogirlMerge;
 
