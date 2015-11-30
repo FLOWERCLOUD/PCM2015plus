@@ -14,11 +14,61 @@
 
 void PropagateThread::run()
 {
-	
-	ProxyStandaraGrayColorPly pandaOriGrayply(
-		"F:\\VisualcamerAndYaobing\\pink-panther2\\plywithnormandstandard\\",
-		"pandaOriGrayply"
+	ProxyStandaraAjustViewOriColorPly single_standard_ajustview(
+		"D:\\point_data\\qinghuadata\\standard\\single\\",
+		"single_standard_ajustview"
 		);
+	//ProxyStandaraAjustViewOriColorPly two_standard_ajustview(
+	//	"D:\\point_data\\qinghuadata\\standard\\two\\",
+	//	"two_standard_ajustview"
+	//	);
+	//
+	//ProxyStandaraGrayColorPly pandaOriGrayply(
+	//	"F:\\VisualcamerAndYaobing\\pink-panther2\\plywithnormandstandard\\",
+	//	"pandaOriGrayply"
+	//	);
+	/*ProxyStandaraOriColorPly cabinetOriGrayply(
+	"D:\\point_data\\plystandard\\cabinet20150904\\",
+	"cabinetGrayply"
+	);*/
+
+	/*ProxyStandaraGrayColorPly carDepthOriGrayply(
+	"D:\\point_data\\plystandard\\carDepth\\",
+	"carDepthGrayply"
+	);*/
+	//ProxyStandaraAjustViewOriColorPly fansOriGrayply(
+	//	"D:\\point_data\\plystandard\\fans_ply\\",
+	//	"fansGrayply"
+	//	);
+	/*ProxyStandaraGrayColorPly fingerOriGrayply(
+	"D:\\point_data\\plystandard\\finger\\",
+	"fingerGrayply"
+	);*/
+	/*ProxyStandaraGrayColorPly girldanceOriGrayply(
+	"D:\\point_data\\plystandard\\girldance\\",
+	"girldanceGrayply"
+	);*/
+	/*ProxyStandaraGrayColorPly horseOriGrayply(
+	"D:\\point_data\\plystandard\\horse\\",
+	"horseGrayply"
+	);*/
+	//ProxyStandaraGrayColorPly mandanceOriGrayply(
+	//"D:\\point_data\\plystandard\\mandance\\",
+	//"mandanceGrayply"
+	//);
+	/*ProxyStandaraGrayColorPly robotDepthOriGrayply(
+	"D:\\point_data\\plystandard\\robotDepth\\",
+	"robotDepthGrayply"
+	);*/
+	/*ProxyStandaraOriColorPly shiqunOriGrayply(
+		"D:\\point_data\\plystandard\\shiqun\\",
+		"shiqunGrayply"
+		);*/
+	//ProxyStandaraGrayColorPly twogirlshakehandOriGrayply(
+	//	"D:\\point_data\\plystandard\\twogirlshakehand\\",
+	//	"twogirlshakehandGrayply"
+	//	);
+
 
 	 //mergeFile( 
 		// "H:\\povay_pointcloud\\point_data\\twogirlshakehand\\resetLabelsandCorr\\corr\\" ,
@@ -59,7 +109,7 @@ void PropagateThread::run()
 //	 return;
 	
 	Proxy * mProxy ;
-	mProxy = &pandaOriGrayply;
+	mProxy = &single_standard_ajustview;
 
 	if(mProxy)mProxy->setContext(this);
 	//Logger<< "propagate run "<<std::endl;

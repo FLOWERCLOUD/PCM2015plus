@@ -42,7 +42,7 @@ protected:
 
 };
 
-class ProxyAjustViewPly : public Proxy
+class ProxyAjustViewPly : public virtual Proxy
 {
 public:
 	ProxyAjustViewPly( char* plyOutputDir ,char* _prefix ):
@@ -66,6 +66,8 @@ protected:
 		for( IndexType i = 0 ; i< smpNum ;++i)
 		{
 			vector< PointType> smpCoodinates;
+			vector< PointType> smpNorms;
+			vector<ColorType> smpColors;
 
 			Matrix44 adjust_matrix  = smt[i].matrix_to_scene_coord();
 			for( auto vtxbitr  = smt[i].begin() ; vtxbitr!= smt[i].end() ;++vtxbitr){
@@ -76,9 +78,13 @@ protected:
 
 				PointType tmp2( coodinate.x,coodinate.y  ,coodinate.z );
 				smpCoodinates.push_back(tmp2);
+				smpNorms.push_back(PointType((*vtxbitr)->nx() ,(*vtxbitr)->ny(),(*vtxbitr)->nz()));
+				smpColors.push_back( ColorType( (*vtxbitr)->r() ,(*vtxbitr)->g() , (*vtxbitr)->b() ,1.0));
 			}
 			
 			SmpSetcoodinates.push_back( smpCoodinates );
+			SmpSetnorms.push_back(smpNorms);
+			SmpSetColors.push_back(smpColors);
 		}
 	//	std::cout<<"end_getAllSampleCurrentViewMatrix"<<std::endl:
 	}
@@ -141,6 +147,8 @@ protected:
 	char* output_file_path_ ; // ply
 	char* prefix_;
 	vector< vector<PointType> > SmpSetcoodinates;
+	vector< vector<PointType> > SmpSetnorms;
+	vector< vector<ColorType> > SmpSetColors;
 
 
 };
@@ -295,7 +303,7 @@ protected:
 		ColorType pClr = Color_Utility::span_color_from_hy_table( ((Vertex*)pvtx)->label() );
 		return pClr;
 	}
-
+	
 	void generatePly()
 	{
 			SampleSet& smpset =  SampleSet::get_instance();
@@ -333,6 +341,129 @@ protected:
 
 			}
 	}
+
+	
+
+	void generateStandaraPLY(vector< vector<PointType> >& SmpSetcoodinates ,vector< vector<PointType> >& SmpSetNorms ,vector< vector<ColorType> >& SmpSetColors)
+	{
+		SampleSet& smpset =  SampleSet::get_instance();
+		IndexType frameNum = smpset.size();
+
+
+
+		ScalarType bottomTox ;
+		ScalarType bottomToy ;
+		ScalarType bottomToz ;
+		ScalarType maxscale = -1;
+		ScalarType wrapboxminx ,wrapboxminy ,wrapboxminz;
+		wrapboxminx = wrapboxminy = wrapboxminz =1000;
+		ScalarType wrapboxmaxx ,wrapboxmaxy ,wrapboxmaxz;
+		wrapboxmaxx = wrapboxmaxy = wrapboxmaxz = -1000;
+		Sample* smp;
+		//先得到所有帧的最大包围盒
+		
+	
+		for( IndexType frameId = 0 ;frameId <frameNum ;++frameId)
+		{
+			auto smpeitr = SmpSetcoodinates[frameId].end();
+			//smp = &(SampleSet::get_instance()[frameId]);
+			ScalarType xmin ,xmax ,ymin ,ymax , zmin ,zmax;
+			xmin = ymin = zmin = 10000;
+			xmax = ymax = zmax = -10000;
+			for( auto smpbitr = SmpSetcoodinates[frameId].begin() ; smpbitr != smpeitr ; ++ smpbitr)
+			{
+				ScalarType xtmp = smpbitr->x();
+				if( xtmp < xmin ) xmin = xtmp;
+				ScalarType ytmp = smpbitr->y();
+				if( ytmp < ymin) ymin = ytmp;
+				ScalarType ztmp = smpbitr->z();
+				if( ztmp < zmin )zmin = ztmp;
+			}
+			for( auto smpbitr = SmpSetcoodinates[frameId].begin() ; smpbitr != smpeitr ; ++ smpbitr)
+			{
+				ScalarType xtmp = smpbitr->x();
+				if( xtmp > xmax ) xmax = xtmp;
+				ScalarType ytmp = smpbitr->y();
+				if( ytmp > ymax) ymax = ytmp;
+				ScalarType ztmp = smpbitr->z();
+				if( ztmp > zmax )zmax = ztmp;
+			}
+	/*		for( auto vbitr = smp->begin() ; vbitr != smp->end(); ++vbitr ){
+				ScalarType xtmp = (*vbitr)->x();
+				if( xtmp < xmin ) xmin = xtmp;
+				ScalarType ytmp = (*vbitr)->y();
+				if( ytmp < ymin) ymin = ytmp;
+				ScalarType ztmp = (*vbitr)->z();
+				if( ztmp < zmin )zmin = ztmp;
+
+			}
+			for( auto vbitr = smp->begin() ; vbitr != smp->end(); ++vbitr ){
+				ScalarType xtmp = (*vbitr)->x();
+				if( xtmp > xmax ) xmax = xtmp;
+				ScalarType ytmp = (*vbitr)->y();
+				if( ytmp > ymax) ymax = ytmp;
+				ScalarType ztmp = (*vbitr)->z();
+				if( ztmp > zmax )zmax = ztmp;
+
+			}*/
+			wrapboxminx = wrapboxminx<xmin? wrapboxminx:xmin;
+			wrapboxminy = wrapboxminy<ymin? wrapboxminy:ymin;
+			wrapboxminz = wrapboxminz<zmin? wrapboxminz:zmin;
+			wrapboxmaxx = wrapboxmaxx> xmax? wrapboxmaxx : xmax;
+			wrapboxmaxy = wrapboxmaxy> ymax? wrapboxmaxy : ymax;
+			wrapboxmaxz = wrapboxmaxz> zmax? wrapboxmaxz : zmax;
+		}
+		/* 映射到 [0 ，1 ]区间*/
+		ScalarType xscale = (wrapboxmaxx - wrapboxminx);
+		ScalarType yscale = (wrapboxmaxy - wrapboxminy);
+		ScalarType zscale = (wrapboxmaxz - wrapboxminz);
+		/*得到最大的一维*/
+		maxscale =( maxscale=xscale>=yscale?xscale:yscale)>= zscale ? maxscale : zscale;  
+		bottomTox = 0 - wrapboxminx;
+		bottomToy = 0 - wrapboxminy;
+		bottomToz = 0 - wrapboxminz;
+
+		for( IndexType i = 0 ;i<frameNum ;++i){
+			char path[100];
+			strcpy(path ,output_file_path_);
+			char fullPath[250];
+			sprintf( fullPath ,"%s%s%.3d%s",path ,prefix_, i ,".ply");     //必须加入.3d ，使得文件排序正常
+			std::ofstream outfile( fullPath , std::ofstream::out);
+
+			outfile<<"ply"<<std::endl;
+			outfile<<"format ascii 1.0"<<std::endl;
+			IndexType vtxnum = smpset[i].num_vertices();
+			outfile<<"element vertex "<< vtxnum<<std::endl;
+			outfile<<"property   float   x"<<std::endl;
+			outfile<<"property   float   y "<<std::endl;
+			outfile<<"property   float   z "<<std::endl;
+			outfile<<"property   float   nx"<<std::endl;
+			outfile<<"property   float   ny "<<std::endl;
+			outfile<<"property   float   nz "<<std::endl;
+			outfile<<"property   uchar red "<<std::endl;
+			outfile<<"property   uchar   green"<<std::endl;
+			outfile<<"property   uchar  blue"<<std::endl;
+			outfile<<"end_header"<<std::endl;
+			auto smpnormbitr = SmpSetNorms[i].begin();
+			auto smpcolorbitr = SmpSetColors[i].begin();
+			for( auto smpbitr = SmpSetcoodinates[i].begin() ; smpbitr != SmpSetcoodinates[i].end() ; ++ smpbitr ,++smpnormbitr,++smpcolorbitr)
+			{
+				PointType& vtx = *smpbitr;
+				PointType& norm = *smpnormbitr;
+				ColorType& pClr = *smpcolorbitr;//getLabelColor( &vtx );
+				outfile<< (vtx.x()+ bottomTox)/maxscale <<" "<<(vtx.y()+bottomToy)/maxscale <<" "<< (vtx.z()+ bottomToz)/maxscale<<" "<<norm.x()<<" "<<norm.y()<<" "<<norm.z()<<" "<<(int)(pClr(0 ,0)*255)<<" "<<(int)(pClr(1,0)*255)<<" "<<(int)(pClr(2,0)*255)<<std::endl;
+			}
+			/*for( auto  vtxbitr = smpset[i].begin() ; vtxbitr != smpset[i].end() ;++vtxbitr ){
+				Vertex& vtx = **vtxbitr;
+				ColorType pClr = getLabelColor( &vtx );
+
+				outfile<< (vtx.x()+ bottomTox)/maxscale <<" "<<(vtx.y()+bottomToy)/maxscale <<" "<< (vtx.z()+ bottomToz)/maxscale<<" "<<vtx.nx()<<" "<<vtx.ny()<<" "<<vtx.nz()<<" "<<pClr(0 ,0)<<" "<<pClr(1,0)<<" "<<pClr(2,0)<<std::endl;
+
+			}*/
+
+			outfile.close();
+		}
+	}
 	void generateStandaraPLY()
 	{
 		SampleSet& smpset =  SampleSet::get_instance();
@@ -349,6 +480,7 @@ protected:
 		ScalarType wrapboxmaxx ,wrapboxmaxy ,wrapboxmaxz;
 		wrapboxmaxx = wrapboxmaxy = wrapboxmaxz = -1000;
 		Sample* smp;
+		//先得到所有帧的最大包围盒
 		for( IndexType frameId = 0 ;frameId <frameNum ;++frameId)
 		{
 			smp = &(SampleSet::get_instance()[frameId]);
@@ -384,6 +516,7 @@ protected:
 		ScalarType xscale = (wrapboxmaxx - wrapboxminx);
 		ScalarType yscale = (wrapboxmaxy - wrapboxminy);
 		ScalarType zscale = (wrapboxmaxz - wrapboxminz);
+		/*得到最大的一维*/
 		maxscale =( maxscale=xscale>=yscale?xscale:yscale)>= zscale ? maxscale : zscale;  
 		bottomTox = 0 - wrapboxminx;
 		bottomToy = 0 - wrapboxminy;
@@ -628,6 +761,41 @@ public:
 
 };
 
+class ProxyStandaraOriColorPly : public ProxyPly
+{
+public: 
+	ProxyStandaraOriColorPly( char* plyOutputDir ,char* _prefix ):
+	  ProxyPly(plyOutputDir,_prefix){}
+public:
+	ColorType getLabelColor(void* vtx)
+	{
+		ColorType m( (int)(((Vertex*)vtx)->r()*255)  ,(int)(((Vertex*)vtx)->g()*255) ,(int)(((Vertex*)vtx)->b()*255) ,1.);
+		return m;
+	}
+	void run()
+	{
+		generateStandaraPLY();
+
+	}
+
+};
+
+class ProxyStandaraAjustViewOriColorPly : public ProxyStandaraOriColorPly , public ProxyAjustViewPly
+{
+public: 
+	ProxyStandaraAjustViewOriColorPly( char* plyOutputDir ,char* _prefix ):ProxyStandaraOriColorPly(plyOutputDir,_prefix),ProxyAjustViewPly( plyOutputDir,_prefix ){}
+public:
+	ColorType getLabelColor(void* vtx){
+		return ProxyStandaraOriColorPly::getLabelColor(vtx);
+	}
+	void run()
+	{
+		getAllSampleCurrentViewMatrix();
+		generateStandaraPLY(SmpSetcoodinates ,SmpSetnorms ,SmpSetColors);
+
+	}
+
+};
 
 class ProxyProOrigAndPly : public ProxyProOri
 {
