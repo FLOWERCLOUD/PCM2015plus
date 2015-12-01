@@ -5,6 +5,9 @@
 #include "tracer.h"
 #include "globals.h"
 #include "tracer.h"
+
+#include "savePLYDialog.h"
+#include <fstream>
 using namespace qglviewer;
 
 #ifndef GL_MULTISAMPLE
@@ -702,9 +705,49 @@ void PaintCanvas::setTiledView(GLdouble fovY , float viewRatio , float fAspect ,
 	}
 }
 
-void PaintCanvas::Logf(int level ,const char* f)
+void PaintCanvas::Logf(int level ,const char* f){}
+
+void PaintCanvas::savePLY(SavePlySetting& ss)
 {
-	if(!main_window_ )return;
-	char buf[4096];
+	QString outfile;
+	/*outfile=QString("%1/%2%3.png")
+	.arg(ss.outdir).arg(ss.basename)
+	.arg(ss.counter++,2,10,QChar('0'));*/
+	//char* output_file_path_ = (char*)outfile.toStdString().c_str();
+	SampleSet& smpset =  SampleSet::get_instance();
+	IndexType frameNum = smpset.size();
+	for( IndexType i = 0 ;i<frameNum ;++i){
+		/*char path[100];
+		strcpy(path ,outfile.toStdString().c_str());*/
+		char fullPath[250];
+		sprintf( fullPath ,"%s%s%s%.3d%s",ss.outdir.toStdString().c_str() ,"/",ss.basename.toStdString().c_str(), ss.counter++ ,".ply");     //必须加入.3d ，使得文件排序正常
+		std::ofstream outfile( fullPath , std::ofstream::out);
+
+		outfile<<"ply"<<std::endl;
+		outfile<<"format ascii 1.0"<<std::endl;
+		IndexType vtxnum = smpset[i].num_vertices();
+		outfile<<"element vertex "<< vtxnum<<std::endl;
+		outfile<<"property   float   x"<<std::endl;
+		outfile<<"property   float   y "<<std::endl;
+		outfile<<"property   float   z "<<std::endl;
+		outfile<<"property   float   nx"<<std::endl;
+		outfile<<"property   float   ny "<<std::endl;
+		outfile<<"property   float   nz "<<std::endl;
+		outfile<<"property   uchar red "<<std::endl;
+		outfile<<"property   uchar   green"<<std::endl;
+		outfile<<"property   uchar  blue"<<std::endl;
+		outfile<<"end_header"<<std::endl;
+		for( auto  vtxbitr = smpset[i].begin() ; vtxbitr != smpset[i].end() ;++vtxbitr ){
+			Vertex& vtx = **vtxbitr;
+			ColorType pClr = 255*vtx.color();
+
+			outfile<<vtx.x()<<" "<<vtx.y()<<" "<< vtx.z()<<" "<<vtx.nx()<<" "<<vtx.ny()<<" "<<vtx.nz()<<" "<<(int)pClr(0 ,0)<<" "<<(int)pClr(1,0)<<" "<<(int)pClr(2,0)<<std::endl;
+
+		}
+
+		outfile.close();
+
+	}
+	
 
 }

@@ -83,6 +83,7 @@ public:
 		//snapshot
 		bool saveSnapshot();
 
+		bool savePLY();
 
 		bool runOrPause();
 		bool stop();

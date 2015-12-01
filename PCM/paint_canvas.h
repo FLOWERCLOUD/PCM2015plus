@@ -4,10 +4,11 @@
 #include "QGLViewer/qglviewer.h"
 #include "select_tool.h"
 #include "snapshotsetting.h"
+#include "savePLYDialog.h"
 
 
 class main_window;
-
+class SavePlySetting;
 class PaintCanvas: public QGLViewer
 {
 	Q_OBJECT
@@ -37,6 +38,9 @@ public:
 	ScalarType nearPlane;
 	ScalarType farPlane;
 	void Logf(int level ,const char* f );
+	//save ply
+	SavePlySetting splys;
+	void savePLY(SavePlySetting& ss);
 	
 
 	
@@ -55,6 +59,7 @@ protected:
 	virtual void wheelEvent(QWheelEvent *e);
 	void saveSnapshotImp(SnapshotSetting& _ss);
 	void setTileView( IndexType totalCols , IndexType totalRows ,IndexType tileCol ,IndexType tileRow );
+
 private:
 	int				coord_system_region_size_;
 	main_window*	main_window_;

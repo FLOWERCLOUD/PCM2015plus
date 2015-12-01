@@ -14,9 +14,17 @@
 
 void PropagateThread::run()
 {
-	ProxyVisualLabel qinhua_single(
-		"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totLabelSmooth(15_24).txt",
-		"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totCorr(15_24).txt");
+	//mergeFile("","","","");
+	/*ProxyVisualLabel qinhua_single(
+	"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totLabelSmooth(15_24).txt",
+	"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totCorr(15_24).txt");*/
+	Proxy_PropagateAndVisual qinhua_single(
+		"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\nolabel\\total_label115_124center116.txt",
+		"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totCorr(15_24).txt",
+		115,
+		124,
+		116
+		);
 
 	/*ProxyStandaraAjustViewOriColorPly single_standard_ajustview(
 	"D:\\point_data\\qinghuadata\\standard\\single\\",

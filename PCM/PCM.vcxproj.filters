@@ -227,6 +227,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_saveSnapshotDialog.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="savePLYDialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_savePLYDialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_savePLYDialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="main_window.qrc">
@@ -433,6 +442,12 @@
     <CustomBuild Include="saveSnapshotDialog.h">
       <Filter>Visualize</Filter>
     </CustomBuild>
+    <CustomBuild Include="savePlyDialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="savePLYDialog.h">
+      <Filter>Visualize</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="traj2AffineModel_distance.h">
@@ -471,8 +486,17 @@
     <ClInclude Include="GeneratedFiles\ui_savesnapshotDialog.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="saveplysetting.h">
+      <Filter>Visualize</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_savePlyDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PCM.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

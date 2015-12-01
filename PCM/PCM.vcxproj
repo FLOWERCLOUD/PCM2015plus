@@ -186,6 +186,7 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_LayerDialog.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_maching_state.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_propagate_withThread.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_savePLYDialog.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_saveSnapshotDialog.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_trajectory_classifier.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -208,6 +209,7 @@
     <ClCompile Include="GeneratedFiles\Release\moc_LayerDialog.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_maching_state.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_propagate_withThread.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_savePLYDialog.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_saveSnapshotDialog.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_trajectory_classifier.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -253,6 +255,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main_window.cpp" />
     <ClCompile Include="paint_canvas.cpp" />
+    <ClCompile Include="savePLYDialog.cpp" />
     <ClCompile Include="saveSnapshotDialog.cpp" />
     <ClCompile Include="select_tool.cpp" />
     <ClCompile Include="spectral_clustering.cpp" />
@@ -1909,6 +1912,7 @@
     <ClInclude Include="BoostGraph.h" />
     <ClInclude Include="GeneratedFiles\ui_layerDialog.h" />
     <ClInclude Include="GeneratedFiles\ui_papagate_dialog.h" />
+    <ClInclude Include="GeneratedFiles\ui_savePlyDialog.h" />
     <ClInclude Include="GeneratedFiles\ui_savesnapshotDialog.h" />
     <ClInclude Include="GlobalObject.h" />
     <ClInclude Include="GraphMatching.h" />
@@ -1951,7 +1955,20 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR_64_10)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_XML_LIB  "-IC:\Program Files\MATLAB\R2011b\extern\include" "-I.\GeneratedFiles" "-I." "-I$(QTDIR_64_10)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR_64_10)\include\QtCore" "-I$(QTDIR_64_10)\include\QtGui" "-I$(QTDIR_64_10)\include\QtOpenGL" "-I$(QTDIR_64_10)\include\QtWidgets" "-I.\.." "-I$(QTDIR_64_10)\include\QtXml" "-I.\..\eigen-3-1-4" "-IF:\opencv\build\include\opencv" "-IF:\opencv\build\include\opencv2" "-IF:\opencv\build\include"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR_64_10)\bin\moc.exe</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Performing Custom Build Tools 5</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Performing Custom Build Tools 5</Message>
     </CustomBuild>
+    <CustomBuild Include="savePLYDialog.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR_64_10)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_XML_LIB  "-IC:\Program Files\MATLAB\R2011b\extern\include" "-I.\GeneratedFiles" "-I." "-I$(QTDIR_64_10)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR_64_10)\include\QtCore" "-I$(QTDIR_64_10)\include\QtGui" "-I$(QTDIR_64_10)\include\QtOpenGL" "-I$(QTDIR_64_10)\include\QtWidgets" "-I.\.." "-I$(QTDIR_64_10)\include\QtXml" "-I.\..\eigen-3-1-4" "-IF:\opencv\build\include\opencv" "-IF:\opencv\build\include\opencv2" "-IF:\opencv\build\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR_64_10)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_XML_LIB  "-IC:\Program Files\MATLAB\R2011b\extern\include" "-I.\GeneratedFiles" "-I." "-I$(QTDIR_64_10)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR_64_10)\include\QtCore" "-I$(QTDIR_64_10)\include\QtGui" "-I$(QTDIR_64_10)\include\QtOpenGL" "-I$(QTDIR_64_10)\include\QtWidgets" "-I.\.." "-I$(QTDIR_64_10)\include\QtXml" "-I.\..\eigen-3-1-4" "-IF:\opencv\build\include\opencv" "-IF:\opencv\build\include\opencv2" "-IF:\opencv\build\include"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR_64_10)\bin\moc.exe</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR_64_10)\bin\moc.exe</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Performing Custom Build Tools 5</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Performing Custom Build Tools 5</Message>
+    </CustomBuild>
+    <ClInclude Include="saveplysetting.h" />
     <ClInclude Include="snapshotsetting.h" />
     <ClInclude Include="traj2AffineModel_distance.h" />
   </ItemGroup>
@@ -2000,6 +2017,22 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR_64_10)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR_64_10)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="savePlyDialog.ui">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR_64_10)\bin\uic.exe" -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR_64_10)\bin\uic.exe" -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR_64_10)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR_64_10)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Performing Custom Build Tools 5</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Performing Custom Build Tools 5</Message>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
