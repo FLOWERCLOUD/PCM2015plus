@@ -236,6 +236,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_savePLYDialog.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="pcl_descriptor.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="main_window.qrc">
@@ -491,6 +494,9 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_savePlyDialog.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pcl_descriptor.h">
+      <Filter>Algorithm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

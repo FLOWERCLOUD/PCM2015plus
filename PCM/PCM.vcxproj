@@ -144,7 +144,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PreprocessorDefinitions>UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_XML_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OPENCVDIR)\include\opencv;$(OPENCVDIR)\sources\include\opencv2;$(OPENCVDIR)\build\include;.\GeneratedFiles;.;$(QTDIR_64_10)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR_64_10)\include\QtCore;$(MATLABDIR2012b)\extern\include;$(QTDIR_64_10)\include\QtGui;$(QTDIR_64_10)\include\QtOpenGL;$(QTDIR_64_10)\include\QtWidgets;..;$(QTDIR_64_10)\include\QtXml;..\eigen-3-1-4;$(SolutionDir);$(SolutionDir)boost_1_59_0\boost_1_59_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OPENCVDIR)\include\opencv;$(OPENCVDIR)\sources\include\opencv2;$(OPENCVDIR)\build\include;.\GeneratedFiles;.;$(QTDIR_64_10)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR_64_10)\include\QtCore;$(MATLABDIR2012b)\extern\include;$(QTDIR_64_10)\include\QtGui;$(QTDIR_64_10)\include\QtOpenGL;$(QTDIR_64_10)\include\QtWidgets;..;$(QTDIR_64_10)\include\QtXml;..\eigen-3-1-4;$(SolutionDir);$(SolutionDir)boost_1_59_0\boost_1_59_0;$(PCL_DIR);$(PCL_ROOT)\3rdParty\FLANN\include;$(PCL_ROOT)\3rdParty\OpenNI\include;$(PCL_ROOT)\3rdParty\Qhull\include;$(PCL_ROOT)\3rdParty\VTK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -153,9 +153,9 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(MATLABDIR2012b)\extern\lib\win64\microsoft;$(MATLABDIR2012b)\lib\win64;$(SolutionDir)\x64\Release;$(QTDIR_64_10)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MATLABDIR2012b)\extern\lib\win64\microsoft;$(MATLABDIR2012b)\lib\win64;$(SolutionDir)\x64\Release;$(QTDIR_64_10)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\OpenNI\lib;$(PCL_ROOT)\3rdParty\Qhull\lib;$(PCL_ROOT)\3rdParty\VTK\lib;$(PCL_ROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;QGLViewer2.lib;$(QTDIR_64_10)\lib\qtmain.lib;$(QTDIR_64_10)\lib\QtCore4.lib;$(QTDIR_64_10)\lib\QtGui4.lib;$(QTDIR_64_10)\lib\QtOpenGL4.lib;$(QTDIR_64_10)\lib\QtXml4.lib;libeng.lib;libmx.lib;libmex.lib;libmat.lib;glut.lib;glut64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;QGLViewer2.lib;$(QTDIR_64_10)\lib\qtmain.lib;$(QTDIR_64_10)\lib\QtCore4.lib;$(QTDIR_64_10)\lib\QtGui4.lib;$(QTDIR_64_10)\lib\QtOpenGL4.lib;$(QTDIR_64_10)\lib\QtXml4.lib;libeng.lib;libmx.lib;libmex.lib;libmat.lib;glut.lib;glut64.lib;pcl_features_release.lib;pcl_kdtree_release.lib;pcl_search_release.lib;pcl_io_release.lib;pcl_io_ply_release.lib;pcl_common_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -219,6 +219,7 @@
     <ClCompile Include="LayerDialog.cpp" />
     <ClCompile Include="maching_state.cpp" />
     <ClCompile Include="multiway_propagation.cpp" />
+    <ClCompile Include="pcl_descriptor.cpp" />
     <ClCompile Include="plans_fit.cpp" />
     <ClCompile Include="propagate_withThread.cpp" />
     <ClCompile Include="sample.cpp" />
@@ -1949,6 +1950,7 @@
     </CustomBuild>
     <ClInclude Include="merge_propagate_write.h" />
     <ClInclude Include="merge_write_utilities.h" />
+    <ClInclude Include="pcl_descriptor.h" />
     <ClInclude Include="resource.h" />
     <CustomBuild Include="saveSnapshotDialog.h">
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
