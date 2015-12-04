@@ -14,16 +14,30 @@
 
 void PropagateThread::run()
 {
+
+	/*char* CORR_FILESNAME = "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\totcorr";
+	char* CORR_FILEOUT_NAME= "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\corroutput0_87center51.txt";
+	char* LABEL_FILESNAME = "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\totlabel";
+	char* LABEL_FILEOUT_NAME = "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\labeloutput0_87center51.txt";
+	mergeFile(CORR_FILESNAME ,CORR_FILEOUT_NAME , LABEL_FILESNAME , LABEL_FILEOUT_NAME);
+	return;*/
 	//mergeFile("","","","");
 	/*ProxyVisualLabel qinhua_single(
 	"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totLabelSmooth(15_24).txt",
 	"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totCorr(15_24).txt");*/
-	Proxy_PropagateAndVisual qinhua_single(
-		"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\nolabel\\total_label115_124center116.txt",
-		"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totCorr(15_24).txt",
-		115,
-		124,
-		116
+	//Proxy_PropagateAndVisual qinhua_single(
+	//	"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\nolabel\\total_label115_124center116.txt",
+	//	"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totCorr(15_24).txt",
+	//	115,
+	//	124,
+	//	116
+	//	);
+	Proxy_PropagateAndVisual hanger(
+		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\labeloutput0_87center51.txt",
+		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\corroutput0_87center51.txt",
+		0,
+		87,
+		51
 		);
 
 	/*ProxyStandaraAjustViewOriColorPly single_standard_ajustview(
@@ -121,7 +135,7 @@ void PropagateThread::run()
 //	 return;
 	
 	Proxy * mProxy ;
-	mProxy = &qinhua_single;
+	mProxy = &hanger;
 
 	if(mProxy)mProxy->setContext(this);
 	//Logger<< "propagate run "<<std::endl;

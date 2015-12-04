@@ -2,6 +2,7 @@
 //************************************
 // Method:    depthToCloud
 // 根据清华大学一篇文章中的深度图数据获得点云坐标
+#include <iostream>
 //************************************
 struct mvertex
 {
@@ -95,12 +96,14 @@ void appendlabel( const char* file_in ,char* file_out);
 void mergeFile(char* CORR_FILESNAME ,char* CORR_FILEOUT_NAME , char* LABEL_FILESNAME , char* LABEL_FILEOUT_NAME)
 {
 	QString dir_in( CORR_FILESNAME );
-	if (dir_in.isEmpty())
-		return ;
+	if (dir_in.isEmpty()){
+		std::cout<<"corr_files empty"<<std::endl;
+		return ;}
 
 	QDir file_dir(dir_in);
 	if ( !file_dir.exists() )
 	{
+		std::cout<<"corr_files don't exist"<<std::endl;
 		return ;
 	}
 	file_dir.setFilter(QDir::Files);
@@ -125,14 +128,16 @@ void mergeFile(char* CORR_FILESNAME ,char* CORR_FILEOUT_NAME , char* LABEL_FILES
 
 
 	}
-
+	std::cout<<"merge corr_files success"<<std::endl;
 	QString dir_in2( LABEL_FILESNAME );
-	if (dir_in2.isEmpty())
-		return ;
+	if (dir_in2.isEmpty()){
+		std::cout<<"label_files empty"<<std::endl;
+		return ;}
 
 	QDir file_dir2(dir_in2);
 	if ( !file_dir2.exists() )
 	{
+		std::cout<<"label_files don't exist"<<std::endl;
 		return;
 	}
 	file_dir2.setFilter(QDir::Files);
@@ -154,6 +159,7 @@ void mergeFile(char* CORR_FILESNAME ,char* CORR_FILEOUT_NAME , char* LABEL_FILES
 
 
 	}
+	std::cout<<"merge label_files success"<<std::endl;
 
 }
 void mergeFile( )
@@ -198,7 +204,7 @@ void appendlabel( const char* file_in ,char* file_out)
 	string str;
 	char buffer[50];
 	int buf[3];
-	fscanf(in_file,"%d\n",  &buf[0] );	 //略过第一行
+	//fscanf(in_file,"%d\n",  &buf[0] );	 //略过第一行
 	while(true){
 
 		int stat = fscanf(in_file,"%d %d %d\n",  &buf[0] ,&buf[1] , &buf[2]);	 

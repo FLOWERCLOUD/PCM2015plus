@@ -96,7 +96,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PreprocessorDefinitions>UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_XML_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR_64_10)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR_64_10)\include\QtCore;$(QTDIR_64_10)\include\QtGui;$(QTDIR_64_10)\include\QtOpenGL;$(QTDIR_64_10)\include\QtWidgets;..;$(QTDIR_64_10)\include\QtXml;..\eigen-3-1-4;$(OPENCVDIR)\include\opencv;$(OPENCVDIR)\sources\include\opencv2;$(OPENCVDIR)\build\include;$(MATLABDIR2012b)\extern\include;$(SolutionDir);$(SolutionDir)boost_1_59_0\boost_1_59_0;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR_64_10)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR_64_10)\include\QtCore;$(QTDIR_64_10)\include\QtGui;$(QTDIR_64_10)\include\QtOpenGL;$(QTDIR_64_10)\include\QtWidgets;..;$(QTDIR_64_10)\include\QtXml;..\eigen-3-1-4;$(OPENCVDIR)\include\opencv;$(OPENCVDIR)\sources\include\opencv2;$(OPENCVDIR)\build\include;$(MATLABDIR2012b)\extern\include;$(SolutionDir);$(SolutionDir)boost_1_59_0\boost_1_59_0;.\;$(PCL_DIR);$(PCL_ROOT)\3rdParty\FLANN\include;$(PCL_ROOT)\3rdParty\OpenNI\include;$(PCL_ROOT)\3rdParty\Qhull\include;$(PCL_ROOT)\3rdParty\VTK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -108,9 +108,9 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(MATLABDIR2012b)\extern\lib\win64\microsoft;$(MATLABDIR2012b)\lib\win64;$(SolutionDir)\x64\Debug;$(QTDIR_64_10)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MATLABDIR2012b)\extern\lib\win64\microsoft;$(MATLABDIR2012b)\lib\win64;$(SolutionDir)\x64\Debug;$(QTDIR_64_10)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\OpenNI\lib;$(PCL_ROOT)\3rdParty\Qhull\lib;$(PCL_ROOT)\3rdParty\VTK\lib;$(PCL_ROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(QTDIR_64_10)\lib\qtmaind.lib;$(QTDIR_64_10)\lib\QtCored4.lib;$(QTDIR_64_10)\lib\QtGuid4.lib;$(QTDIR_64_10)\lib\QtOpenGLd4.lib;opengl32.lib;glu32.lib;$(QTDIR_64_10)\lib\QtXmld4.lib;QGLViewerd2.lib;libeng.lib;libmx.lib;libmex.lib;libmat.lib;glut.lib;glut64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(QTDIR_64_10)\lib\qtmaind.lib;$(QTDIR_64_10)\lib\QtCored4.lib;$(QTDIR_64_10)\lib\QtGuid4.lib;$(QTDIR_64_10)\lib\QtOpenGLd4.lib;opengl32.lib;glu32.lib;$(QTDIR_64_10)\lib\QtXmld4.lib;QGLViewerd2.lib;libeng.lib;libmx.lib;libmex.lib;libmat.lib;glut.lib;glut64.lib;pcl_features_debug.lib;pcl_kdtree_debug.lib;pcl_search_debug.lib;pcl_io_debug.lib;pcl_io_ply_debug.lib;pcl_common_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep>

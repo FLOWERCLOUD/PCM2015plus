@@ -2537,9 +2537,9 @@ void DualwayPropagation::changedDepthAndDispaly( int _depth )
 			HFrame& cframe = hier_componets_[ fbitr->first]; 
 			Logger<<" 层数"<< cframe.hier_label_bucket.size()<<std::endl;
 			if ((_depth + 1) > cframe.hier_label_bucket.size()) continue;
-Logger<<" 先在在第 "<< _depth <<" 层"<<std::endl;
+//Logger<<" 先在在第 "<< _depth <<" 层"<<std::endl;
 				std::vector<HLabel*>& cLabelbck = cframe.hier_label_bucket[_depth];
-Logger<<" vector<HLabel*> 大小"<< cLabelbck.size()<<std::endl;
+//Logger<<" vector<HLabel*> 大小"<< cLabelbck.size()<<std::endl;
 			//std::vector<HLabel*>& cLabelbck = cframe.hier_label_bucket[_depth];
 				std::vector<HLabel*>::iterator hlabelbitr , hlabeleitr ;
 
@@ -2548,7 +2548,7 @@ Logger<<" vector<HLabel*> 大小"<< cLabelbck.size()<<std::endl;
 				for( ; hlabelbitr!= hlabeleitr ;++ hlabelbitr){
 					HLabel* pclabel = *hlabelbitr;
 					std::map<IndexType ,HVertex*>::iterator vtxvecbitr ,vtxveceitr;
-Logger<<"label id "<< pclabel->label_id<<" 点数："<< pclabel->vertex_bucket.size()<<std::endl;
+//Logger<<"label id "<< pclabel->label_id<<" 点数："<< pclabel->vertex_bucket.size()<<std::endl;
 					vtxvecbitr = pclabel->vertex_bucket.begin();
 					vtxveceitr = pclabel->vertex_bucket.end();
 					for( ; vtxvecbitr!= vtxveceitr ;++vtxvecbitr){
