@@ -28,6 +28,7 @@ PaintCanvas::PaintCanvas(const QGLFormat& format, QWidget *parent):
 	nearPlane = .2f;
 	farPlane = 5.f;
 	takeSnapTile=false;
+	centerframeNum = 0;
 
 	main_window_ = (main_window*)parent;
 
@@ -59,7 +60,7 @@ void PaintCanvas::draw()
 	if ( !set.empty() )
 	{
 		glDisable(GL_MULTISAMPLE);
-		for (size_t i = 0; i <set.size(); i++ )
+		for (int i = 0; i <set.size(); i++ )
 		{
 			//if( i == 0 || i > 9)continue;
 			LOCK(set[i]);
@@ -67,24 +68,26 @@ void PaintCanvas::draw()
 			{
 			case PaintCanvas::VERTEX_COLOR:
 				 glEnable(GL_MULTISAMPLE);
-				set[i].draw(ColorMode::VertexColorMode(),Paint_Param::g_step_size * (ScalarType)i);
+				set[i].draw(ColorMode::VertexColorMode(),Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
 				glDisable(GL_MULTISAMPLE);
 				break;
 			case PaintCanvas::OBJECT_COLOR:
 				 glEnable(GL_MULTISAMPLE);
 				set[i].draw(ColorMode::ObjectColorMode(), 
-					Paint_Param::g_step_size * (ScalarType)i);
+					Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
 				glDisable(GL_MULTISAMPLE);
 				break;
 			case PaintCanvas::LABEL_COLOR:
-				 glEnable(GL_MULTISAMPLE);
+				 glEnable(GL_MULTISAMPLE);			
 				set[i].draw(ColorMode::LabelColorMode(),
-					Paint_Param::g_step_size * (ScalarType)i);
+						 Paint_Param::g_step_size * (ScalarType)(i-centerframeNum) );
+
+				
 				glDisable(GL_MULTISAMPLE);
 				break;
 			case PaintCanvas::WrapBoxColorMode:   //added by huayun
 				if(show_Graph_WrapBox_){
-					const Vec3& bias = Paint_Param::g_step_size * (ScalarType)i;
+					const Vec3& bias = Paint_Param::g_step_size * (ScalarType)(i-centerframeNum);
 					auto camera_look_at = camera()->viewDirection();
 
 
@@ -162,7 +165,7 @@ void PaintCanvas::draw()
 						break;
 					}
 					set[i].draw(ColorMode::EdgePointColorMode(),
-					Paint_Param::g_step_size * (ScalarType)i);
+					Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
 				}
 				glDisable(GL_MULTISAMPLE);
 				break;
@@ -175,7 +178,7 @@ void PaintCanvas::draw()
 						break;
 					}
 					set[i].draw(ColorMode::SphereMode(),
-						Paint_Param::g_step_size * (ScalarType)i);
+						Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
 				}
 			//	glDisable(GL_MULTISAMPLE);
 				break;
@@ -191,6 +194,7 @@ void PaintCanvas::draw()
 	//draw line tracer
 	if (show_trajectory_)
 	{
+		Tracer::get_instance().setcenterframeNum(centerframeNum);
 		Tracer::get_instance().draw();
 	}
 
@@ -372,6 +376,7 @@ void PaintCanvas::wheelEvent(QWheelEvent *e)
 
 		updateGL();
 	}
+	
 
 	if (e->modifiers() == Qt::AltModifier )
 	{
@@ -397,6 +402,19 @@ void PaintCanvas::wheelEvent(QWheelEvent *e)
 
 		Paint_Param::g_step_size(0) += 0.1f * numDegrees;
 
+
+		updateGL();
+	}
+	//change line size
+	if (e->modifiers() == Qt::Key_L)
+	{
+		int numDegrees = e->delta() / 120;
+
+		Paint_Param::g_line_size += 1.f * numDegrees;
+		if (Paint_Param::g_line_size < 0.)
+		{
+			Paint_Param::g_line_size = 0.1;
+		}
 
 		updateGL();
 	}

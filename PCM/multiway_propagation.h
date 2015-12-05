@@ -432,74 +432,74 @@ public:
 
 	void read_data(char *label_name,char *corr_name);
 
-	void init_labeles_graph()
-	{
-		for (auto citer = components_.begin(); citer!=components_.end(); citer++)
-		{
-			IndexType nodeSize = citer->second.label_bucket.size();
+	//void init_labeles_graph()
+	//{
+	//	for (auto citer = components_.begin(); citer!=components_.end(); citer++)
+	//	{
+	//		IndexType nodeSize = citer->second.label_bucket.size();
 
-			LabelsGraph* new_labelGraph_space = allocator_.allocate<LabelsGraph>();
+	//		LabelsGraph* new_labelGraph_space = allocator_.allocate<LabelsGraph>();
 
-			LabelsGraph* new_labelGraph = new (new_labelGraph_space)LabelsGraph;
+	//		LabelsGraph* new_labelGraph = new (new_labelGraph_space)LabelsGraph;
 
 
-			new_labelGraph->added_vertex(nodeSize);
+	//		new_labelGraph->added_vertex(nodeSize);
 
-			for (IndexType i = 0; i < nodeSize-1; i ++)
-			{
-				for (IndexType j = i + 1; j < nodeSize; j++)
-				{
+	//		for (IndexType i = 0; i < nodeSize-1; i ++)
+	//		{
+	//			for (IndexType j = i + 1; j < nodeSize; j++)
+	//			{
 
-					CLabel* fir = citer->second.label_bucket[i];
+	//				CLabel* fir = citer->second.label_bucket[i];
 
-					CLabel* sec = citer->second.label_bucket[j];
+	//				CLabel* sec = citer->second.label_bucket[j];
 
-					map<IndexType,CVertex*> fir_vtx = fir->vertex_bucket;
+	//				map<IndexType,CVertex*> fir_vtx = fir->vertex_bucket;
 
-					map<IndexType,CVertex*> sec_vtx = sec->vertex_bucket;
+	//				map<IndexType,CVertex*> sec_vtx = sec->vertex_bucket;
 
-					//计算两个块之间的最短距离
-					ScalarType minDis = 1000000;
-					SampleSet& sample_set = SampleSet::get_instance();
-					map<IndexType,CVertex*>::iterator biter1 , eiter1 ,biter2,eiter2;
-					eiter1 = fir_vtx.end();
-					eiter2 = sec_vtx.end();
-					ScalarType dia ;
-					for( biter1 = fir_vtx.begin() ;biter1 != eiter1 ;++biter1){
-						for( biter2 = sec_vtx.begin() ;biter2 != eiter2 ;++biter2){
-							IndexType index1 = biter1->first;
-							Sample& s = sample_set[citer->first];
-							dia = s.getBox().diag();
-							
-							PointType point1 =  s.vertices_matrix().col(index1);
+	//				//计算两个块之间的最短距离
+	//				ScalarType minDis = 1000000;
+	//				SampleSet& sample_set = SampleSet::get_instance();
+	//				map<IndexType,CVertex*>::iterator biter1 , eiter1 ,biter2,eiter2;
+	//				eiter1 = fir_vtx.end();
+	//				eiter2 = sec_vtx.end();
+	//				ScalarType dia ;
+	//				for( biter1 = fir_vtx.begin() ;biter1 != eiter1 ;++biter1){
+	//					for( biter2 = sec_vtx.begin() ;biter2 != eiter2 ;++biter2){
+	//						IndexType index1 = biter1->first;
+	//						Sample& s = sample_set[citer->first];
+	//						dia = s.getBox().diag();
+	//						
+	//						PointType point1 =  s.vertices_matrix().col(index1);
 
-							IndexType index2 = biter2->first;
-						
-							PointType point2 =  s.vertices_matrix().col(index2);
-							
-							ScalarType distance = (point1 - point2).norm();
-							if(distance < minDis)minDis = distance;
-							
+	//						IndexType index2 = biter2->first;
+	//					
+	//						PointType point2 =  s.vertices_matrix().col(index2);
+	//						
+	//						ScalarType distance = (point1 - point2).norm();
+	//						if(distance < minDis)minDis = distance;
+	//						
 
-						}
+	//					}
 
-					}
-					 
-					if (minDis <  dia * 0.0588 )
-					{
+	//				}
+	//				 
+	//				if (minDis <  dia * 0.0588 )
+	//				{
 
-			           boost::add_edge(i,j,*new_labelGraph);
+	//		           boost::add_edge(i,j,*new_labelGraph);
 
-					}
+	//				}
 
-				}
-			}
+	//			}
+	//		}
 
-			citer->second.labelGraph = new_labelGraph;
-	
-		}
+	//		citer->second.labelGraph = new_labelGraph;
+	//
+	//	}
 
-	}
+	//}
 	void getEdgeVertexs( IndexType _CFrameId ,IndexType lLabelId ,IndexType rLabelId , map<IndexType, map<IndexType ,HVertex*> >& _edgepoints );
 	void getEdgeVertexsByMinDIstance( IndexType _CFrameId , distanPriQueue& _PriQuemap, map<IndexType, map<IndexType ,HVertex*> >& _edgepoints );
 	void init_labeles_graph_hier();
@@ -508,52 +508,52 @@ public:
 	void init_node_link(IndexType _frameId , IndexType _depth);
 
 
-	void read_label_file(char *filename)
-	{
-		FILE* in_file = fopen(filename, "r");
-		if (in_file==NULL)
-		{
-			return;
-		}
-		IndexType frame, label, vtx_idx;
-		while ( true )
-		{
-			int stat =  fscanf(in_file, "%d %d %d\n",&frame, &label, &vtx_idx);
-			if (stat == EOF)
-				break;
-			if ( components_.find(frame)==components_.end() )
-			{
-				components_.insert(make_pair(frame, CFrame()));
-				components_[frame].frame_id = frame;
-			}
-			if ( label >= components_[frame].label_bucket.size() )
-			{
-				components_[frame].label_bucket.resize( label+1 );
-			}
-			if (   nullptr==components_[frame].label_bucket[label] )
-			{
-				CLabel* new_label_space = allocator_.allocate<CLabel>();
-				CLabel* new_label = new (new_label_space)CLabel;
-				components_[frame].label_bucket[label] = new_label;
-				components_[frame].label_bucket[label]->frame_parent = &components_[frame];
-				components_[frame].label_bucket[label]->label_id = label;
-			}
-			CVertex* new_space = allocator_.allocate<CVertex>();
-			CVertex* new_vtx = new (new_space)CVertex(vtx_idx, components_[frame].label_bucket[label]);
-			components_[frame].label_bucket[label]->vertex_bucket.insert( make_pair(vtx_idx,new_vtx) );
-			components_[frame].label_of_vtx.insert( make_pair(vtx_idx, label) );
-			//ADD BY HUAYUN 
-			SampleSet& sample_set = SampleSet::get_instance();
-			Sample& sample = sample_set[frame];
-			 
-		 
+	//void read_label_file(char *filename)
+	//{
+	//	FILE* in_file = fopen(filename, "r");
+	//	if (in_file==NULL)
+	//	{
+	//		return;
+	//	}
+	//	IndexType frame, label, vtx_idx;
+	//	while ( true )
+	//	{
+	//		int stat =  fscanf(in_file, "%d %d %d\n",&frame, &label, &vtx_idx);
+	//		if (stat == EOF)
+	//			break;
+	//		if ( components_.find(frame)==components_.end() )
+	//		{
+	//			components_.insert(make_pair(frame, CFrame()));
+	//			components_[frame].frame_id = frame;
+	//		}
+	//		if ( label >= components_[frame].label_bucket.size() )
+	//		{
+	//			components_[frame].label_bucket.resize( label+1 );
+	//		}
+	//		if (   nullptr==components_[frame].label_bucket[label] )
+	//		{
+	//			CLabel* new_label_space = allocator_.allocate<CLabel>();
+	//			CLabel* new_label = new (new_label_space)CLabel;
+	//			components_[frame].label_bucket[label] = new_label;
+	//			components_[frame].label_bucket[label]->frame_parent = &components_[frame];
+	//			components_[frame].label_bucket[label]->label_id = label;
+	//		}
+	//		CVertex* new_space = allocator_.allocate<CVertex>();
+	//		CVertex* new_vtx = new (new_space)CVertex(vtx_idx, components_[frame].label_bucket[label]);
+	//		components_[frame].label_bucket[label]->vertex_bucket.insert( make_pair(vtx_idx,new_vtx) );
+	//		components_[frame].label_of_vtx.insert( make_pair(vtx_idx, label) );
+	//		//ADD BY HUAYUN 
+	//		SampleSet& sample_set = SampleSet::get_instance();
+	//		Sample& sample = sample_set[frame];
+	//		 
+	//	 
 
-		 	 
+	//	 	 
 
-		}
-	}
+	//	}
+	//}
 
-	void read_corres_file(char *filename)
+	/*void read_corres_file(char *filename)
 	{
 		FILE* in_file = fopen(filename,"r");
 		if(in_file==NULL)
@@ -582,31 +582,36 @@ public:
 				cur_vtx.prev_corr = components_[next_frame].label_bucket[ next_label]->vertex_bucket[next_vtx_idx];
 			}
 		}
-	}
+	}*/
 	void read_corres_file_hier(char* filename);
 
 	void  read_label_file_hier(char *filename);
 
 	void show_corresponding(int f)
 	{
-		for ( IndexType l = 0; l<components_[f].label_bucket.size(); l++ )
+		for ( IndexType l = 0; l<hier_componets_[f].hier_label_bucket[0].size(); l++ )
 		{
-			CLabel& label = *components_[f].label_bucket[l];
+			HLabel& label = *hier_componets_[f].hier_label_bucket[0][l];
+			IndexType mSize = label.vertex_bucket.size();
+			IndexType i = 5;
 			for ( auto viter = label.vertex_bucket.begin();
-					viter!=label.vertex_bucket.end();
-					viter++)
+				viter!=label.vertex_bucket.end() && i < mSize;
+				i += 5, advance(viter,5))
 			{
-				CVertex& vtx = *(viter->second);
+				HVertex& vtx = *(viter->second);
 				if ( vtx.next_corr )
 				{
 					Tracer::get_instance().add_record(f, vtx.vtx_id, f+1, vtx.next_corr->vtx_id);
 				}
+
 				if (vtx.prev_corr)
 				{
 					Tracer::get_instance().add_record(f, vtx.vtx_id, f-1, vtx.prev_corr->vtx_id);
 				}
+
 			}
 		}
+
 	}
 
 	void smooth_label(IndexType frame_idx)

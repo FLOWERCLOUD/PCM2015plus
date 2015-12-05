@@ -8,6 +8,7 @@
 #include "sample.h"
 #include "vertex.h"
 #include "globals.h"
+#include "paint_canvas.h"
 
 using namespace std;
 
@@ -58,7 +59,10 @@ public:
 			add_record(srGraph,start(0,vtx_idx),tgGraph,end(0,vtx_idx));
 		}        
 	}
-
+	void setcenterframeNum(IndexType centerframe)
+	{
+		centerframenum_= centerframe;
+	}
 	void draw()
 	{
 		IndexType	num_record = head_.size();
@@ -72,9 +76,9 @@ public:
 		SampleSet&	set = SampleSet::get_instance();
 
 		glColor4f(1.,0.,0.,1.);
-		glLineWidth( Paint_Param::g_point_size );
+		glLineWidth( Paint_Param::g_line_size );
 		glBegin(GL_LINES);
-		for ( IndexType i=0; i < num_record; i++ )
+		for ( int i=0; i < num_record; i++ )
 		{
 			IndexType	sample0_idx = head_[i].first;
 			IndexType	sample0_vtx_idx = head_[i].second;
@@ -87,8 +91,8 @@ public:
 				Vec4(sample0_vtx.x(), sample0_vtx.y(),sample0_vtx.z(),1.0);
 			Vec4	second_v	= set[sample1_idx].matrix_to_scene_coord() *
 				Vec4(sample1_vtx.x(), sample1_vtx.y(),sample1_vtx.z(),1.0);
-			Vec3 bias0 = Paint_Param::g_step_size * (ScalarType)sample0_idx;
-			Vec3 bias1 = Paint_Param::g_step_size * (ScalarType)sample1_idx;
+			Vec3 bias0 = Paint_Param::g_step_size * (ScalarType)((int)sample0_idx - centerframenum_ );
+			Vec3 bias1 = Paint_Param::g_step_size * (ScalarType)((int)sample1_idx -centerframenum_);
 			glColor4f( 1,0,0,1 );
 			glVertex3f( first_v(0)+bias0(0),first_v(1)+bias0(1),first_v(2)+bias0(2) );
 			glVertex3f( second_v(0)+bias1(0), second_v(1)+bias1(1),second_v(2) + bias1(2) );
@@ -126,7 +130,9 @@ public:
 	}
 
 private:
-	Tracer(){}
+	Tracer(){
+		centerframenum_ = 0;
+	}
 	~Tracer(){};
 	Tracer( const Tracer&);
 	void operator=(const Tracer&);
@@ -134,6 +140,7 @@ private:
 private:
 	vector< Sample_Vertex_Index >		head_;
 	vector< Sample_Vertex_Index >	tail_;
+	IndexType centerframenum_;
 
 };
 

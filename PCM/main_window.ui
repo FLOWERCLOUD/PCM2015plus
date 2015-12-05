@@ -152,6 +152,16 @@
       </rect>
      </property>
     </widget>
+    <widget class="QSpinBox" name="centerframe">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>470</y>
+       <width>201</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
   <action name="actionImportFiles">

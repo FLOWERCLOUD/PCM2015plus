@@ -11,6 +11,7 @@ namespace Paint_Param
 {
 	extern	Vec3	g_step_size;
 	extern ScalarType g_point_size;
+	extern ScalarType g_line_size;
 }
 
 namespace Register_Param

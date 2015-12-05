@@ -80,6 +80,7 @@ public:
 	//added by huayun
 	bool			show_Graph_WrapBox_;
 	bool			show_EdgeVertexs_;
+	IndexType		centerframeNum;
 };
 
 #endif

@@ -35,6 +35,9 @@ bool ifGraphBoxVisible = 0;
 bool ifEdgeVertexVisible = 0;
 IndexType LabelGraphDepth = 0;
 #include <QtGui/QSplitter>
+#include <QtGui/QVBoxLayout>
+#include <qtgui/QHBoxLayout>
+#include <QtGui/QSizePolicy>
 
 
 
@@ -55,12 +58,27 @@ main_window::main_window(QWidget *parent)
 	main_canvas_ = new PaintCanvas(format, this);
 
 	setCentralWidget(main_canvas_);
+	//add Multiple widgets on a QDockWidget
 	QDockWidget* layerDock = new QDockWidget(  QString(" LAYERDOCK") , this);
 	ui.LayerSpinBox->setMinimumSize(QSize(50, 38));
 	ui.LayerSpinBox->setMaximumWidth(300);
-
-	layerDock->setWidget(ui.LayerSpinBox);
-
+	ui.centerframe->setMinimumSize(QSize(50, 38));
+	ui.centerframe->setMaximumWidth(300);
+	//layerDock->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding ) );
+	
+	QWidget* multiwidget = new QWidget();
+	multiwidget->setMaximumHeight(100);
+	QVBoxLayout* layerlayout = new QVBoxLayout();
+	QHBoxLayout* LayerDialoglayout = new QHBoxLayout();
+	QHBoxLayout* centetframelayout = new QHBoxLayout();
+	LayerDialoglayout->addWidget(new QLabel("layer") );
+	LayerDialoglayout->addWidget(ui.LayerSpinBox);
+	centetframelayout->addWidget(new QLabel("center frame"));
+	centetframelayout->addWidget(ui.centerframe);
+	layerlayout->addLayout(LayerDialoglayout);
+	layerlayout->addLayout(centetframelayout);
+	multiwidget->setLayout(layerlayout);
+	layerDock->setWidget(multiwidget);
 	this->addDockWidget(static_cast<Qt::DockWidgetArea>(1), layerDock);
 
 	QSplitter *splitter= new QSplitter(this);
@@ -165,6 +183,7 @@ void main_window::createPaintSettingAction()
 	//connect( ui.LayerSpinBox ,SIGNAL( triggered() ) ,this ,SLOT(layerSpinBoxChanged( 2)) );
 	connect( ui.LayerSpinBox ,SIGNAL( valueChanged(int)) ,this ,SLOT(layerSpinBoxChanged(int)) );
 	//connect( ui.actionButtonback, SIGNAL(triggered() ) , this ,SLOT(layerSpinBoxChanged(int)) );
+	connect( ui.centerframe ,SIGNAL( valueChanged(int)) ,this ,SLOT(centerframeChanged(int)) );
 	//connect( ui.actionButton2stop, SIGNAL(triggered() ) , this ,SLOT(layerSpinBoxChanged(int)) );
 	StateManager::getInstance().setWindowrefer(this);
 	int runorp = connect( ui.actionButtonRunOrPause, SIGNAL(triggered() ) , this ,SLOT( runOrPause() ) );
@@ -320,7 +339,7 @@ void main_window::clearTracer()
 //icon.addFile(QString::fromUtf8("Resources/openFile.png"), QSize(), QIcon::Normal, QIcon::Off);
 //actionImportFiles->setIcon(icon);
 void main_window::layerSpinBoxChanged(int i){
-	Logger<<"spinbox 值改变  "<< i <<std::endl;
+	Logger<<"layer 值改变  "<< i <<std::endl;
 	if( i != LabelGraphDepth){
 		LabelGraphDepth = i;
 		SampleSet::get_instance()[cur_select_sample_idx_].clayerDepth_ = i;
@@ -329,6 +348,11 @@ void main_window::layerSpinBoxChanged(int i){
 	DualwayPropagation::get_instance().changedDepthAndDispaly( i);
 	main_canvas_->updateGL();
 
+}
+void main_window::centerframeChanged(int i){
+	Logger<<"centerframe 值改变  "<< i <<std::endl;
+	main_canvas_->centerframeNum = i;
+	main_canvas_->updateGL();
 }
 //connect( ui.actionButtonback, SIGNAL(triggered() ) , this ,SLOT(layerSpinBoxChanged(int)) );
 //connect( ui.actionButton2stop, SIGNAL(triggered() ) , this ,SLOT(layerSpinBoxChanged(int)) );

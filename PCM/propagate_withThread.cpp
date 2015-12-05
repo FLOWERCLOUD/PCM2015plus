@@ -35,8 +35,8 @@ void PropagateThread::run()
 	Proxy_PropagateAndVisual hanger(
 		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\labeloutput0_87center51.txt",
 		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\corroutput0_87center51.txt",
-		0,
-		87,
+		48,
+		54,
 		51
 		);
 
@@ -239,6 +239,7 @@ void PropagateThread::run()
 // 
 	//Proxy_Propagate* mpp = dynamic_cast<Proxy_Propagate*>(mProxy);
 	//visualCosegmentation( mpp->getLabelFileName());
+	dp_.show_corresponding(51);
 
 }
 

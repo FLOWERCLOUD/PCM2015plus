@@ -94,6 +94,8 @@ public:
 
 
 		void layerSpinBoxChanged(int i);
+		void centerframeChanged(int i);
+
 		void chooseGraph_WrapBox_visiable();
 		void Show_Graph_WrapBox();
 		void unShow_Graph_WrapBox();
