@@ -29,6 +29,7 @@ PaintCanvas::PaintCanvas(const QGLFormat& format, QWidget *parent):
 	farPlane = 5.f;
 	takeSnapTile=false;
 	centerframeNum = 0;
+	is_key_l_pressed = false;
 
 	main_window_ = (main_window*)parent;
 
@@ -363,7 +364,7 @@ void PaintCanvas::wheelEvent(QWheelEvent *e)
 	//	updateGL();
 	//}
 
-
+	//std::cout<<Qt::ControlModifier<<std::endl;
 	if (e->modifiers() == Qt::ControlModifier)
 	{
 		int numDegrees = e->delta() / 120;
@@ -406,17 +407,20 @@ void PaintCanvas::wheelEvent(QWheelEvent *e)
 		updateGL();
 	}
 	//change line size
-	if (e->modifiers() == Qt::Key_L)
+	if (is_key_l_pressed)
 	{
+		
 		int numDegrees = e->delta() / 120;
-
+		
 		Paint_Param::g_line_size += 1.f * numDegrees;
+		std::cout<<Paint_Param::g_line_size<<std::endl;
 		if (Paint_Param::g_line_size < 0.)
 		{
 			Paint_Param::g_line_size = 0.1;
 		}
 
 		updateGL();
+		return;
 	}
 	QGLViewer::wheelEvent(e);
 }
@@ -458,6 +462,25 @@ void PaintCanvas::keyPressEvent(QKeyEvent * e)
 			updateGL();
 		}
 	}
+	if ( e->key() == Qt::Key_L &&!e->isAutoRepeat())
+	{
+		
+		std::cout<<"key_l_pressed"<<std::endl;
+		is_key_l_pressed = true;
+	}
+}
+void PaintCanvas::keyReleaseEvent(QKeyEvent * e)
+{
+	//if(e->isAutoRepeat())
+	//{
+	//	e->ignore();
+	//	return;
+	//}
+	if ( e->key() == Qt::Key_L&& !e->isAutoRepeat())
+	{
+		std::cout<<"key_l_release"<<std::endl;
+		is_key_l_pressed = false;
+	}
 }
 
 void PaintCanvas::showSelectedTraj()
@@ -498,6 +521,25 @@ void PaintCanvas::showSelectedTraj()
 		}
 	}
 	this->show_trajectory_ = true;
+}
+void PaintCanvas::showSelectedlabelTraj(std::vector<int>& _selectedlabeltraj)
+{
+	/*Tracer& tracer = Tracer::get_instance();
+	tracer.clear_records();
+
+	IndexType m = (SampleSet::get_instance()).size(); 
+	IndexType n = (SampleSet::get_instance()[0]).num_vertices();
+
+	for ( IndexType i=0; i<selected_items.size(); i++ )
+	{
+	IndexType selected_idx = selected_items[i];
+
+	for ( IndexType j=0; j<traj_num; j++ )
+	{
+	tracer.add_record(  j, traj(j) , j+1, traj(j+1) );
+	}
+	}*/
+
 }
 
 void PaintCanvas::pasteTile()

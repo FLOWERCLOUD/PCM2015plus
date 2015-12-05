@@ -41,6 +41,8 @@ public:
 	//save ply
 	SavePlySetting splys;
 	void savePLY(SavePlySetting& ss);
+	//show trajectory
+	void showSelectedlabelTraj(std::vector<int>& _selectedlabeltraj);
 	
 
 	
@@ -54,6 +56,7 @@ protected:
 	virtual void mouseMoveEvent(QMouseEvent *e);
 	virtual void mouseReleaseEvent(QMouseEvent *e);
 	virtual void keyPressEvent(QKeyEvent * e);
+	virtual void keyReleaseEvent(QKeyEvent * e);
 
 	// wheel event
 	virtual void wheelEvent(QWheelEvent *e);
@@ -68,6 +71,7 @@ private:
 	bool  takeSnapTile;
 	IndexType tileCol ,tileRow , totalCols ,totalRows;
 	IndexType currSnapLayer;  // snapshot; total number of layers and current layer rendered
+	bool is_key_l_pressed;
 
 
 public:

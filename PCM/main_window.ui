@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1122</width>
-    <height>592</height>
+    <height>656</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -148,7 +148,7 @@
        <x>0</x>
        <y>430</y>
        <width>301</width>
-       <height>61</height>
+       <height>41</height>
       </rect>
      </property>
     </widget>
@@ -159,6 +159,29 @@
        <y>470</y>
        <width>201</width>
        <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button_traj_label">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>500</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>traj_label</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="text_trajectory_label">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>500</y>
+       <width>131</width>
+       <height>31</height>
       </rect>
      </property>
     </widget>

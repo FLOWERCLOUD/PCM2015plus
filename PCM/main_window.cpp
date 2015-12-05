@@ -38,6 +38,7 @@ IndexType LabelGraphDepth = 0;
 #include <QtGui/QVBoxLayout>
 #include <qtgui/QHBoxLayout>
 #include <QtGui/QSizePolicy>
+#include <sstream>
 
 
 
@@ -71,12 +72,17 @@ main_window::main_window(QWidget *parent)
 	QVBoxLayout* layerlayout = new QVBoxLayout();
 	QHBoxLayout* LayerDialoglayout = new QHBoxLayout();
 	QHBoxLayout* centetframelayout = new QHBoxLayout();
+	QHBoxLayout* trj_labelLayout = new QHBoxLayout();
 	LayerDialoglayout->addWidget(new QLabel("layer") );
 	LayerDialoglayout->addWidget(ui.LayerSpinBox);
 	centetframelayout->addWidget(new QLabel("center frame"));
 	centetframelayout->addWidget(ui.centerframe);
+	trj_labelLayout->addWidget(ui.text_trajectory_label);
+	trj_labelLayout->addWidget(ui.button_traj_label);
+
 	layerlayout->addLayout(LayerDialoglayout);
 	layerlayout->addLayout(centetframelayout);
+	layerlayout->addLayout(trj_labelLayout);
 	multiwidget->setLayout(layerlayout);
 	layerDock->setWidget(multiwidget);
 	this->addDockWidget(static_cast<Qt::DockWidgetArea>(1), layerDock);
@@ -184,6 +190,8 @@ void main_window::createPaintSettingAction()
 	connect( ui.LayerSpinBox ,SIGNAL( valueChanged(int)) ,this ,SLOT(layerSpinBoxChanged(int)) );
 	//connect( ui.actionButtonback, SIGNAL(triggered() ) , this ,SLOT(layerSpinBoxChanged(int)) );
 	connect( ui.centerframe ,SIGNAL( valueChanged(int)) ,this ,SLOT(centerframeChanged(int)) );
+
+	connect(ui.button_traj_label, SIGNAL(clicked()), this, SLOT(dealtarjlabel()) );
 	//connect( ui.actionButton2stop, SIGNAL(triggered() ) , this ,SLOT(layerSpinBoxChanged(int)) );
 	StateManager::getInstance().setWindowrefer(this);
 	int runorp = connect( ui.actionButtonRunOrPause, SIGNAL(triggered() ) , this ,SLOT( runOrPause() ) );
@@ -338,7 +346,8 @@ void main_window::clearTracer()
 //QIcon icon;
 //icon.addFile(QString::fromUtf8("Resources/openFile.png"), QSize(), QIcon::Normal, QIcon::Off);
 //actionImportFiles->setIcon(icon);
-void main_window::layerSpinBoxChanged(int i){
+void main_window::layerSpinBoxChanged(int i)
+{
 	Logger<<"layer 值改变  "<< i <<std::endl;
 	if( i != LabelGraphDepth){
 		LabelGraphDepth = i;
@@ -349,9 +358,37 @@ void main_window::layerSpinBoxChanged(int i){
 	main_canvas_->updateGL();
 
 }
-void main_window::centerframeChanged(int i){
+void main_window::centerframeChanged(int i)
+{
 	Logger<<"centerframe 值改变  "<< i <<std::endl;
 	main_canvas_->centerframeNum = i;
+	main_canvas_->updateGL();
+}
+void main_window::dealtarjlabel()
+{
+	std::stringstream istring(ui.text_trajectory_label->text().toStdString());
+	static int labelidx = 0;
+	Logger<<"dealtarjlabel  "<<std::endl;
+
+	std::vector<int> frame;
+
+	frame.push_back(51);
+	/*frame.push_back(52);
+	frame.push_back(53);
+	frame.push_back(54);*/
+	//std::vector<int> traj_label_vec;
+	
+	int label;
+	traj_label_vec.clear();
+	while(istring>>label){
+		traj_label_vec.push_back(label);
+	};
+
+
+	//label.push_back(1);
+	
+	//label.push_back(7);
+	DualwayPropagation::get_instance().show_correspondingframeandlabel(frame ,traj_label_vec);
 	main_canvas_->updateGL();
 }
 //connect( ui.actionButtonback, SIGNAL(triggered() ) , this ,SLOT(layerSpinBoxChanged(int)) );

@@ -587,33 +587,8 @@ public:
 
 	void  read_label_file_hier(char *filename);
 
-	void show_corresponding(int f)
-	{
-		for ( IndexType l = 0; l<hier_componets_[f].hier_label_bucket[0].size(); l++ )
-		{
-			HLabel& label = *hier_componets_[f].hier_label_bucket[0][l];
-			IndexType mSize = label.vertex_bucket.size();
-			IndexType i = 5;
-			for ( auto viter = label.vertex_bucket.begin();
-				viter!=label.vertex_bucket.end() && i < mSize;
-				i += 5, advance(viter,5))
-			{
-				HVertex& vtx = *(viter->second);
-				if ( vtx.next_corr )
-				{
-					Tracer::get_instance().add_record(f, vtx.vtx_id, f+1, vtx.next_corr->vtx_id);
-				}
-
-				if (vtx.prev_corr)
-				{
-					Tracer::get_instance().add_record(f, vtx.vtx_id, f-1, vtx.prev_corr->vtx_id);
-				}
-
-			}
-		}
-
-	}
-
+	void show_corresponding(int f);
+	void show_correspondingframeandlabel( std::vector<int>& f , std::vector<int>& label);
 	void smooth_label(IndexType frame_idx)
 	{
 		Sample& orig_smp = SampleSet::get_instance()[frame_idx];

@@ -239,7 +239,7 @@ void PropagateThread::run()
 // 
 	//Proxy_Propagate* mpp = dynamic_cast<Proxy_Propagate*>(mProxy);
 	//visualCosegmentation( mpp->getLabelFileName());
-	dp_.show_corresponding(51);
+	
 
 }
 

@@ -260,6 +260,7 @@
     <ClCompile Include="saveSnapshotDialog.cpp" />
     <ClCompile Include="select_tool.cpp" />
     <ClCompile Include="spectral_clustering.cpp" />
+    <ClCompile Include="tracer.cpp" />
     <ClCompile Include="trajectory_classifier.cpp" />
     <ClCompile Include="vertex.cpp" />
   </ItemGroup>

@@ -84,6 +84,7 @@ public:
 		bool saveSnapshot();
 
 		bool savePLY();
+		void dealtarjlabel();
 
 		bool runOrPause();
 		bool stop();
@@ -140,7 +141,7 @@ public:
 		return main_canvas_;
 
 	}
-
+	
 private:
 
 
@@ -173,6 +174,7 @@ private:
 	LayerDialog* m_layer;
 public:
 	//static main_window* mv_;
+	std::vector<int> traj_label_vec;
 
 };
 

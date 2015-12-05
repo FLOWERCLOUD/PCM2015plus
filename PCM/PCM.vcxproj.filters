@@ -239,6 +239,9 @@
     <ClCompile Include="pcl_descriptor.cpp">
       <Filter>Algorithm</Filter>
     </ClCompile>
+    <ClCompile Include="tracer.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="main_window.qrc">

@@ -2708,6 +2708,85 @@ void DualwayPropagation::read_corres_file_hier(char* filename)
 	}
 }
 
+void DualwayPropagation::show_corresponding(int f)
+{
+	for ( IndexType l = 0; l<hier_componets_[f].hier_label_bucket[0].size(); l++ )
+	{
+		HLabel& label = *hier_componets_[f].hier_label_bucket[0][l];
+		IndexType mSize = label.vertex_bucket.size();
+		IndexType i = 5;
+		for ( auto viter = label.vertex_bucket.begin();
+			viter!=label.vertex_bucket.end() && i < mSize;
+			i += 5, advance(viter,5))
+		{
+			HVertex& vtx = *(viter->second);
+			if ( vtx.next_corr )
+			{
+				Tracer::get_instance().add_record(f, vtx.vtx_id, f+1, vtx.next_corr->vtx_id);
+			}
+
+			if (vtx.prev_corr)
+			{
+				Tracer::get_instance().add_record(f, vtx.vtx_id, f-1, vtx.prev_corr->vtx_id);
+			}
+
+		}
+	}
+}
+
+void DualwayPropagation::show_correspondingframeandlabel(std::vector<int>& f , std::vector<int>& _label)
+{
+	if(!f.size())return;
+	Tracer::get_instance().clear_records();
+	for( auto frameitr = f.begin(); frameitr!=f.end() ;++frameitr)
+	{
+		IndexType frameid = *frameitr;
+		std::cout<<frameid<<std::endl;
+		int depth = hier_componets_[frameid].hier_label_bucket.size();
+		for ( IndexType labelidx = 0; labelidx<hier_componets_[frameid].hier_label_bucket[depth-1].size(); labelidx++ )
+		{
+			HLabel& label = *hier_componets_[frameid].hier_label_bucket[depth-1][labelidx];
+			int findlabelidx;
+			for( findlabelidx =0 ; findlabelidx < _label.size() ; ++findlabelidx)
+			{
+				if(label.label_id ==_label[findlabelidx] )break;
+			}
+			if(findlabelidx == _label.size())continue;
+			IndexType mSize = label.vertex_bucket.size();
+			IndexType i = 5;
+			/*for ( auto viter = label.vertex_bucket.begin();
+				viter!=label.vertex_bucket.end() && i < mSize;
+				i += 5, advance(viter,5))*/
+			for ( auto viter = label.vertex_bucket.begin();
+				viter!=label.vertex_bucket.end();
+				++viter )
+			{
+				HVertex& vtx = *(viter->second);
+				HVertex* pHvertx = &vtx;
+				int itrframe = frameid;
+				while( pHvertx->next_corr )
+				{
+					
+					Tracer::get_instance().add_record(itrframe, pHvertx->vtx_id, itrframe+1, pHvertx->next_corr->vtx_id ,label.label_id);
+					++itrframe;
+					pHvertx = pHvertx->next_corr;
+				}
+				pHvertx = &vtx;
+				itrframe = frameid;
+				while(pHvertx->prev_corr&&itrframe)
+				{
+					if(frameid)Tracer::get_instance().add_record(itrframe, pHvertx->vtx_id, itrframe-1, pHvertx->prev_corr->vtx_id,label.label_id);
+					--itrframe;
+					pHvertx = pHvertx->prev_corr;
+				}
+
+			}
+		}
+	
+	}
+	
+}
+
 
 
 
