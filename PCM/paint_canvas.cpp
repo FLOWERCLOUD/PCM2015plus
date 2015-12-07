@@ -14,7 +14,7 @@ using namespace qglviewer;
 #define GL_MULTISAMPLE 0x809D
 #endif
 
-
+extern int REAL_TIME_RENDER;
 PaintCanvas::PaintCanvas(const QGLFormat& format, QWidget *parent):
 	QGLViewer(format, parent),
 	coord_system_region_size_(150),
@@ -198,6 +198,9 @@ void PaintCanvas::draw()
 		Tracer::get_instance().setcenterframeNum(centerframeNum);
 		Tracer::get_instance().draw();
 	}
+	
+	//std::cout<<"updategl end"<<std::endl;
+
 
 
 

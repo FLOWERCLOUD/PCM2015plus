@@ -19,7 +19,7 @@ namespace Register_Param
 	extern MatrixXXi g_traj_matrix;
 	extern bool g_is_traj_compute;
 }
-
+//extern QWaitCondition mWaitcond;
 #define		LOCK(x)		x.lock()
 #define		UNLOCK(x)	x.unlock()
 

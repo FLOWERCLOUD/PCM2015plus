@@ -927,6 +927,36 @@ public:
 
 };
 
+class Proxy_PropagateAndStepVisual:public  Proxy_Propagate , public ProxyVisualLabel
+{
+public:
+	//Proxy_PropagateAndVisual( char* _label_filename ,char* _corr_filename , IndexType _startFrame , IndexType _endFrame ,IndexType _centerFrame ):
+	Proxy_PropagateAndStepVisual( char* _label_filename1 , char* _corr_filename2 ,IndexType _startFrame1, IndexType _endFrame1 ,IndexType _centerFrame1):
+	  Proxy_Propagate(_label_filename1 ,_corr_filename2, _startFrame1 ,_endFrame1,_centerFrame1) , ProxyVisualLabel(_label_filename1 ,_corr_filename2){}
+public: 
+	void run()
+	{
+		showSampleLabel();
+		//Propagate();
+		pt_->dp_.read_label_file_hier(label_filename_);
+		pt_->dp_.read_corres_file_hier(corr_filename_);
+
+		pt_->dp_.init_labeles_graph_hier2();
+		for( int i = centerFrame_ ;i < endFrame_;++i){
+			pt_->split_twoAjacent_graph_next( pt_->dp_,i ,i+1);
+
+		}
+		for( int i = centerFrame_ ;i > startFrame_;--i){
+			pt_->split_twoAjacent_graph_prev( pt_->dp_,i-1 ,i);
+
+		}
+		
+
+	}
+
+
+};
+
 
 
 

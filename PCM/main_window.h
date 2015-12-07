@@ -85,6 +85,7 @@ public:
 
 		bool savePLY();
 		void dealtarjlabel();
+		bool wakeUpThread();
 
 		bool runOrPause();
 		bool stop();
@@ -142,6 +143,7 @@ public:
 
 	}
 	
+
 private:
 
 

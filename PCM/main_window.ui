@@ -108,6 +108,7 @@
    <addaction name="actionButton2stop"/>
    <addaction name="actionButtonRunOrPause"/>
    <addaction name="actionButtonadvance"/>
+   <addaction name="actionWakeWorkThread"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
@@ -414,6 +415,15 @@
    </property>
    <property name="text">
     <string>SavePly</string>
+   </property>
+  </action>
+  <action name="actionWakeWorkThread">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/wake_up.png</normaloff>Resources/wake_up.png</iconset>
+   </property>
+   <property name="text">
+    <string>wakeWorkThread</string>
    </property>
   </action>
  </widget>

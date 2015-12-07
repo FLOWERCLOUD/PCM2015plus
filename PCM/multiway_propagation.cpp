@@ -10,6 +10,7 @@
 #define frame_label_to_key(f,l) ((f<<16)|l)
 #define get_index_from_key(k) (k&0xffff)
 #define get_frame_from_key(k) (k>>16)
+#include "GlobalObject.h"
 
 
 struct PatchMatch
@@ -2009,6 +2010,7 @@ void DualwayPropagation::split_twoAjacent_graph_next(IndexType srFrame, IndexTyp
 		// char* out_label_file = "D:\\desk_file\\论文实验内容2014-12-30\\2015-3-10-算法在设计\\horse_multiview0804\\refine(8_18)\\0824ViewoutputLabels.txt";
 		// wirteSplitGraphLables(out_label_file);
 		//hier_componets_[tgFrame].hier_label_bucket[tgGraSize - 1] = new_label_bucket;
+		
 
 	}//遍历每条边,每条边都会使得new_graph增加一个新的节点
 
@@ -2535,7 +2537,7 @@ void DualwayPropagation::changedDepthAndDispaly( int _depth )
 	for( ; fbitr != feitr ; ++fbitr){
 		//if(smpset[ fbitr->first].is_visible()){
 			HFrame& cframe = hier_componets_[ fbitr->first]; 
-			Logger<<" 层数"<< cframe.hier_label_bucket.size()<<std::endl;
+//			Logger<<" 层数"<< cframe.hier_label_bucket.size()<<std::endl;
 			if ((_depth + 1) > cframe.hier_label_bucket.size()) continue;
 //Logger<<" 先在在第 "<< _depth <<" 层"<<std::endl;
 				std::vector<HLabel*>& cLabelbck = cframe.hier_label_bucket[_depth];

@@ -39,8 +39,10 @@ IndexType LabelGraphDepth = 0;
 #include <qtgui/QHBoxLayout>
 #include <QtGui/QSizePolicy>
 #include <sstream>
-
-
+#include <QWaitCondition>
+// 全局条件变量
+QWaitCondition mWaitcond;
+int REAL_TIME_RENDER = 0;
 
 main_window::main_window(QWidget *parent)
 	: QMainWindow(parent),
@@ -192,6 +194,7 @@ void main_window::createPaintSettingAction()
 	connect( ui.centerframe ,SIGNAL( valueChanged(int)) ,this ,SLOT(centerframeChanged(int)) );
 
 	connect(ui.button_traj_label, SIGNAL(clicked()), this, SLOT(dealtarjlabel()) );
+	connect(ui.actionWakeWorkThread ,  SIGNAL(triggered()), this, SLOT(wakeUpThread() ) );
 	//connect( ui.actionButton2stop, SIGNAL(triggered() ) , this ,SLOT(layerSpinBoxChanged(int)) );
 	StateManager::getInstance().setWindowrefer(this);
 	int runorp = connect( ui.actionButtonRunOrPause, SIGNAL(triggered() ) , this ,SLOT( runOrPause() ) );
@@ -628,9 +631,9 @@ void main_window::showCoordinateAndIndexUnderMouse( const QPoint& point )
 	else
 	{
 		Sample& cur_selected_sample = SampleSet::get_instance()[cur_select_sample_idx_];
-		Vec4 v_pre(v.x - Paint_Param::g_step_size(0)*cur_select_sample_idx_,
-			v.y - Paint_Param::g_step_size(1)*cur_select_sample_idx_,
-			v.z - Paint_Param::g_step_size(2)*cur_select_sample_idx_ ,1.);
+		Vec4 v_pre(v.x - Paint_Param::g_step_size(0)*(cur_select_sample_idx_-main_canvas_->centerframeNum),
+			v.y - Paint_Param::g_step_size(1)*(cur_select_sample_idx_-main_canvas_->centerframeNum),
+			v.z - Paint_Param::g_step_size(2)*(cur_select_sample_idx_-main_canvas_->centerframeNum) ,1.);
 		//Necessary to do this step, convert view-sample space to world-sample space
 		v_pre = cur_selected_sample.matrix_to_scene_coord().inverse() * v_pre;
 		idx = cur_selected_sample.closest_vtx( PointType(v_pre(0), v_pre(1), v_pre(2)) );
@@ -876,12 +879,13 @@ void main_window::processButtonRunOrPuase()
 		frameTimer->start(50);
 	}
 	Logger<<"曹"<<i<<std::endl;
+	//if(!REAL_TIME_RENDER)
 	DualwayPropagation::get_instance().startframeAnimation(frameTimer);
 }
 
 void main_window::excFrameAnimation()
 {
-
+	//if(!REAL_TIME_RENDER)
 	DualwayPropagation::get_instance().excFrameAnimation();
 	//ui.treeWidget->fin
 	main_canvas_->updateGL();
@@ -973,4 +977,13 @@ bool main_window::savePLY()
 	}
 
 	return false; 
+}
+
+bool main_window::wakeUpThread()
+{
+
+	mWaitcond.wakeOne();
+	//REAL_TIME_RENDER =1;
+	return true;
+
 }

@@ -2,7 +2,7 @@
 #include "basic_types.h"
 #include "multiway_propagation.h"
 #include <QThread>
-
+class main_window;
 class PropagateThread :public QThread
 {
 	Q_OBJECT
@@ -47,6 +47,7 @@ public:
 	void propagateLabel2Orignal();
 	void propagateLabel2Orignal(Sample& oriPC,vector<IndexType>& sampleVtxId,vector<IndexType>& label_smp,vector<IndexType>& label_ori , IndexType _labelNum);
 	void visualAllvtx();
+	
 	IndexType selectedSmpIdx_;
 
 	IndexType centerframe_;
@@ -56,5 +57,7 @@ public:
 	bool    is_propagate_back_;
 
 	DualwayPropagation& dp_;
+	main_window* p_window;
+	
 
 };

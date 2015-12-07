@@ -11,9 +11,17 @@
 #include "merge_write_utilities.h"
 #include "merge_propagate_write.h"
 #include "time.h"
-
+#include <QWaitCondition>
+#include "GlobalObject.h"
+extern QWaitCondition mWaitcond;
 void PropagateThread::run()
 {
+	std::cout<<"thread waking"<<std::endl;
+		QMutex mutex;
+		mutex.lock();
+		mWaitcond.wait(&mutex);
+		mutex.unlock();
+	std::cout<<"thread waked"<<std::endl;
 
 	/*char* CORR_FILESNAME = "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\totcorr";
 	char* CORR_FILEOUT_NAME= "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\corroutput0_87center51.txt";
@@ -32,7 +40,7 @@ void PropagateThread::run()
 	//	124,
 	//	116
 	//	);
-	Proxy_PropagateAndVisual hanger(
+	Proxy_PropagateAndStepVisual hanger(
 		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\labeloutput0_87center51.txt",
 		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\corroutput0_87center51.txt",
 		48,
@@ -336,6 +344,12 @@ void PropagateThread::split_twoAjacent_graph_next( DualwayPropagation& dp1 ,Inde
 
 	for (EdgeIterator eit = ei.first; eit != ei.second; ++eit)
 	{
+		std::cout<<"thread waking"<<std::endl;
+		QMutex mutex;
+		mutex.lock();
+		mWaitcond.wait(&mutex);
+		mutex.unlock();
+		std::cout<<"thread waked"<<std::endl;
 		EdgeDescriptor ed = *eit;
 
 		GraphEdgeProperty& ep = (*srGraLat)[ed];
@@ -579,6 +593,12 @@ void PropagateThread::split_twoAjacent_graph_next( DualwayPropagation& dp1 ,Inde
 		}//遍历collapse的边
 
 
+		//这里测试 ，直接替换第一层的label_bucket
+		dp_.hier_componets_[tgFrame].hier_label_bucket[0] = new_label_bucket;
+		dp_.changedDepthAndDispaly(0);
+		QMetaObject::invokeMethod( Global_Window->getCanvas() ,"updateGL",Qt::QueuedConnection);
+		//Global_Window->getCanvas()->updateGL();
+
 	}//遍历每条边,每条边都会使得new_graph增加一个新的节点
 
 
@@ -589,6 +609,8 @@ void PropagateThread::split_twoAjacent_graph_next( DualwayPropagation& dp1 ,Inde
 	dp_.hier_componets_[tgFrame].hier_label_bucket.push_back(new_label_bucket);
 
 	dp_.hier_componets_[tgFrame].hier_graph.push_back(new_graph);//保存最新的graph
+
+	//main_window_->getCanvas()->updateGL();
 
 
 	Logger<<"  Start next split.\n";
@@ -752,6 +774,13 @@ void PropagateThread::split_twoAjacent_graph_prev( DualwayPropagation& dp ,Index
 
 	for (EdgeIterator eit = ei.first; eit != ei.second; ++eit)
 	{
+		std::cout<<"thread waking"<<std::endl;
+		QMutex mutex;
+		mutex.lock();
+		mWaitcond.wait(&mutex);
+		mutex.unlock();
+		std::cout<<"thread waked"<<std::endl;
+
 		EdgeDescriptor ed = *eit;
 
 		GraphEdgeProperty& ep = (*guideSplitGraph)[ed];
@@ -1002,6 +1031,11 @@ void PropagateThread::split_twoAjacent_graph_prev( DualwayPropagation& dp ,Index
 			boost::add_edge(glueEdge.start_,glueEdge.end_,glueEdge,*shouldSplitGraph);
 
 		}//遍历collapse的边
+		dp_.hier_componets_[srFrame].hier_label_bucket[0] = new_label_bucket;
+		dp_.changedDepthAndDispaly(0);
+
+		QMetaObject::invokeMethod(this ,"updateGL",Qt::QueuedConnection);
+		//Global_Window->getCanvas()->updateGL();
 
 	} //遍历引导分割图的每条边
 
