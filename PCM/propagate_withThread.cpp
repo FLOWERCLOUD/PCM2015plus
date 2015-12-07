@@ -310,6 +310,7 @@ void PropagateThread::visualCosegmentation(char *labels_file)
 
 void PropagateThread::split_twoAjacent_graph_next( DualwayPropagation& dp1 ,IndexType srFrame, IndexType tgFrame)
 {
+	QMetaObject::invokeMethod( Global_Window->getCanvas() ,"updateGL",Qt::QueuedConnection);
 	//向前分裂
 
 	//get the new graph of tgGrame--需要深拷贝
@@ -1034,7 +1035,7 @@ void PropagateThread::split_twoAjacent_graph_prev( DualwayPropagation& dp ,Index
 		dp_.hier_componets_[srFrame].hier_label_bucket[0] = new_label_bucket;
 		dp_.changedDepthAndDispaly(0);
 
-		QMetaObject::invokeMethod(this ,"updateGL",Qt::QueuedConnection);
+		QMetaObject::invokeMethod( Global_Window->getCanvas() ,"updateGL",Qt::QueuedConnection);
 		//Global_Window->getCanvas()->updateGL();
 
 	} //遍历引导分割图的每条边
