@@ -58,6 +58,7 @@ public:
 
 	DualwayPropagation& dp_;
 	main_window* p_window;
-	
+signals:
+	void writeSignal(QString newValue ,int level);
 
 };

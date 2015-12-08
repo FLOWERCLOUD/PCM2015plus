@@ -183,6 +183,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_dlg_propagate.cpp" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_GLLogStream.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_LayerDialog.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_maching_state.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_propagate_withThread.cpp" />
@@ -215,6 +216,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GLLogStream.cpp" />
     <ClCompile Include="graph_cut_node.cpp" />
     <ClCompile Include="LayerDialog.cpp" />
     <ClCompile Include="maching_state.cpp" />
@@ -1916,6 +1918,14 @@
     <ClInclude Include="GeneratedFiles\ui_papagate_dialog.h" />
     <ClInclude Include="GeneratedFiles\ui_savePlyDialog.h" />
     <ClInclude Include="GeneratedFiles\ui_savesnapshotDialog.h" />
+    <CustomBuild Include="GLLogStream.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR_64_10)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_XML_LIB  "-IC:\Program Files\MATLAB\R2011b\extern\include" "-I.\GeneratedFiles" "-I." "-I$(QTDIR_64_10)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR_64_10)\include\QtCore" "-I$(QTDIR_64_10)\include\QtGui" "-I$(QTDIR_64_10)\include\QtOpenGL" "-I$(QTDIR_64_10)\include\QtWidgets" "-I.\.." "-I$(QTDIR_64_10)\include\QtXml" "-I.\..\eigen-3-1-4" "-IF:\opencv\build\include\opencv" "-IF:\opencv\build\include\opencv2" "-IF:\opencv\build\include"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR_64_10)\bin\moc.exe</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing %(Filename).h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing %(Filename).h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+    </CustomBuild>
     <ClInclude Include="GlobalObject.h" />
     <ClInclude Include="GraphMatching.h" />
     <ClInclude Include="InOutputDefinition.h" />

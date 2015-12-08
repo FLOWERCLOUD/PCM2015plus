@@ -16,12 +16,13 @@
 extern QWaitCondition mWaitcond;
 void PropagateThread::run()
 {
-	std::cout<<"thread waking"<<std::endl;
-		QMutex mutex;
-		mutex.lock();
-		mWaitcond.wait(&mutex);
-		mutex.unlock();
-	std::cout<<"thread waked"<<std::endl;
+	QMetaObject::invokeMethod( Global_Window,"saveSnapshot",Qt::QueuedConnection);
+	//std::cout<<"thread waking"<<std::endl;
+	//	QMutex mutex;
+	//	mutex.lock();
+	//	mWaitcond.wait(&mutex);
+	//	mutex.unlock();
+	//std::cout<<"thread waked"<<std::endl;
 
 	/*char* CORR_FILESNAME = "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\totcorr";
 	char* CORR_FILEOUT_NAME= "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\corroutput0_87center51.txt";
@@ -47,7 +48,8 @@ void PropagateThread::run()
 		54,
 		51
 		);
-
+	int returncode = QObject::connect(this,SIGNAL(writeSignal(QString,int)), Global_Window,SLOT(logText(QString,int)),Qt::QueuedConnection);
+	std::cout<<"returncode: "<<returncode<<std::endl;
 	/*ProxyStandaraAjustViewOriColorPly single_standard_ajustview(
 	"D:\\point_data\\qinghuadata\\standard\\single\\",
 	"single_standard_ajustview"
@@ -345,12 +347,7 @@ void PropagateThread::split_twoAjacent_graph_next( DualwayPropagation& dp1 ,Inde
 
 	for (EdgeIterator eit = ei.first; eit != ei.second; ++eit)
 	{
-		std::cout<<"thread waking"<<std::endl;
-		QMutex mutex;
-		mutex.lock();
-		mWaitcond.wait(&mutex);
-		mutex.unlock();
-		std::cout<<"thread waked"<<std::endl;
+		
 		EdgeDescriptor ed = *eit;
 
 		GraphEdgeProperty& ep = (*srGraLat)[ed];
@@ -381,7 +378,18 @@ void PropagateThread::split_twoAjacent_graph_next( DualwayPropagation& dp1 ,Inde
 		IndexType eS = ep.start_;
 		IndexType eE = ep.end_;
 
-		Logger<<"  边的起点为"<<eS<<"终点为"<<eE<<endl;
+std::cout<<"thread waking"<<std::endl;
+		//int returncode = QObject::connect(this,SIGNAL(testSignal(QString)), Global_Window,SLOT(logText(QString)),Qt::QueuedConnection	
+		//QMetaObject::invokeMethod( Global_Window ,"logText",Qt::QueuedConnection ,Q_ARG(QString ,QString("12345"))/*,Q_ARG(int,0)*/);
+		/*bool returncode;
+		QMetaObject::invokeMethod( Global_Window ,"logText",Qt::QueuedConnection ,Q_RETURN_ARG(bool ,returncode) ,Q_ARG(char* ,"12345"),Q_ARG(int,0) );*/
+		Logger<<"边的起点为"<<eS<<"终点为"<<eE<<endl;	
+emit writeSignal(QString("begin: edge start: ")+ QString("%1").arg(eS)+QString("  edge end: ")+QString("%1").arg(eE) ,3);  //释放写信号,写到主窗口的输出框中
+QMutex mutex;
+mutex.lock();
+mWaitcond.wait(&mutex);
+mutex.unlock();
+std::cout<<"thread waked"<<std::endl;
 
 		IndexType recordS = 0;       
 		IndexType recordE = 0;
@@ -402,17 +410,19 @@ void PropagateThread::split_twoAjacent_graph_next( DualwayPropagation& dp1 ,Inde
 		}
 
 		ScalarType ration = (ScalarType)(recordS + recordE)/vtxBSzie;
-
+emit writeSignal(QString("recordS: ")+ QString("%1").arg(recordS)+QString("  recordE: ")+QString("%1").arg(recordE) ,3);  //释放写信号,写到主窗口的输出框中
 		//若分裂出来的点个数有一个数据很少,则该边不做裂变
 
 		if ( recordE < 5 || recordS < 5 )
 		{
 			Logger<<"边界点太靠近,不需要分裂.\n";
+emit writeSignal(QString("edge point is not enough, do not split.\n"),1);  //释放写信号,写到主窗口的输出框中
 			continue;
 		}
 
 		if (ration < 0.2)
 		{
+emit writeSignal(QString("Unmark ratio too high,do not split now.\n"),1); 
 			Logger<<"Unmark点比值太大,暂时不分裂.\n";
 			continue;
 		}
@@ -598,11 +608,12 @@ void PropagateThread::split_twoAjacent_graph_next( DualwayPropagation& dp1 ,Inde
 		dp_.hier_componets_[tgFrame].hier_label_bucket[0] = new_label_bucket;
 		dp_.changedDepthAndDispaly(0);
 		QMetaObject::invokeMethod( Global_Window->getCanvas() ,"updateGL",Qt::QueuedConnection);
+emit writeSignal(QString("target frame")+QString("%1").arg(tgFrame)+QString("frame iter one end"),2);  //释放写信号,写到主窗口的输出框中
 		//Global_Window->getCanvas()->updateGL();
 
 	}//遍历每条边,每条边都会使得new_graph增加一个新的节点
 
-
+emit writeSignal(QString("target frame")+QString("%1").arg(tgFrame)+QString("all iter end"),2);  //释放写信号,写到主窗口的输出框中
 
 
 	checkPsNewLabelParentPtr(new_label_bucket,labParentsize);//next dirction

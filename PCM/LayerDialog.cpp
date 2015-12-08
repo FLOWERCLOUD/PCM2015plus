@@ -7,6 +7,7 @@
 #include "ui_layerDialog.h"
 #include "sample_set.h"
 #include "main_window.h"
+#include "GLLogStream.h"
 using namespace std;
 
 
@@ -107,28 +108,28 @@ void LayerDialog::frameItemClicked(QTreeWidgetItem* _item, int col)
 
 void LayerDialog::updateLog(GLLogStream& log)
 {
-	//QList< pair<int,QString> > &logStringList=log.S;
-	//ui_->logPlainTextEdit->clear();
-	////ui->logPlainTextEdit->setFont(QFont("Courier",10));
+	QList< pair<int,QString> > &logStringList=log.S;
+	ui_->logPlainTextEdit->clear();
+	//ui->logPlainTextEdit->setFont(QFont("Courier",10));
 
-	//pair<int,QString> logElem;
-	//QString preWarn    = "<font face=\"courier\" size=3 color=\"red\"> Warning: " ;
-	//QString preSystem  = "<font face=\"courier\" size=2 color=\"grey\">" ;
-	//QString preFilter  = "<font face=\"courier\" size=2 color=\"black\">" ;
+	pair<int,QString> logElem;
+	QString preWarn    = "<font face=\"courier\" size=4 color=\"red\"> Warning: " ;
+	QString preSystem  = "<font face=\"courier\" size=3 color=\"grey\">" ;
+	QString preFilter  = "<font face=\"courier\" size=3 color=\"black\">" ;
 
-	//QString post   = "</font>";
-	//QString logText;
-	//foreach(logElem, logStringList){
-	//	logText += logElem.second;
-	//	if(logElem.first == GLLogStream::SYSTEM)
-	//		logText = preSystem + logText + post;
-	//	if(logElem.first == GLLogStream::WARNING)
-	//		logText = preWarn + logText + post;
-	//	if(logElem.first == GLLogStream::FILTER)
-	//		logText = preFilter + logText + post;
-	//	logText += "<BR>";
-	//}
-	//ui_->logPlainTextEdit->appendHtml(logText);
+	QString post   = "</font>";
+	QString logText;
+	foreach(logElem, logStringList){
+		logText += logElem.second;
+		if(logElem.first == GLLogStream::SYSTEM)
+			logText = preSystem + logText + post;
+		if(logElem.first == GLLogStream::WARNING)
+			logText = preWarn + logText + post;
+		if(logElem.first == GLLogStream::FILTER)
+			logText = preFilter + logText + post;
+		logText += "<BR>";
+	}
+	ui_->logPlainTextEdit->appendHtml(logText);
 }
 
 void LayerDialog::updateTableVisibility( IndexType itemid)

@@ -27,6 +27,7 @@
 #include "maching_state.h"
 #include "saveSnapshotDialog.h"
 #include "savePLYDialog.h"
+#include "GLLogStream.h"
 using namespace qglviewer;
 using namespace std;
 using namespace ANIMATION;
@@ -42,6 +43,7 @@ IndexType LabelGraphDepth = 0;
 #include <QWaitCondition>
 // 全局条件变量
 QWaitCondition mWaitcond;
+GLLogStream logstream;
 int REAL_TIME_RENDER = 0;
 
 main_window::main_window(QWidget *parent)
@@ -909,6 +911,7 @@ bool main_window::increaseInterval()
 
 bool main_window::decreaseInterval()
 {
+	std::cout<<"decreaseInterval()"<<std::endl;
 	if(  StateManager::getInstance().state() ==  RUNSTATE){
 		Logger<<" lessenduration"<<std::endl;
 		StateManager::getInstance().decreaseInterval();
@@ -925,7 +928,7 @@ bool main_window::decreaseInterval()
 }
 
 bool main_window::saveSnapshot()
-{
+{ 
 	SaveSnapshotDialog dialog(this);
 
 	dialog.setValues(getCanvas()->ss);
@@ -985,5 +988,24 @@ bool main_window::wakeUpThread()
 	mWaitcond.wakeOne();
 	//REAL_TIME_RENDER =1;
 	return true;
+
+}
+void main_window::logText(QString as,int level)
+{
+	//std::cout<<"logText"<<as.toStdString()<<std::endl;
+	string tmp = as.toStdString();
+	char* text = (char*)tmp.c_str();
+	int mode = level;
+	GLLogStream::Levels lveltype;
+	switch(mode){
+		case 0 : lveltype  = GLLogStream::SYSTEM;break;
+		case 1 : lveltype  = GLLogStream::WARNING;break;
+		case 2 : lveltype  = GLLogStream::FILTER;break;
+		case 3 : lveltype  = GLLogStream::DEBUG;break;
+		default: lveltype  = GLLogStream::DEBUG;
+	}
+	logstream.Log( lveltype,text);
+	m_layer->updateLog(logstream);
+	//return true;
 
 }

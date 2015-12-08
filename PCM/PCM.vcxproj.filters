@@ -242,6 +242,12 @@
     <ClCompile Include="tracer.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="GLLogStream.cpp">
+      <Filter>Visualize</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_GLLogStream.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="main_window.qrc">
@@ -452,6 +458,9 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="savePLYDialog.h">
+      <Filter>Visualize</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GLLogStream.h">
       <Filter>Visualize</Filter>
     </CustomBuild>
   </ItemGroup>

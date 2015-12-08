@@ -86,6 +86,7 @@ public:
 		bool savePLY();
 		void dealtarjlabel();
 		bool wakeUpThread();
+		void logText(QString as,int level);/*char* text ,int mode*/
 
 		bool runOrPause();
 		bool stop();
@@ -143,6 +144,7 @@ public:
 
 	}
 	
+
 
 private:
 
