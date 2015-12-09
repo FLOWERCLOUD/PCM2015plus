@@ -1490,16 +1490,17 @@ void DualwayPropagation:: init_labeles_graph_hier()
 
 }
 
-void DualwayPropagation::init_labeles_graph_hier2()
+void DualwayPropagation::init_labeles_graph_hier2(int _depth )
 {
 	Logger<<"  Begin initialize graphs.\n";
 
 	for (auto citer = hier_componets_.begin(); citer!=hier_componets_.end(); citer++)
 	{
 
-		IndexType lbsize = citer->second.hier_label_bucket.size();
-		assert( lbsize > 0);
-		IndexType nodeSize = citer->second.hier_label_bucket[lbsize -1].size();//.size();
+		int lbsize = citer->second.hier_label_bucket.size();
+//		assert( lbsize > 0);
+ 		lbsize = lbsize < _depth+1? lbsize:_depth+1;
+		int nodeSize = citer->second.hier_label_bucket[lbsize -1].size();//.size();
 
 		LabelsGraph* new_labelGraph_space = allocator_.allocate<LabelsGraph>();
 
@@ -1605,8 +1606,14 @@ void DualwayPropagation::init_labeles_graph_hier2()
 		}
 
 		citer->second.hier_graph.clear();
-
-		citer->second.hier_graph.push_back( new_labelGraph);
+//test 
+		if(citer->second.hier_graph.size()==0){
+			citer->second.hier_graph.push_back( new_labelGraph);
+		}else{
+			delete citer->second.hier_graph[0];
+			citer->second.hier_graph[0] = new_labelGraph;
+		}
+//orgin		citer->second.hier_graph.push_back( new_labelGraph);
 
 	}//帧遍历结束
 
@@ -1650,11 +1657,11 @@ void DualwayPropagation::getEdgeVertexs2( IndexType _CFrameId , distanPriQueue& 
 }
 
 
-void DualwayPropagation::init_node_link()
+void DualwayPropagation::init_node_link(int depth)
 {
 	for (auto citer = hier_componets_.begin(); citer!=hier_componets_.end(); citer++){
-		std::cout<<"第"<<citer->first<<"帧"<<std::endl;
-		init_node_link( citer->first , 0);
+//		std::cout<<"第"<<citer->first<<"帧"<<std::endl;
+		init_node_link( citer->first , depth);
 
 	}
 }
@@ -1662,6 +1669,9 @@ void DualwayPropagation::init_node_link(IndexType _frameId ,IndexType _depth)
 {
 	HFrame& cframe = hier_componets_[_frameId];
 	Sample& csmp = SampleSet::get_instance()[_frameId];
+	int truedepth = cframe.hier_graph.size()-1;
+	if(truedepth<0)truedepth=0;
+	_depth = truedepth < _depth?truedepth: _depth;
 
 	LabelsGraph& lbgf = *(cframe.hier_graph[_depth]);
 	LabelsGraph::vertex_iterator vbitr , veitr;
@@ -1670,9 +1680,17 @@ void DualwayPropagation::init_node_link(IndexType _frameId ,IndexType _depth)
 	assert( _depth < cframe.hier_label_bucket.size() );
 	/*vector<HLabel*>::iterator hlable_bitr = cframe.hier_label_bucket[_depth].begin();
 	vector<HLabel*>::iterator hlable_eitr = cframe.hier_label_bucket[_depth].end();*/
+
+//we should clear it before we do the link operation
+	if( csmp.wrap_box_link_.size() !=0 )
+	{
+		if( _depth < csmp.wrap_box_link_.size() )csmp.wrap_box_link_[_depth].clear();  
+		
+	}
+
 	for( ; vbitr != veitr; ++ vbitr){
 		HLabel& hlb1  = *(cframe.hier_label_bucket[_depth][*vbitr]);
-		std::cout<<"vbitr:"<<*vbitr<<" hlabel:"<<hlb1.label_id<<std::endl;
+//		std::cout<<"vbitr:"<<*vbitr<<" hlabel:"<<hlb1.label_id<<std::endl;
 		map<IndexType ,HVertex*>::iterator hvtxbk_bitr1 = hlb1.vertex_bucket.begin();
 		map<IndexType ,HVertex*>::iterator hvtxbk_eitr1 = hlb1.vertex_bucket.end();
 		PointType mean1( 0 ,0 ,0 );
@@ -1685,7 +1703,7 @@ void DualwayPropagation::init_node_link(IndexType _frameId ,IndexType _depth)
 		}
 		mean1 = sum1/count1;
 
-		std::cout<<"x:"<<mean1.x()<<"y:"<<mean1.y()<<"z:"<<mean1.z()<<std::endl;
+//		std::cout<<"x:"<<mean1.x()<<"y:"<<mean1.y()<<"z:"<<mean1.z()<<std::endl;
 		boost::tie( adjbitr ,adjeitr) = boost::adjacent_vertices( *vbitr , lbgf);
 		if( adjbitr == adjeitr ){  //没有邻点
 
@@ -1705,7 +1723,7 @@ void DualwayPropagation::init_node_link(IndexType _frameId ,IndexType _depth)
 		for( ; adjbitr != adjeitr; ++adjbitr){
 			//
 			HLabel&  hlb2 = *(cframe.hier_label_bucket[_depth][*adjbitr]);
-			std::cout<<"adjbitr:"<<*adjbitr<<" llabel:"<<hlb2.label_id<<std::endl;
+//			std::cout<<"adjbitr:"<<*adjbitr<<" llabel:"<<hlb2.label_id<<std::endl;
 			map<IndexType ,HVertex*>::iterator hvtxbk_bitr2 = hlb2.vertex_bucket.begin();
 			map<IndexType ,HVertex*>::iterator hvtxbk_eitr2 = hlb2.vertex_bucket.end();
 			//
@@ -1718,7 +1736,7 @@ void DualwayPropagation::init_node_link(IndexType _frameId ,IndexType _depth)
 				sum2 += point;
 			}
 			mean2 = sum2/count2;
-			std::cout<<"x:"<<mean2.x()<<"y:"<<mean2.y()<<"z:"<<mean2.z()<<std::endl;
+//			std::cout<<"x:"<<mean2.x()<<"y:"<<mean2.y()<<"z:"<<mean2.z()<<std::endl;
 			IndexType index1 = *vbitr;
 			IndexType index2 = *adjbitr;
 			LinkNode* linknode;
@@ -1745,8 +1763,8 @@ void DualwayPropagation::init_node_link(IndexType _frameId ,IndexType _depth)
 	vector<LinkNode>::iterator lneitr = csmp.wrap_box_link_[_depth].end();
 	for( ; lnbitr != lneitr ;++lnbitr){
 		LinkNode& ln =*lnbitr;
-		std::cout<<"labelh:" <<ln.labelH_<<" x:"<<ln.pointH_.x()<<" y:"<<ln.pointH_.y()<<" z:"<<ln.pointH_.z()<<std::endl;
-		std::cout<<"labell:" <<ln.labelL_<<" x:"<<ln.pointL_.x()<<" y:"<<ln.pointL_.y()<<" z:"<<ln.pointL_.z()<<std::endl;
+//		std::cout<<"labelh:" <<ln.labelH_<<" x:"<<ln.pointH_.x()<<" y:"<<ln.pointH_.y()<<" z:"<<ln.pointH_.z()<<std::endl;
+//		std::cout<<"labell:" <<ln.labelL_<<" x:"<<ln.pointL_.x()<<" y:"<<ln.pointL_.y()<<" z:"<<ln.pointL_.z()<<std::endl;
 
 	}
 

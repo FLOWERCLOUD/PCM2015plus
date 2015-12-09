@@ -942,6 +942,7 @@ public:
 		pt_->dp_.read_corres_file_hier(corr_filename_);
 
 		pt_->dp_.init_labeles_graph_hier2();
+		pt_->dp_.init_node_link();
 		for( int i = centerFrame_ ;i < endFrame_;++i){
 			pt_->split_twoAjacent_graph_next( pt_->dp_,i ,i+1);
 

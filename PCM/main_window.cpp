@@ -450,8 +450,8 @@ void  main_window::Show_Graph_WrapBox()
 
 	std::cout<<"Show_Graph_WrapBox"<<std::endl;
 
-	//main_canvas_->which_color_mode_ = PaintCanvas::WrapBoxColorMode;
-	main_canvas_->which_color_mode_ = PaintCanvas::SphereMode;
+	main_canvas_->which_color_mode_ = PaintCanvas::WrapBoxColorMode;
+	//main_canvas_->which_color_mode_ = PaintCanvas::SphereMode;
 	main_canvas_->setGraph_WrapBoxShowOrNot(true);
 
 	main_canvas_->updateGL();

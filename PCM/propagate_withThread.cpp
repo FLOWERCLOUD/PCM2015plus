@@ -16,7 +16,7 @@
 extern QWaitCondition mWaitcond;
 void PropagateThread::run()
 {
-	QMetaObject::invokeMethod( Global_Window,"saveSnapshot",Qt::QueuedConnection);
+//	QMetaObject::invokeMethod( Global_Window,"saveSnapshot",Qt::QueuedConnection);
 	//std::cout<<"thread waking"<<std::endl;
 	//	QMutex mutex;
 	//	mutex.lock();
@@ -606,6 +606,18 @@ emit writeSignal(QString("Unmark ratio too high,do not split now.\n"),1);
 
 		//这里测试 ，直接替换第一层的label_bucket
 		dp_.hier_componets_[tgFrame].hier_label_bucket[0] = new_label_bucket;
+
+		map<IndexType,IndexType> labelIndex;
+		IndexType kk=0;
+		for (auto iter = new_label_bucket.begin(); iter != new_label_bucket.end(); ++ iter,++kk)
+		{
+			IndexType label = (*iter)->label_id;
+			labelIndex[label] = kk;
+		}
+		dp_.hier_componets_[tgFrame].hier_label_vtxBucket_index[0] = labelIndex;
+		dp_.init_labeles_graph_hier2(0);
+		dp_.init_node_link(0);
+
 		dp_.changedDepthAndDispaly(0);
 		QMetaObject::invokeMethod( Global_Window->getCanvas() ,"updateGL",Qt::QueuedConnection);
 emit writeSignal(QString("target frame")+QString("%1").arg(tgFrame)+QString("frame iter one end"),2);  //释放写信号,写到主窗口的输出框中
@@ -616,11 +628,23 @@ emit writeSignal(QString("target frame")+QString("%1").arg(tgFrame)+QString("fra
 emit writeSignal(QString("target frame")+QString("%1").arg(tgFrame)+QString("all iter end"),2);  //释放写信号,写到主窗口的输出框中
 
 
+
 	checkPsNewLabelParentPtr(new_label_bucket,labParentsize);//next dirction
+
+	map<IndexType,IndexType> labelIndex;
+	IndexType kk=0;
+	for (auto iter = new_label_bucket.begin(); iter != new_label_bucket.end(); ++ iter,++kk)
+	{
+		IndexType label = (*iter)->label_id;
+		labelIndex[label] = kk;
+	}
 
 	dp_.hier_componets_[tgFrame].hier_label_bucket.push_back(new_label_bucket);
 
 	dp_.hier_componets_[tgFrame].hier_graph.push_back(new_graph);//保存最新的graph
+
+	dp_.hier_componets_[tgFrame].hier_label_vtxBucket_index.push_back(labelIndex);
+
 
 	//main_window_->getCanvas()->updateGL();
 

@@ -503,7 +503,7 @@ public:
 	void getEdgeVertexs( IndexType _CFrameId ,IndexType lLabelId ,IndexType rLabelId , map<IndexType, map<IndexType ,HVertex*> >& _edgepoints );
 	void getEdgeVertexsByMinDIstance( IndexType _CFrameId , distanPriQueue& _PriQuemap, map<IndexType, map<IndexType ,HVertex*> >& _edgepoints );
 	void init_labeles_graph_hier();
-	void init_node_link();
+	void init_node_link(int depth = 0);
 
 	void init_node_link(IndexType _frameId , IndexType _depth);
 
@@ -764,7 +764,7 @@ public:
 	void processButtonRunOrPuase();
 	void wirteGraphLables(std::string filename ,IndexType _depth);
 	void initialLabelDisplay();
-	void init_labeles_graph_hier2();
+	void init_labeles_graph_hier2(int _depth =0);
 	void getEdgeVertexs2( IndexType _CFrameId , distanPriQueue& _PriQuemap, map<IndexType, map<IndexType ,HVertex*> >& _edgepoints );
 	void wirteGraphLablesAtTop(std::string filename );
 	void writeOrigCloudWithLabel(const std::string _filename);
