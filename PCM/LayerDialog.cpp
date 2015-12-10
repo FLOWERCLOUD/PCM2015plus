@@ -113,7 +113,7 @@ void LayerDialog::updateLog(GLLogStream& log)
 	//ui->logPlainTextEdit->setFont(QFont("Courier",10));
 
 	pair<int,QString> logElem;
-	QString preWarn    = "<font face=\"courier\" size=4 color=\"red\"> Warning: " ;
+	QString preWarn    = "<font face=\"courier\" size=4 color=\"red\">";// Warning: " ;
 	QString preSystem  = "<font face=\"courier\" size=3 color=\"grey\">" ;
 	QString preFilter  = "<font face=\"courier\" size=3 color=\"black\">" ;
 

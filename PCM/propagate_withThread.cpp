@@ -345,6 +345,7 @@ void PropagateThread::split_twoAjacent_graph_next( DualwayPropagation& dp1 ,Inde
 
 	pair<EdgeIterator,EdgeIterator> ei = boost::edges(*srGraLat);
 
+emit writeSignal(QString("target frame")+QString("%1").arg(tgFrame)+QString("begin"),1);  //释放写信号,写到主窗口的输出框中
 	for (EdgeIterator eit = ei.first; eit != ei.second; ++eit)
 	{
 		
@@ -615,7 +616,8 @@ emit writeSignal(QString("Unmark ratio too high,do not split now.\n"),1);
 			labelIndex[label] = kk;
 		}
 		dp_.hier_componets_[tgFrame].hier_label_vtxBucket_index[0] = labelIndex;
-		dp_.init_labeles_graph_hier2(0);
+		dp_.hier_componets_[tgFrame].hier_graph[0] = new_graph;
+//		dp_.init_labeles_graph_hier2(0);  //in fact this function is build graph based on space disatance ,therefore ,it may not be the reality graph
 		dp_.init_node_link(0);
 
 		dp_.changedDepthAndDispaly(0);
