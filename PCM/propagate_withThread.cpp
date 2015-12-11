@@ -537,17 +537,18 @@ emit writeSignal(QString("Unmark ratio too high,do not split now.\n"),1);
 		newEP.edgePoints[edgeKey].insert(nedgePoints[edgeKey].begin(), nedgePoints[edgeKey].end());
 
 
-		boost::add_edge(nodeId,nSize,newEP,*new_graph);
+		boost::add_edge(nodeId,nSize,newEP,*new_graph);   //nodeId: the node split. nSize:  nSize: the node added
 
-		//断定查找两个节点与其它节点进行连边操作只会出现 recordColapseEdges.size()次数.
+		////the callapsed edged may be out of work ,it is right for us to iterate the left node to build the edges
+
 		for (auto iter = collapseEdges.begin(); iter != collapseEdges.end(); iter ++)
 		{
 
 			GraphEdgeProperty glueEdge;
 
 			glueEdge = (*iter);
-			IndexType  sEdgeId = glueEdge.start_;
-			IndexType  eEdgeId = glueEdge.end_;
+			IndexType  sEdgeId = glueEdge.start_;  //the start point of the edge ,this id if smaller than the eEdgeId
+			IndexType  eEdgeId = glueEdge.end_;  //the end point of the edge
 
 			map<IndexType,HVertex*>  edgePoints;
 
@@ -570,20 +571,58 @@ emit writeSignal(QString("Unmark ratio too high,do not split now.\n"),1);
 				minDistBeTwoParts(tgFrame,startVtx,nodeVtx,minNode);
 				minDistBeTwoParts(tgFrame,startVtx,nSizeVtx,minSize);
 
-				if (minNode < minSize)
+				if( minNode < 0.04 && minSize <0.04)
+				{
+					glueEdge.end_ = nodeId;
+					IndexType eKey1 = frame_index_to_key(glueEdge.start_,glueEdge.end_);
+					glueEdge.edgePoints[eKey1] = edgePoints;
+					boost::add_edge(glueEdge.start_,glueEdge.end_,glueEdge,*new_graph);
+
+					IndexType newGraphEdgeSize = new_graph->m_edges.size(); //为了给新增加的边添加序号
+					GraphEdgeProperty addglueEdge;
+					addglueEdge.start_ = glueEdge.start_; 
+					addglueEdge.end_ = nSize; 
+					addglueEdge.index = newGraphEdgeSize ;
+
+					IndexType eKey2 = frame_index_to_key(addglueEdge.start_,addglueEdge.end_);
+					addglueEdge.edgePoints[eKey2] = edgePoints;
+					boost::add_edge(addglueEdge.start_,addglueEdge.end_,addglueEdge,*new_graph);
+					continue;
+
+				}
+				else if (minNode < minSize)
 				{
 					glueEdge.end_ = nodeId;
 				}else
 				{
 					glueEdge.end_ = nSize;
 				}
+	
 
 			}else//nodeid为起点
 			{
 				minDistBeTwoParts(tgFrame,endVtx,nodeVtx,minNode);
 				minDistBeTwoParts(tgFrame,endVtx,nSizeVtx,minSize);
+				if( minNode < 0.04 && minSize <0.04)
+				{
+					glueEdge.start_ = nodeId;
+					glueEdge.end_ = eEdgeId;
+					IndexType eKey1 = frame_index_to_key(glueEdge.start_,glueEdge.end_);
+					glueEdge.edgePoints[eKey1] = edgePoints;
+					boost::add_edge(glueEdge.start_,glueEdge.end_,glueEdge,*new_graph);
 
-				if (minNode < minSize)
+					IndexType newGraphEdgeSize = new_graph->m_edges.size(); //为了给新增加的边添加序号
+					GraphEdgeProperty addglueEdge;
+					addglueEdge.start_ = eEdgeId; 
+					addglueEdge.end_ = nSize; 
+					addglueEdge.index = newGraphEdgeSize ;
+
+					IndexType eKey2 = frame_index_to_key(addglueEdge.start_,addglueEdge.end_);
+					addglueEdge.edgePoints[eKey2] = edgePoints;
+					boost::add_edge(addglueEdge.start_,addglueEdge.end_,addglueEdge,*new_graph);
+					continue;
+				}
+				else if (minNode < minSize)
 				{
 					glueEdge.start_ = nodeId;
 					glueEdge.end_ = eEdgeId;
