@@ -377,7 +377,7 @@ void main_window::dealtarjlabel()
 
 	std::vector<int> frame;
 
-	frame.push_back(51);
+	frame.push_back(54);
 	/*frame.push_back(52);
 	frame.push_back(53);
 	frame.push_back(54);*/

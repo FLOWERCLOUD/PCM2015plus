@@ -24,12 +24,12 @@ void PropagateThread::run()
 	//	mutex.unlock();
 	//std::cout<<"thread waked"<<std::endl;
 
-	/*char* CORR_FILESNAME = "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\totcorr";
-	char* CORR_FILEOUT_NAME= "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\corroutput0_87center51.txt";
-	char* LABEL_FILESNAME = "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\totlabel";
-	char* LABEL_FILEOUT_NAME = "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\labeloutput0_87center51.txt";
-	mergeFile(CORR_FILESNAME ,CORR_FILEOUT_NAME , LABEL_FILESNAME , LABEL_FILEOUT_NAME);
-	return;*/
+	//char* CORR_FILESNAME = "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll20151212l\\totcorr";
+	//char* CORR_FILEOUT_NAME= "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll20151212l\\corroutput0_87center51.txt";
+	//char* LABEL_FILESNAME = "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll20151212l\\totlabel";
+	//char* LABEL_FILEOUT_NAME = "D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll20151212l\\labeloutput0_87center51.txt";
+	//mergeFile(CORR_FILESNAME ,CORR_FILEOUT_NAME , LABEL_FILESNAME , LABEL_FILEOUT_NAME);
+	//return;
 	//mergeFile("","","","");
 	/*ProxyVisualLabel qinhua_single(
 	"D:\\point_data\\qinghuadata\\standard\\single\\label_corr\\totLabelSmooth(15_24).txt",
@@ -42,10 +42,10 @@ void PropagateThread::run()
 	//	116
 	//	);
 	Proxy_PropagateAndStepVisual hanger(
-		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\labeloutput0_87center51.txt",
-		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll\\corroutput0_87center51.txt",
-		48,
-		54,
+		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll20151212l\\labeloutput0_87center51.txt",
+		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll20151212l\\corroutput0_87center51.txt",
+		40,
+		59,
 		51
 		);
 	int returncode = QObject::connect(this,SIGNAL(writeSignal(QString,int)), Global_Window,SLOT(logText(QString,int)),Qt::QueuedConnection);
@@ -395,7 +395,7 @@ std::cout<<"thread waked"<<std::endl;
 		IndexType recordS = 0;       
 		IndexType recordE = 0;
 
-		IndexType vtxBSzie = splitedLabel->vertex_bucket.size();
+		IndexType vtxBSize = splitedLabel->vertex_bucket.size();
 		for (auto iter = splitedLabel->vertex_bucket.begin(); iter != splitedLabel->vertex_bucket.end(); iter ++)
 		{
 			IndexType prev_id = iter->second->prev_corr->label_parent[gLevel]->label_id; //
@@ -410,8 +410,8 @@ std::cout<<"thread waked"<<std::endl;
 			}
 		}
 
-		ScalarType ration = (ScalarType)(recordS + recordE)/vtxBSzie;
-emit writeSignal(QString("recordS: ")+ QString("%1").arg(recordS)+QString("  recordE: ")+QString("%1").arg(recordE) ,3);  //ÊÍ·ÅÐ´ÐÅºÅ,Ð´µ½Ö÷´°¿ÚµÄÊä³ö¿òÖÐ
+		ScalarType ration = (ScalarType)(recordS + recordE)/vtxBSize;
+emit writeSignal(QString("recordS: ")+ QString("%1").arg(recordS)+QString("  recordE: ")+QString("%1").arg(recordE)+QString("  vtxBSize: ")+QString("%1").arg(vtxBSize) ,3);  //ÊÍ·ÅÐ´ÐÅºÅ,Ð´µ½Ö÷´°¿ÚµÄÊä³ö¿òÖÐ
 		//Èô·ÖÁÑ³öÀ´µÄµã¸öÊýÓÐÒ»¸öÊý¾ÝºÜÉÙ,Ôò¸Ã±ß²»×öÁÑ±ä
 
 		if ( recordE < 5 || recordS < 5 )
@@ -421,7 +421,7 @@ emit writeSignal(QString("edge point is not enough, do not split.\n"),1);  //ÊÍ·
 			continue;
 		}
 
-		if (ration < 0.2)
+		if (ration < 0.1) //0.2
 		{
 emit writeSignal(QString("Unmark ratio too high,do not split now.\n"),1); 
 			Logger<<"Unmarkµã±ÈÖµÌ«´ó,ÔÝÊ±²»·ÖÁÑ.\n";
@@ -848,15 +848,10 @@ void PropagateThread::split_twoAjacent_graph_prev( DualwayPropagation& dp ,Index
 
 	// guideSplitGraphµÄÃ¿Ìõ±ßÒýµ¼Ò»´Î·Ö¸î
 	pair<EdgeIterator,EdgeIterator> ei = boost::edges(*guideSplitGraph);
-
+emit writeSignal(QString("target frame")+QString("%1").arg(tgFrame)+QString("begin"),1); 
 	for (EdgeIterator eit = ei.first; eit != ei.second; ++eit)
 	{
-		std::cout<<"thread waking"<<std::endl;
-		QMutex mutex;
-		mutex.lock();
-		mWaitcond.wait(&mutex);
-		mutex.unlock();
-		std::cout<<"thread waked"<<std::endl;
+
 
 		EdgeDescriptor ed = *eit;
 
@@ -905,6 +900,16 @@ void PropagateThread::split_twoAjacent_graph_prev( DualwayPropagation& dp ,Index
 		IndexType strCorPsSzie = 0;
 		IndexType endCorPsSize = 0;
 
+std::cout<<"thread waking"<<std::endl;
+Logger<<"±ßµÄÆðµãÎª"<<curEdgeStart<<"ÖÕµãÎª"<<curEdgeEnd<<endl;	
+emit writeSignal(QString("begin: edge start: ")+ QString("%1").arg(curEdgeStart)+QString("  edge end: ")+QString("%1").arg(curEdgeEnd) ,3);  //ÊÍ·ÅÐ´ÐÅºÅ,Ð´µ½Ö÷´°¿ÚµÄÊä³ö¿òÖÐ
+QMutex mutex;
+mutex.lock();
+mWaitcond.wait(&mutex);
+mutex.unlock();
+std::cout<<"thread waked"<<std::endl;	
+
+
 		//·ÖÀàÇ°×öÒ»¸ö¼òµ¥µÄÔ¤ÅÐ¶Ï
 		for (auto iter = splitedLabel->vertex_bucket.begin(); iter != splitedLabel->vertex_bucket.end(); iter ++)
 		{
@@ -932,16 +937,19 @@ void PropagateThread::split_twoAjacent_graph_prev( DualwayPropagation& dp ,Index
 		IndexType  vtxBSize = splitedLabel->vertex_bucket.size();
 
 		ScalarType ration = (ScalarType)(strCorPsSzie + endCorPsSize)/vtxBSize;
+emit writeSignal(QString("recordS: ")+ QString("%1").arg(strCorPsSzie)+QString("  recordE: ")+QString("%1").arg(endCorPsSize) +QString("  vtxBSize: ")+QString("%1").arg(vtxBSize),3);  //ÊÍ·ÅÐ´ÐÅºÅ,Ð´µ½Ö÷´°¿ÚµÄÊä³ö¿òÖÐ
 
 		if ( strCorPsSzie < 5 || endCorPsSize < 5)
 		{
 			Logger<<"±ß½çµã¿¿½ü±ß½ç(¶ÔÓ¦µã¸öÊý),²»ÐèÒª·ÖÁÑ.\n";
+emit writeSignal(QString("edge point is not enough, do not split.\n"),1);  //ÊÍ·ÅÐ´ÐÅºÅ,Ð´µ½Ö÷´°¿ÚµÄÊä³ö¿òÖÐ
 			continue;
 		}
 
-		if ( ration < 0.2)
+		if ( ration < 0.05) //0.2
 		{
 			Logger<<"ËÄÁ½²¦Ç§½ï?ËãÁË°É!.\n";
+emit writeSignal(QString("Unmark ratio too high,do not split now.\n"),1); 
 			continue;
 		}
 
@@ -1074,8 +1082,26 @@ void PropagateThread::split_twoAjacent_graph_prev( DualwayPropagation& dp ,Index
 			{
 				minDistBeTwoParts(srFrame,startVtx,nodeVtx,minNode);
 				minDistBeTwoParts(srFrame,startVtx,nSizeVtx,minSize);
+				if( minNode < 0.04 && minSize <0.04)
+				{
+					glueEdge.end_ = edgePsCorNode;
+					IndexType eKey1 = frame_index_to_key(glueEdge.start_,glueEdge.end_);
+					glueEdge.edgePoints[eKey1] = edgePoints;
+					boost::add_edge(glueEdge.start_,glueEdge.end_,glueEdge,*shouldSplitGraph);
 
-				if (minNode < minSize)
+					IndexType newGraphEdgeSize = shouldSplitGraph->m_edges.size(); //ÎªÁË¸øÐÂÔö¼ÓµÄ±ßÌí¼ÓÐòºÅ
+					GraphEdgeProperty addglueEdge;
+					addglueEdge.start_ = glueEdge.start_; 
+					addglueEdge.end_ = nSize; 
+					addglueEdge.index = newGraphEdgeSize ;
+
+					IndexType eKey2 = frame_index_to_key(addglueEdge.start_,addglueEdge.end_);
+					addglueEdge.edgePoints[eKey2] = edgePoints;
+					boost::add_edge(addglueEdge.start_,addglueEdge.end_,addglueEdge,*shouldSplitGraph);
+					continue;
+
+				}
+				else if (minNode < minSize)
 				{
 					glueEdge.end_ = edgePsCorNode;
 				}else
@@ -1087,8 +1113,26 @@ void PropagateThread::split_twoAjacent_graph_prev( DualwayPropagation& dp ,Index
 			{
 				minDistBeTwoParts(srFrame,endVtx,nodeVtx,minNode);
 				minDistBeTwoParts(srFrame,endVtx,nSizeVtx,minSize);
+				if( minNode < 0.04 && minSize <0.04)
+				{
+					glueEdge.start_ =edgePsCorNode;
+					glueEdge.end_ = eEdgeId;
+					IndexType eKey1 = frame_index_to_key(glueEdge.start_,glueEdge.end_);
+					glueEdge.edgePoints[eKey1] = edgePoints;
+					boost::add_edge(glueEdge.start_,glueEdge.end_,glueEdge,*shouldSplitGraph);
 
-				if (minNode < minSize)
+					IndexType newGraphEdgeSize = shouldSplitGraph->m_edges.size(); //ÎªÁË¸øÐÂÔö¼ÓµÄ±ßÌí¼ÓÐòºÅ
+					GraphEdgeProperty addglueEdge;
+					addglueEdge.start_ = eEdgeId; 
+					addglueEdge.end_ = nSize; 
+					addglueEdge.index = newGraphEdgeSize ;
+
+					IndexType eKey2 = frame_index_to_key(addglueEdge.start_,addglueEdge.end_);
+					addglueEdge.edgePoints[eKey2] = edgePoints;
+					boost::add_edge(addglueEdge.start_,addglueEdge.end_,addglueEdge,*shouldSplitGraph);
+					continue;
+				}
+				else if (minNode < minSize)
 				{
 					glueEdge.start_ = edgePsCorNode;
 					glueEdge.end_ = eEdgeId;
@@ -1109,18 +1153,39 @@ void PropagateThread::split_twoAjacent_graph_prev( DualwayPropagation& dp ,Index
 
 		}//±éÀúcollapseµÄ±ß
 		dp_.hier_componets_[srFrame].hier_label_bucket[0] = new_label_bucket;
+		map<IndexType,IndexType> labelIndex;
+		IndexType kk=0;
+		for (auto iter = new_label_bucket.begin(); iter != new_label_bucket.end(); ++ iter,++kk)
+		{
+			IndexType label = (*iter)->label_id;
+			labelIndex[label] = kk;
+		}
+		dp_.hier_componets_[srFrame].hier_label_vtxBucket_index[0] = labelIndex;
+		dp_.hier_componets_[srFrame].hier_graph[0] = shouldSplitGraph;
+		dp_.init_node_link(0);
 		dp_.changedDepthAndDispaly(0);
-
 		QMetaObject::invokeMethod( Global_Window->getCanvas() ,"updateGL",Qt::QueuedConnection);
+emit writeSignal(QString("target frame")+QString("%1").arg(tgFrame)+QString("frame iter one end"),2);  //ÊÍ·ÅÐ´ÐÅºÅ,Ð´µ½Ö÷´°¿ÚµÄÊä³ö¿òÖÐ
 		//Global_Window->getCanvas()->updateGL();
 
 	} //±éÀúÒýµ¼·Ö¸îÍ¼µÄÃ¿Ìõ±ß
 
+emit writeSignal(QString("target frame")+QString("%1").arg(tgFrame)+QString("all iter end"),2); 
 	checkPsNewLabelParentPtr(new_label_bucket,srGraphSize + 1);
+
+	map<IndexType,IndexType> labelIndex;
+	IndexType kk=0;
+	for (auto iter = new_label_bucket.begin(); iter != new_label_bucket.end(); ++ iter,++kk)
+	{
+		IndexType label = (*iter)->label_id;
+		labelIndex[label] = kk;
+	}
+
 
 	dp_.hier_componets_[srFrame].hier_label_bucket.push_back(new_label_bucket);
 
 	dp_.hier_componets_[srFrame].hier_graph.push_back(shouldSplitGraph);//±£´æ×îÐÂµÄgraph
+	dp_.hier_componets_[tgFrame].hier_label_vtxBucket_index.push_back(labelIndex);
 
 	Logger<<"  End prev split.\n";
 	Logger<<" .......\n";
