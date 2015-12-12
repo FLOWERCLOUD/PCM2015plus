@@ -72,7 +72,7 @@ main_window::main_window(QWidget *parent)
 	//layerDock->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding ) );
 	
 	QWidget* multiwidget = new QWidget();
-	multiwidget->setMaximumHeight(100);
+	multiwidget->setMaximumHeight(150);
 	QVBoxLayout* layerlayout = new QVBoxLayout();
 	QHBoxLayout* LayerDialoglayout = new QHBoxLayout();
 	QHBoxLayout* centetframelayout = new QHBoxLayout();
@@ -377,7 +377,7 @@ void main_window::dealtarjlabel()
 
 	std::vector<int> frame;
 
-	frame.push_back(54);
+	frame.push_back(main_canvas_->centerframeNum);
 	/*frame.push_back(52);
 	frame.push_back(53);
 	frame.push_back(54);*/
