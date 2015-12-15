@@ -30,6 +30,8 @@ int main(int argc, char *argv[])
 {
 	ConsoleLogger::Instance();
 	MyApplication a(argc, argv);
+	a.setOrganizationName("scut_cg440");
+	a.setApplicationName("PCM");
 	main_window w ;//= main_window::getInstance();
 	setGlobalWindow( &w);
 	w.show();

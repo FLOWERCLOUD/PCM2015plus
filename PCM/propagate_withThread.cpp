@@ -41,12 +41,19 @@ void PropagateThread::run()
 	//	124,
 	//	116
 	//	);
+	//Proxy_PropagateAndStepVisual hanger(
+	//	"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll20151212l\\labeloutput0_87center51.txt",
+	//	"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll20151212l\\corroutput0_87center51.txt",
+	//	40,
+	//	59,
+	//	51
+	//	);
 	Proxy_PropagateAndStepVisual hanger(
-		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll20151212l\\labeloutput0_87center51.txt",
-		"D:\\point_data\\hanger\\hanger\\label_corr\\hangerAll20151212l\\corroutput0_87center51.txt",
-		40,
-		59,
-		51
+		"D:\\point_data\\horse\\yuan\\totCosegSmth(13_22).txt",
+		"D:\\point_data\\horse\\yuan\\totCorr(13_22).txt",
+		13,
+		22,
+		17
 		);
 	int returncode = QObject::connect(this,SIGNAL(writeSignal(QString,int)), Global_Window,SLOT(logText(QString,int)),Qt::QueuedConnection);
 	std::cout<<"returncode: "<<returncode<<std::endl;

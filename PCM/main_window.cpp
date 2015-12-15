@@ -263,6 +263,18 @@ void main_window::setSceneToolMode()
 
 void main_window::createFileMenuAction()
 {
+	for (int i = 0; i < MaxRecentFiles; ++i) {
+		recentFileActs[i] = new QAction(this);
+		recentFileActs[i]->setVisible(false);
+		connect(recentFileActs[i], SIGNAL(triggered()),
+			this, SLOT(openRecentFile()));
+	}
+	separatorAct = ui.menuFiles->addSeparator();
+	for (int i = 0; i < MaxRecentFiles; ++i)
+		ui.menuFiles->addAction(recentFileActs[i]);
+	ui.menuFiles->addSeparator();
+
+	updateRecentFileActions();
 	connect(ui.actionImportFiles, SIGNAL(triggered()),this, SLOT(openFiles()));
 	connect(ui.actionSaveSnapshot ,SIGNAL(triggered()) , this ,SLOT(saveSnapshot()));
 	connect(ui.actionSavePly ,SIGNAL(triggered()) , this ,SLOT(savePLY()));
@@ -287,7 +299,7 @@ bool main_window::openFile()
 bool main_window::setSampleVisible()
 {
 	SampleSet::get_instance()[cur_select_sample_idx_].set_visble(true);
-	m_layer->updateTable();
+	m_layer->updateTable(cur_select_sample_idx_);
 	main_canvas_->updateGL();
 	return true;
 }
@@ -295,7 +307,7 @@ bool main_window::setSampleVisible()
 bool main_window::setSampleInvisible()
 {
 	SampleSet::get_instance()[cur_select_sample_idx_].set_visble(false);
-	m_layer->updateTable();
+	m_layer->updateTable(cur_select_sample_idx_);
 	main_canvas_->updateGL();
 	return true;
 }
@@ -509,6 +521,7 @@ bool main_window::openFiles()
 	QString dir = QFileDialog::getExistingDirectory(this,tr("Import point cloud files"),".");
 	if (dir.isEmpty())
 		return false;
+	setCurrentFile(dir);
 
 	resetSampleSet();
 
@@ -550,6 +563,7 @@ bool main_window::openFiles()
 			new_sample->smpId = sample_idx;
 			sample_idx++;
 		}
+		
 
 	}
 
@@ -800,15 +814,15 @@ using namespace ANIMATION;
 bool main_window::runOrPause()
 {
 	if(  StateManager::getInstance().state() ==  RUNSTATE){
-	Logger<<" old state is runstate"<<std::endl;
+//	Logger<<" old state is runstate"<<std::endl;
 		StateManager::getInstance().pause();
 		 
 
 	}else if(StateManager::getInstance().state() ==  PAUSESTATE){
-		Logger<<" old state is pause state"<<std::endl;
+//		Logger<<" old state is pause state"<<std::endl;
 		StateManager::getInstance().run();
 	}else if(StateManager::getInstance().state() ==  STOPSTATE){
-		Logger<<" old state is stop state"<<std::endl;
+//		Logger<<" old state is stop state"<<std::endl;
 		StateManager::getInstance().run();
 	}
 	return false;
@@ -816,10 +830,10 @@ bool main_window::runOrPause()
 bool main_window::stop()
 {
 	if(StateManager::getInstance().state() ==  RUNSTATE){
-		Logger<<" old state is runstate"<<std::endl;
+//		Logger<<" old state is runstate"<<std::endl;
 		StateManager::getInstance().stop();
 	}else if (StateManager::getInstance().state() ==  PAUSESTATE){
-		Logger<<" old state is pause state"<<std::endl;
+//		Logger<<" old state is pause state"<<std::endl;
 
 	}else{
 
@@ -890,21 +904,22 @@ void main_window::excFrameAnimation()
 	//if(!REAL_TIME_RENDER)
 	DualwayPropagation::get_instance().excFrameAnimation();
 	//ui.treeWidget->fin
+	//m_layer->updateTable(0);
 	main_canvas_->updateGL();
 }
 
 bool main_window::increaseInterval()
 {
 	if(  StateManager::getInstance().state() ==  RUNSTATE){
-		Logger<<" add duration"<<std::endl;
+//		Logger<<" add duration"<<std::endl;
 		StateManager::getInstance().increaseInterval();
 
 
 	}else if(StateManager::getInstance().state() ==  PAUSESTATE){
-		Logger<<" add duration"<<std::endl;
+//		Logger<<" add duration"<<std::endl;
 		StateManager::getInstance().increaseInterval();
 	}else if(StateManager::getInstance().state() ==  STOPSTATE){
-		Logger<<" old state is stop state"<<std::endl;
+//		Logger<<" old state is stop state"<<std::endl;
 	}
 	return false;
 }
@@ -913,15 +928,15 @@ bool main_window::decreaseInterval()
 {
 	std::cout<<"decreaseInterval()"<<std::endl;
 	if(  StateManager::getInstance().state() ==  RUNSTATE){
-		Logger<<" lessenduration"<<std::endl;
+//		Logger<<" lessenduration"<<std::endl;
 		StateManager::getInstance().decreaseInterval();
 
 
 	}else if(StateManager::getInstance().state() ==  PAUSESTATE){
-		Logger<<" lessenduration"<<std::endl;
+//		Logger<<" lessenduration"<<std::endl;
 		StateManager::getInstance().decreaseInterval();
 	}else if(StateManager::getInstance().state() ==  STOPSTATE){
-		Logger<<"lessenduration"<<std::endl;
+//		Logger<<"lessenduration"<<std::endl;
 		
 	}
 	return false;
@@ -1007,5 +1022,127 @@ void main_window::logText(QString as,int level)
 	logstream.Log( lveltype,text);
 	m_layer->updateLog(logstream);
 	//return true;
+
+}
+
+void main_window::openRecentFile()
+{
+	QAction *action = qobject_cast<QAction *>(sender());
+	if (action)
+		loadFile(action->data().toString());
+
+}
+void main_window::updateRecentFileActions()
+{
+	QSettings settings;
+	QStringList files = settings.value("recentFileList").toStringList();
+
+	int numRecentFiles = qMin(files.size(), (int)MaxRecentFiles);
+
+	for (int i = 0; i < numRecentFiles; ++i) {
+		QString text = tr("&%1 %2").arg(i + 1).arg(strippedName(files[i]));
+		recentFileActs[i]->setText(text);
+		recentFileActs[i]->setData(files[i]);
+		recentFileActs[i]->setVisible(true);
+	}
+	for (int j = numRecentFiles; j < MaxRecentFiles; ++j)
+		recentFileActs[j]->setVisible(false);
+
+	separatorAct->setVisible(numRecentFiles > 0);
+
+
+
+}
+QString main_window::strippedName(const QString &fullFileName)
+{
+	return QFileInfo(fullFileName).fileName();
+}
+void main_window::loadFile(const QString &dir)
+{
+	//QString dir = QFileDialog::getExistingDirectory(this,tr("Import point cloud files"),".");
+	if (dir.isEmpty())
+		return ;
+	setCurrentFile(dir);
+
+	resetSampleSet();
+
+	QDir file_dir(dir);
+	if ( !file_dir.exists() )
+	{
+		QMessageBox::warning(this, tr("Recent Files"),
+			tr("Cannot read file %1:\n%2.")
+			.arg("ss")
+			.arg("ss"));
+		return;
+	}
+	file_dir.setFilter(QDir::Files);
+
+	QFileInfoList file_list = file_dir.entryInfoList();
+	IndexType sample_idx = 0;
+	for (IndexType file_idx = 0; file_idx < file_list.size(); file_idx++)
+	{
+		QFileInfo file_info = file_list.at(file_idx);
+		FileIO::FILE_TYPE file_type;
+
+		if (file_info.suffix() == "xyz")
+		{
+			file_type = FileIO::XYZ;
+		}
+		else if(file_info.suffix() == "ply")
+		{
+			file_type = FileIO::PLY;
+		}
+		else
+		{
+			continue;
+		}
+
+		string file_path = file_info.filePath().toStdString();
+		cur_import_files_attr_.push_back( make_pair(FileSystem::base_name(file_path), 
+			FileSystem::extension(file_path)) );
+
+		Sample* new_sample = FileIO::load_point_cloud_file(file_path, file_type,sample_idx);
+		if (new_sample != nullptr)
+		{
+			SampleSet::get_instance().push_back(new_sample);
+			new_sample->smpId = sample_idx;
+			sample_idx++;
+		}
+
+
+	}
+	createTreeWidgetItems();
+	m_layer->updateTable();
+
+	//QTextStream in(&file);
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	//textEdit->setPlainText(in.readAll());
+	QApplication::restoreOverrideCursor();
+//	setCurrentFile(fileName);
+	statusBar()->showMessage(tr("File loaded"), 2000);
+
+}
+
+void main_window::setCurrentFile(const QString &fileName)
+{
+	curFile = fileName;
+	std::cout<<curFile.toStdString()<<std::endl;
+	//QDir::setCurrent(curFile);
+	//setWindowFilePath(curFile);
+
+	QSettings settings;
+	QStringList files = settings.value("recentFileList").toStringList();
+	files.removeAll(fileName);
+	files.prepend(fileName);
+	while (files.size() > MaxRecentFiles)
+		files.removeLast();
+
+	settings.setValue("recentFileList", files);
+
+	foreach (QWidget *widget, QApplication::topLevelWidgets()) {
+		main_window *mainWin = qobject_cast<main_window *>(widget);
+		if (mainWin)
+			mainWin->updateRecentFileActions();
+	}
 
 }

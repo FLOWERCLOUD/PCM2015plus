@@ -25,6 +25,7 @@ public:
 	FrameTreeWidgetItem( Sample* , QTreeWidget* tree , QWidget* additional );
 	~FrameTreeWidgetItem();
 	Sample* m;
+	bool curvisiable;
 
 };
 
@@ -39,6 +40,7 @@ public:
 	public slots:
 		void updateTableVisibility(IndexType itemid);
 		void updateTable();
+		void updateTable(int row);
 		void frameItemClicked( QTreeWidgetItem* , int);
 		void showEvent(QShowEvent* );
 		void showContextMenu( const QPoint& pos);

@@ -143,9 +143,24 @@ public:
 		return main_canvas_;
 
 	}
+	LayerDialog* getLayerdialog()
+	{
+		return m_layer;
+
+	}
+	QString curFile;
+	void setCurrentFile(const QString &fileName);
+	void updateRecentFileActions();
+	QString strippedName(const QString &fullFileName);
 	
-
-
+	void loadFile(const QString &fileName);
+	QAction *separatorAct;
+	enum { MaxRecentFiles = 5 };
+	QAction *recentFileActs[MaxRecentFiles];
+public
+slots:
+	void openRecentFile();
+	
 private:
 
 

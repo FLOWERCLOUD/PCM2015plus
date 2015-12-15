@@ -2632,9 +2632,12 @@ void DualwayPropagation::excFrameAnimation()
 		for( IndexType  i = startframe ; i != (endframe+1) ; ++i){
 			if( i == currentVisframe){
 				SampleSet::get_instance()[i].set_visble(true);
+				
 			}else{
 				SampleSet::get_instance()[i].set_visble(false);
+				
 			}
+			
 			
 		}
 		
@@ -2643,12 +2646,15 @@ void DualwayPropagation::excFrameAnimation()
 		for( IndexType  i = startframe ; i != (endframe+1) ; ++i){
 			if( i == currentVisframe){
 				SampleSet::get_instance()[i].set_visble(true);
+
 			}else{
 				SampleSet::get_instance()[i].set_visble(false);
-			}
 
-		}
+			}
+			
+		}		
 	}
+	Global_Window->getLayerdialog()->updateTable(currentVisframe);
 }
 void DualwayPropagation::startlayerAnimation()
 {

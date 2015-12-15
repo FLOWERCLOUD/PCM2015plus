@@ -8,17 +8,22 @@
 #include "sample_set.h"
 #include "main_window.h"
 #include "GLLogStream.h"
+#include "GlobalObject.h"
 using namespace std;
 
 
 
 FrameTreeWidgetItem::FrameTreeWidgetItem(Sample* smp , QTreeWidget* tree , QWidget* additional): QTreeWidgetItem( tree)
 {
-	if( smp->is_visible())
+	if( smp->is_visible()){
 		setIcon(0,QIcon("Resources/visible.png"));
-	else
+		
+	}else{
 		setIcon(0,QIcon("Resources/invisible.png"));
+		
+	}
 	setText(1, QString::number(smp->smpId));
+	curvisiable = smp->is_visible();
 
 	QString meshName = QString("test frame")+ QString(smp->smpId);
 	//if (meshModel->meshModified())
@@ -95,7 +100,8 @@ void LayerDialog::frameItemClicked(QTreeWidgetItem* _item, int col)
 
 			break;
 		}
-		updateTable();
+		Global_Window->getCanvas()->updateGL();
+		updateTable(clickedId);
 		// 此处应有更新界面的函数
 
 
@@ -136,6 +142,42 @@ void LayerDialog::updateTableVisibility( IndexType itemid)
 {
 	if(!isVisible()) return;
 	/*ui_->frameTreeWidget->fin*/
+
+}
+void LayerDialog::updateTable(int row)
+{
+	 if(!isVisible()) return;
+	for(int i=0; i< ui_->frameTreeWidget->topLevelItemCount(); i++)
+	{
+		FrameTreeWidgetItem *item = (FrameTreeWidgetItem *)ui_->frameTreeWidget->topLevelItem(i);
+		if( item->m->is_visible() != item->curvisiable ){
+			item->curvisiable = item->m->is_visible();
+			if(item->curvisiable)
+			{
+				item->setIcon(0,QIcon("Resources/visible.png"));
+				item->setBackground(1,QBrush(Qt::white));
+				item->setForeground(1,QBrush(Qt::yellow));
+				item->setBackground(2,QBrush(Qt::white));
+				item->setForeground(2,QBrush(Qt::yellow));
+				item->setBackground(3,QBrush(Qt::white));
+				item->setForeground(3,QBrush(Qt::yellow));
+	
+			}else{
+				item->setIcon(0,QIcon("Resources/invisible.png"));
+				item->setBackground(1,QBrush(Qt::white));
+				item->setForeground(1,QBrush(Qt::blue));
+				item->setBackground(2,QBrush(Qt::white));
+				item->setForeground(2,QBrush(Qt::blue));
+				item->setBackground(3,QBrush(Qt::white));
+				item->setForeground(3,QBrush(Qt::blue));
+			}
+			
+
+			ui_->frameTreeWidget->update();
+		}
+		
+	}
+
 
 }
 
