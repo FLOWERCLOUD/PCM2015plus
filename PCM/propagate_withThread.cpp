@@ -53,7 +53,7 @@ void PropagateThread::run()
 		"D:\\point_data\\horse\\yuan\\totCorr(13_22).txt",
 		13,
 		22,
-		17
+		13
 		);
 	int returncode = QObject::connect(this,SIGNAL(writeSignal(QString,int)), Global_Window,SLOT(logText(QString,int)),Qt::QueuedConnection);
 	std::cout<<"returncode: "<<returncode<<std::endl;

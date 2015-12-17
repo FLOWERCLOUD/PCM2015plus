@@ -280,7 +280,7 @@ public:
 					 //now split
 
 					 //now create new component
-					 IndexType new_label = next_frame.label_bucket.size();
+					 IndexType new_label = (IndexType)next_frame.label_bucket.size();
 					 new_label_set.insert(new_label);
 					 next_frame.label_bucket.push_back( (CLabel*)0 );
 					 CLabel* new_label_space = allocator_.allocate<CLabel>();
@@ -391,7 +391,7 @@ public:
 					//now split
 
 					//now create new component
-					IndexType new_label = prev_frame.label_bucket.size();
+					IndexType new_label = (IndexType)prev_frame.label_bucket.size();
 					new_label_set.insert(new_label);
 					prev_frame.label_bucket.push_back( (CLabel*)0 );
 					CLabel* new_label_space = allocator_.allocate<CLabel>();
@@ -620,7 +620,7 @@ public:
 		map<IndexType, IndexType> old_label_map = components_[frame_idx].label_of_vtx;
 		for ( i=0; i<idx_mapper.size(); i++)
 		{
-			vector<int> label_count( components_[frame_idx].label_bucket.size(), 0 );
+			vector<int> label_count( (int)components_[frame_idx].label_bucket.size(), 0 );
 			IndexType real_vtx_idx = idx_mapper[i];
 			downsmp_ptr->neighbours(i, k, neighbours, dist );
 			for ( IndexType neig_id = 0; neig_id<k; neig_id++ )

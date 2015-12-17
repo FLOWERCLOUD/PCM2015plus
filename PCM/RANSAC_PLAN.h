@@ -89,7 +89,7 @@ public:
 
 		Matrix33 sigma = pCoor * pCoor.transpose();
 
-		Eigen::EigenSolver<Matrix33> eigen_solver(sigma, Eigen::ComputeFullU | Eigen::ComputeFullV);
+		Eigen::EigenSolver<Matrix33> eigen_solver(sigma, (bool)(Eigen::ComputeFullU | Eigen::ComputeFullV) );
 
 		auto ev = eigen_solver.eigenvectors();
 		auto eval = eigen_solver.eigenvalues();

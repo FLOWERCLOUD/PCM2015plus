@@ -482,11 +482,11 @@ public:
 		//ScalarType corValue =  0.5 * (toComVtx.size()/srVertex.size() + backComVtx.size()/tgVertex.size() );
 
 		//ScalarType scaleShape =  abs((int) (srVertex.size() - tgVertex.size() )) / std::max(srVertex.size(), tgVertex.size() );
-		ScalarType srV_size = srVertex.size();
-		ScalarType tgV_size = tgVertex.size();
+		ScalarType srV_size = (ScalarType)srVertex.size();
+		ScalarType tgV_size = (ScalarType)tgVertex.size();
 
-		IndexType toCom_size = toComVtx.size();
-		IndexType backCom_size = backComVtx.size();
+		ScalarType toCom_size = (ScalarType)toComVtx.size();
+		ScalarType backCom_size = (ScalarType)backComVtx.size();
 
 		ScalarType corValue =  0.5 * (toCom_size/srV_size + backCom_size/tgV_size );
 
@@ -647,7 +647,7 @@ public:
 			HLabel& cLable = *(old_label_bucket[ *vtxbitr]);
 
 			cvd = *vtxbitr;
-			IndexType clabelSize = cLable.vertex_bucket.size();
+			IndexType clabelSize = (IndexType)cLable.vertex_bucket.size();
 			Logger<<"label 号： "<< cLable.label_id <<"点的个数 :"<< clabelSize<<std::endl;
 			if( patches.find( cvd) != patches.end() ){
 				newGraph = new LabelsGraph();
@@ -877,7 +877,7 @@ public:
 		for(  ; vtxbitr != vtxeitr ;++ vtxbitr){
 			HLabel& cLable = *(old_label_bucket[ *vtxbitr]);
 			VertexDescriptor cvd = *vtxbitr;
-			IndexType clabelSize = cLable.vertex_bucket.size();
+			IndexType clabelSize = (IndexType)cLable.vertex_bucket.size();
 			Logger<<"label 号： "<< cLable.label_id <<"点的个数 :"<< clabelSize<<std::endl;
 			//小于阈值，需要对该节点进行处理
 			if( clabelSize < SMOOTH_AREA_ ){
@@ -1296,9 +1296,9 @@ void DualwayPropagation:: init_labeles_graph_hier()
 		std::cout<<"第"<<citer->first<<"帧:"<<std::endl;
 		
 
-		IndexType lbsize = citer->second.hier_label_bucket.size();
+		IndexType lbsize = (IndexType)citer->second.hier_label_bucket.size();
 		assert( lbsize > 0);
-		IndexType nodeSize = citer->second.hier_label_bucket[lbsize -1].size();//.size();
+		IndexType nodeSize = (IndexType)citer->second.hier_label_bucket[lbsize -1].size();//.size();
 
 		//LabelsGraph* new_labelGraph_space = allocator_.allocate<LabelsGraph>();
 
@@ -1497,10 +1497,10 @@ void DualwayPropagation::init_labeles_graph_hier2(int _depth )
 	for (auto citer = hier_componets_.begin(); citer!=hier_componets_.end(); citer++)
 	{
 
-		int lbsize = citer->second.hier_label_bucket.size();
+		IndexType lbsize = (IndexType)citer->second.hier_label_bucket.size();
 //		assert( lbsize > 0);
  		lbsize = lbsize < _depth+1? lbsize:_depth+1;
-		int nodeSize = citer->second.hier_label_bucket[lbsize -1].size();//.size();
+		IndexType nodeSize = (IndexType)citer->second.hier_label_bucket[lbsize -1].size();//.size();
 
 		LabelsGraph* new_labelGraph_space = allocator_.allocate<LabelsGraph>();
 
@@ -1669,7 +1669,7 @@ void DualwayPropagation::init_node_link(IndexType _frameId ,IndexType _depth)
 {
 	HFrame& cframe = hier_componets_[_frameId];
 	Sample& csmp = SampleSet::get_instance()[_frameId];
-	int truedepth = cframe.hier_graph.size()-1;
+	int truedepth = (int)cframe.hier_graph.size()-1;
 	if(truedepth<0)truedepth=0;
 	_depth = truedepth < _depth?truedepth: _depth;
 
@@ -1777,7 +1777,7 @@ void DualwayPropagation::split_twoAjacent_graph_next(IndexType srFrame, IndexTyp
 
 	//get the new graph of tgGrame--需要深拷贝
 
-	IndexType tgGraSize = hier_componets_[tgFrame].hier_graph.size();
+	IndexType tgGraSize = (IndexType)hier_componets_[tgFrame].hier_graph.size();
 	LabelsGraph* oriGra = hier_componets_[tgFrame].hier_graph[tgGraSize - 1];
 	LabelsGraph* new_graph = new LabelsGraph(*oriGra);
 
@@ -1789,7 +1789,7 @@ void DualwayPropagation::split_twoAjacent_graph_next(IndexType srFrame, IndexTyp
 
 
 	//
-	IndexType srGraSize = hier_componets_[srFrame].hier_graph.size();
+	IndexType srGraSize = (IndexType)hier_componets_[srFrame].hier_graph.size();
 
 	LabelsGraph* srGraLat = hier_componets_[srFrame].hier_graph[srGraSize - 1];
 
@@ -1816,7 +1816,7 @@ void DualwayPropagation::split_twoAjacent_graph_next(IndexType srFrame, IndexTyp
 
 		map<IndexType,HVertex*> edgeCorrNextVtx;
 
-		IndexType newGraphEdgeSize = new_graph->m_edges.size();
+		IndexType newGraphEdgeSize = (IndexType)new_graph->m_edges.size();
 
 		IndexType nodeId = checkNextLabelBucket(edgePoints,edgeCorrNextVtx);//获得边界点在下一帧对应的块和对应点
 		//IndexType nodeId = edgeCorrNextVtx.size();
@@ -2221,7 +2221,7 @@ void DualwayPropagation::wirteGraphLablesAtTop(std::string filename )
 		IndexType frame_idx = fbitr->first;
 		HFrame& cframe = hier_componets_[ fbitr->first]; 
 
-		IndexType graph_size =  cframe.hier_label_bucket.size();
+		IndexType graph_size =  (IndexType)cframe.hier_label_bucket.size();
 
 		std::vector<HLabel*>& cLabelbck = cframe.hier_label_bucket[graph_size-1];
 
@@ -2250,7 +2250,7 @@ void DualwayPropagation::wirteGraphLablesAtTop(std::string filename )
 		}
 
 		
-		IndexType labelNum = labelVec.size();
+		IndexType labelNum = (IndexType)labelVec.size();
 		while(true){
 			IndexType minVtxId = 10000000;
 			IndexType corrLabel ;
@@ -2347,7 +2347,7 @@ void DualwayPropagation::writeOrigCloudWithLabel( const std::string _filename)
 {
 	FILE* outfile = fopen(_filename.c_str(),"w");
 	SampleSet& smpset = SampleSet::get_instance();
-	IndexType smpsetSize = smpset.size();
+	IndexType smpsetSize = (IndexType)smpset.size();
 	for( IndexType frame_idx = 0 ; frame_idx< smpsetSize ;++frame_idx){
 		Sample& smp = smpset[frame_idx];
 		IndexType vtxnums = smp.num_vertices();
@@ -2448,7 +2448,7 @@ ScalarType DualwayPropagation::p2PatchAvgDis(IndexType cFrame, PointType& pCoor,
 
 	ScalarType randDis = 0.0;
 
-	IndexType pSize = parthPs.size();
+	IndexType pSize = (IndexType)parthPs.size();
 
 	assert(pSize > 0);
 
@@ -2593,7 +2593,7 @@ void DualwayPropagation::startframeAnimation( QTimer*&  p_qtimer)
 		//startframe = hier_componets_.begin()->first;
 		//endframe = startframe+ hier_componets_.size()-1;
 		startframe  = 0;
-		endframe = SampleSet::get_instance().size()-1;
+		endframe = (IndexType)SampleSet::get_instance().size()-1;
 		
 
 
@@ -2739,7 +2739,7 @@ void DualwayPropagation::show_corresponding(int f)
 	for ( IndexType l = 0; l<hier_componets_[f].hier_label_bucket[0].size(); l++ )
 	{
 		HLabel& label = *hier_componets_[f].hier_label_bucket[0][l];
-		IndexType mSize = label.vertex_bucket.size();
+		IndexType mSize = (IndexType)label.vertex_bucket.size();
 		IndexType i = 5;
 		for ( auto viter = label.vertex_bucket.begin();
 			viter!=label.vertex_bucket.end() && i < mSize;
@@ -2768,7 +2768,7 @@ void DualwayPropagation::show_correspondingframeandlabel(std::vector<int>& f , s
 	{
 		IndexType frameid = *frameitr;
 		std::cout<<frameid<<std::endl;
-		int depth = hier_componets_[frameid].hier_label_bucket.size();
+		int depth = (int)hier_componets_[frameid].hier_label_bucket.size();
 		for ( IndexType labelidx = 0; labelidx<hier_componets_[frameid].hier_label_bucket[depth-1].size(); labelidx++ )
 		{
 			HLabel& label = *hier_componets_[frameid].hier_label_bucket[depth-1][labelidx];
@@ -2778,7 +2778,7 @@ void DualwayPropagation::show_correspondingframeandlabel(std::vector<int>& f , s
 				if(label.label_id ==_label[findlabelidx] )break;
 			}
 			if(findlabelidx == _label.size())continue;
-			IndexType mSize = label.vertex_bucket.size();
+			IndexType mSize = (IndexType)label.vertex_bucket.size();
 			IndexType i = 5;
 			/*for ( auto viter = label.vertex_bucket.begin();
 				viter!=label.vertex_bucket.end() && i < mSize;

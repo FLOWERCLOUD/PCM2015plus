@@ -71,8 +71,8 @@ public:
 
 		HFrame& cur_frame = components_[CFrameId];
 
-		IndexType srLevel = components_[CFrameId].hier_graph.size();
-		IndexType tgLevel = components_[NFrameId].hier_graph.size();
+		IndexType srLevel = (IndexType)components_[CFrameId].hier_graph.size();
+		IndexType tgLevel = (IndexType)components_[NFrameId].hier_graph.size();
 
 		srLevel--;
 		tgLevel--;
@@ -101,7 +101,7 @@ public:
 			IndexType vtx_id = *CFvertex_biter;
 
 
-			IndexType vtxSize = components_[CFrameId].hier_label_bucket[srLevel][vtx_id]->vertex_bucket.size();
+			IndexType vtxSize = (IndexType)components_[CFrameId].hier_label_bucket[srLevel][vtx_id]->vertex_bucket.size();
 
 			if ( vtxSize < 5) //点个数太少则不去找对应点
 			{
@@ -305,7 +305,7 @@ public:
 		LabelsGraph::vertex_iterator NFvertex_eiter;
 		LabelsGraph::adjacency_iterator  NFadj_bitr ,NFadj_eitr;
 
-		IndexType gLevel = components_[NFrameId].hier_graph.size();
+		IndexType gLevel = (IndexType)components_[NFrameId].hier_graph.size();
 
 		LabelsGraph* labelGraphOfNFrame = components_[NFrameId].hier_graph[tgGraLevel];
 
@@ -576,11 +576,11 @@ public:
 		computer_common(srVertex, tgVertex,backComVtx,isTo);
 
 
-		ScalarType srV_size = srVertex.size();
-		ScalarType tgV_size = tgVertex.size();
+		ScalarType srV_size = (ScalarType)srVertex.size();
+		ScalarType tgV_size = (ScalarType)tgVertex.size();
 
-		IndexType toCom_size = toComVtx.size();
-		IndexType backCom_size = backComVtx.size();
+		IndexType toCom_size = (IndexType)toComVtx.size();
+		IndexType backCom_size = (IndexType)backComVtx.size();
 
 		ScalarType corValue =  0.5 * (toCom_size/srV_size + backCom_size/tgV_size );
 
@@ -603,8 +603,8 @@ public:
 		Sample& srFrame = sample_set_[sFrame];
 		Sample& tgFrame = sample_set_[tFrame];
 
-		IndexType toPsSize = toComVtx.size();
-		IndexType backPsSize = backComVtx.size();
+		IndexType toPsSize = (IndexType)toComVtx.size();
+		IndexType backPsSize = (IndexType)backComVtx.size();
 
 		Matrix3X s_coord, t_coord;
 		s_coord.setZero(3, toPsSize);
@@ -717,11 +717,11 @@ public:
 
 		//ScalarType scaleShape =  abs((int) (srVertex.size() - tgVertex.size() )) / std::max(srVertex.size(), tgVertex.size() );
 
-		ScalarType srV_size = srVertex.size();
-		ScalarType tgV_size = tgVertex.size();
+		ScalarType srV_size = (ScalarType)srVertex.size();
+		ScalarType tgV_size = (ScalarType)tgVertex.size();
 
-		IndexType toCom_size = toComVtx.size();
-		IndexType backCom_size = backComVtx.size();
+		IndexType toCom_size = (IndexType)toComVtx.size();
+		IndexType backCom_size = (IndexType)backComVtx.size();
 
 		ScalarType corValue =  0.5 * (toCom_size/srV_size + backCom_size/tgV_size );
 
