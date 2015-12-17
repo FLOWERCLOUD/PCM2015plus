@@ -518,7 +518,9 @@ void  main_window::unShow_EdgeVertexs()
 
 bool main_window::openFiles()
 {
-	QString dir = QFileDialog::getExistingDirectory(this,tr("Import point cloud files"),".");
+	QSettings settings;
+	QStringList files = settings.value("recentFileList").toStringList();
+	QString dir = QFileDialog::getExistingDirectory(this,tr("Import point cloud files"), files[0]);
 	if (dir.isEmpty())
 		return false;
 	setCurrentFile(dir);
