@@ -156,11 +156,11 @@ void LayerDialog::updateTable(int row)
 			{
 				item->setIcon(0,QIcon("Resources/visible.png"));
 				item->setBackground(1,QBrush(Qt::white));
-				item->setForeground(1,QBrush(Qt::yellow));
+				item->setForeground(1,QBrush(Qt::red));
 				item->setBackground(2,QBrush(Qt::white));
-				item->setForeground(2,QBrush(Qt::yellow));
+				item->setForeground(2,QBrush(Qt::red));
 				item->setBackground(3,QBrush(Qt::white));
-				item->setForeground(3,QBrush(Qt::yellow));
+				item->setForeground(3,QBrush(Qt::red));
 	
 			}else{
 				item->setIcon(0,QIcon("Resources/invisible.png"));

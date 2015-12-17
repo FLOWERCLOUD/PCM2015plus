@@ -821,7 +821,7 @@ void PaintCanvas::savePLY(SavePlySetting& ss)
 		/*char path[100];
 		strcpy(path ,outfile.toStdString().c_str());*/
 		char fullPath[250];
-		sprintf( fullPath ,"%s%s%s%.3d%s",ss.outdir.toStdString().c_str() ,"/",ss.basename.toStdString().c_str(), ss.counter++ ,".ply");     //必须加入.3d ，使得文件排序正常
+		sprintf( fullPath ,"%s%s%s%.3d%s",ss.outdir.toStdString().c_str() ,"/",ss.basename.toStdString().c_str(), i ,".ply");     //必须加入.3d ，使得文件排序正常
 		std::ofstream outfile( fullPath , std::ofstream::out);
 
 		outfile<<"ply"<<std::endl;

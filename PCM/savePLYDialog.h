@@ -19,6 +19,4 @@ public:
 private:
 	Ui::SavePlyDialog* ui;
 	SavePlySetting settings;
-
-
 };

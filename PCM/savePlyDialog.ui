@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>701</width>
-    <height>225</height>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Output folder  </string>
+        <string>  Output folder  </string>
        </property>
       </widget>
      </item>
@@ -61,59 +61,120 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Base name  </string>
+        <string>  basename  </string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="baseNameLineEdit">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>20</height>
-        </size>
-       </property>
-      </widget>
+      <widget class="QLineEdit" name="baseNameLineEdit"/>
      </item>
      <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Counter</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="counterSpinBox">
-       <property name="maximum">
-        <number>999</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
+      <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>16</width>
+         <width>40</width>
          <height>20</height>
         </size>
        </property>
       </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="checkbox_isadjustview">
+       <property name="text">
+        <string>adjustview</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QCheckBox" name="checkBox_4">
+       <property name="text">
+        <string>CheckBox</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="checkBox_isoricolor">
+       <property name="text">
+        <string>oricor</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="checkBox_is_labeledcolor">
+       <property name="text">
+        <string>curcolor(labeled)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="label_startframe">
+       <property name="text">
+        <string>start frame</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="5">
+      <widget class="QLineEdit" name="line_endframe"/>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLineEdit" name="line_startframe"/>
+     </item>
+     <item row="1" column="4">
+      <widget class="QLabel" name="label_endframe">
+       <property name="text">
+        <string>end frame</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="6">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>60</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="3" column="3">
+      <widget class="QComboBox" name="comboBox">
+       <item>
+        <property name="text">
+         <string>ply</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>xyz</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>obj</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>output format</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
