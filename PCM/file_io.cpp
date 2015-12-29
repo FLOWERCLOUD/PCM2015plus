@@ -49,13 +49,21 @@ namespace FileIO
 				int fcount=0;
 				fscanf(in_file,"ply\nformat ascii 1.0\nelement vertex %d\n",&vcount);
 				fscanf(in_file,"property float x\nproperty float y\nproperty float z\nproperty float nx\nproperty float ny\nproperty float nz\nproperty uchar red\nproperty uchar green\nproperty uchar blue\n");
+
+				int status_t = fscanf(in_file,"property uchar alpha\n");
+				IndexType faceNum;
+				fscanf(in_file,"element face %d\n" ,&faceNum);
+				fscanf(in_file,"property list uchar int vertex_indices\n");
+
 				fscanf(in_file,"end_header\n");
-			while(true){
+		
+			while(vcount){
 
 				ScalarType vx,vy,vz,nx,ny,nz,cx,cy,cz;
-				int status = fscanf(in_file, "%f %f %f %f %f %f %f %f %f\n",&vx,&vy,&vz,
+				ScalarType alpha;
+				int status = fscanf(in_file, "%f %f %f %f %f %f %f %f %f %f\n",&vx,&vy,&vz,
 					&nx,&ny,&nz,
-					&cx,&cy,&cz);
+					&cx,&cy,&cz ,&alpha);
 				if(status==EOF)break;
 
 				PointType v(vx,vy,vz);
@@ -63,6 +71,12 @@ namespace FileIO
 				NormalType nv(nx,ny,nz);
 
 				new_sample->add_vertex(v, nv, cv);
+				--vcount;
+			}
+			IndexType faceId , vtxId1 ,vtxId2 , vtxId3;				
+			while(faceNum){
+				fscanf(in_file , "%d %d %d %d\n" , &faceId , &vtxId1 ,&vtxId2 ,&vtxId3);
+				--faceNum;
 			}
 
 		}else{

@@ -16,6 +16,19 @@
 extern QWaitCondition mWaitcond;
 void PropagateThread::run()
 {
+	IndexType i;
+	for( i = 0; i< 9 ; ++i){
+	char inpath[250];
+	char outpath[250];
+	//sprintf( inpath , "H:\\povay_pointcloud\\point_data\\horse\\ply\\horse-gallop-ground-truth-ply\\%d.ply" ,i );
+	sprintf( outpath , "H:\\povay_pointcloud\\point_data\\horse\\ply\\horse-gallop-ground-truth-ply\\newcolorlabel_%.2d.txt" ,i );
+	writeLabelFromPly(outpath);
+	//writePlyFromPly(
+	//inpath,
+	//outpath,(ScalarType**)corrColormap);
+
+	}
+	return;
 //	QMetaObject::invokeMethod( Global_Window,"saveSnapshot",Qt::QueuedConnection);
 	//std::cout<<"thread waking"<<std::endl;
 	//	QMutex mutex;
