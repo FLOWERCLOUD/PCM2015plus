@@ -59,9 +59,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_main_window.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_main_window.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="file_system.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -244,6 +241,15 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_GLLogStream.cpp">
       <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_main_window.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PLYReader.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="BASEReader.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -503,6 +509,15 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_savePlyDialog.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PLYReader.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="BASEReader.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

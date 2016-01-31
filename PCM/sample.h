@@ -26,6 +26,7 @@ public:
 
 	Vertex* add_vertex( const PointType& pos,const NormalType& n,
 		const ColorType& c);
+	Vertex* add_vertex( const PointType& pos);
 
 	void delete_vertex_group( const std::vector<IndexType>& idx_grp );
 

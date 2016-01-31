@@ -1,8 +1,45 @@
 #include "file_io.h"
 #include "basic_types.h"
 
+#include <set>
+
+#include "Importer.h"
+#include "PLYReader.h"
+
 namespace FileIO
 {
+	std::set<PCM::IO::BaseReader*> reader_modules_;
+	 /** Registers a new reader module. A call to this function should be
+      implemented in the constructor of all classes derived from BaseReader. */
+	bool register_module(PCM::IO::BaseReader* _bl)
+	{
+		reader_modules_.insert(_bl);
+		return true;
+	}
+
+
+	template <class Mesh> bool readToSample(Mesh*  sample ,std::string& _filename,int opt)
+	{
+		  PCM::IO::ImporterT<Mesh> importer(*sample);
+		  std::set<PCM::IO::BaseReader*>::const_iterator it     =  reader_modules_.begin();
+		  std::set<PCM::IO::BaseReader*>::const_iterator it_end =  reader_modules_.end();
+		//  Mesh _bi;
+		  int _opt;
+		  // Try all registered modules
+		  for(; it != it_end; ++it)
+			  if ((*it)->can_u_read(_filename))
+			  {
+				  //_bi.prepare();
+				  bool ok = (*it)->read(_filename, importer, _opt);
+				 // _bi.finish();
+				  return ok;
+			  }
+
+			  // All modules failed to read
+			  return false;
+		  
+
+	}
 	Sample* load_point_cloud_file( std::string filename, FILE_TYPE type, IndexType sample_idx )
 	{
 		FILE* in_file = fopen(filename.c_str(), "r");
@@ -45,6 +82,18 @@ namespace FileIO
 			}
 	
 		}else if( type == FileIO::PLY){
+
+			int opt =1;
+			if(!readToSample(new_sample, filename, opt))
+			{
+				delete new_sample;
+				new_sample = NULL;
+				return new_sample;
+			}
+			return new_sample;
+
+
+
 				int vcount=0;
 				int fcount=0;
 				fscanf(in_file,"ply\nformat ascii 1.0\nelement vertex %d\n",&vcount);

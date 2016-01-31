@@ -12,7 +12,10 @@ public:
 		normal_(NULL_NORMAL),label_(0),val_(0),is_edge_points_(0),is_wrapbox_(0) ,is_edgePointWithSmallLabel_(-1){};
 	~Vertex(){};
 
-
+	void set_idx(IndexType _idx)
+	{
+		idx_ = _idx;
+	}
 	void set_position( const PointType& pos )
 	{
 		position_ = pos;
@@ -77,6 +80,7 @@ protected:
 	IndexType	is_edge_points_;
 	IndexType   is_edgePointWithSmallLabel_;
 	IndexType	is_wrapbox_;
+	IndexType   idx_;  //the idx in vertices ,may make mistakes when erased
 
 };
 
