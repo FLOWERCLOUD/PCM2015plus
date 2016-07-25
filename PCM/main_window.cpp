@@ -127,14 +127,14 @@ main_window::main_window(QWidget *parent)
 	createAction();
 	createStatusBar();
 
-	if(m_linkageUi || m_graphCutUi /*|| m_planFitUi*/)
-	{
+//	if(m_linkageUi || m_graphCutUi /*|| m_planFitUi*/)
+//	{
 		m_linkageUi  = NULL;
 		m_graphCutUi = NULL;
 		
 		m_propagateUi  =NULL;
 		/*m_planFitUi = NULL;*/
-	}
+//	}
 
 	//srand(time(NULL));
 
@@ -525,7 +525,14 @@ bool main_window::openFiles()
 {
 	QSettings settings;
 	QStringList files = settings.value("recentFileList").toStringList();
-	QString dir = QFileDialog::getExistingDirectory(this,tr("Import point cloud files"), files[0]);
+	QString dir;
+	if(files.size() >0){
+		dir = QFileDialog::getExistingDirectory(this,tr("Import point cloud files"), files[0]);
+	}
+	else{
+		dir = QFileDialog::getExistingDirectory(this,tr("Import point cloud files") ,QString("./") );
+	}
+
 	if (dir.isEmpty())
 		return false;
 	setCurrentFile(dir);

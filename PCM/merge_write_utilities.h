@@ -362,3 +362,30 @@ void writePlyFromPly(char* _plyfilename , char* _outplyfilename , ScalarType** c
 
 
 }
+
+void writeLabelFromPly( char* _labelfile_out)
+{
+
+	FILE* outfile = fopen( _labelfile_out,"w");
+	SampleSet& smpset = SampleSet::get_instance();
+	IndexType smpsetNum = smpset.size();
+
+	IndexType startFrameId = 0;
+	IndexType endFrameId = smpsetNum -1;
+	for( IndexType frameId = startFrameId ; frameId < endFrameId +1 ; ++frameId )
+	{
+		Sample& smp = smpset[frameId];
+		auto smpeitr = smp.end();
+		IndexType vtxId = 0;
+		for( auto smpbitr = smp.begin() ; smpbitr != smpeitr ; ++smpbitr ,++vtxId ){
+			Vertex& vtx = **smpbitr;
+			ColorType cc( (int)255*vtx.r() , (int)255*vtx.g() ,  (int)255*vtx.b() ,255);
+			IndexType labelId = Color_Utility::getColorLabelId(cc);
+			fprintf(outfile, "%d %d %d\n",frameId ,labelId , vtxId );
+		}
+
+	}
+
+	fclose(outfile);	
+
+}

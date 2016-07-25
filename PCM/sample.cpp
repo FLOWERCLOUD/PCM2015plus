@@ -45,8 +45,9 @@ Vertex* Sample::add_vertex(const PointType& pos = NULL_POINT,
 	new_vtx->set_position(pos);
 	new_vtx->set_normal(n);
 	new_vtx->set_color(c);
-
+	new_vtx->set_idx(vertices_.size());
 	vertices_.push_back(new_vtx);
+
 	box_.expand( pos );
 	kd_tree_should_rebuild_ = true;
 
