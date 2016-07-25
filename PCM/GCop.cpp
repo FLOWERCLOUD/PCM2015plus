@@ -1,5 +1,7 @@
 #include "GCop.h"
-#include"sample_set.h"
+#include "sample_set.h"
+#include "sample.h"
+#include "vertex.h"
 
 #include "InOutputDefinition.h"
 //#define SHOW_SAMPLE

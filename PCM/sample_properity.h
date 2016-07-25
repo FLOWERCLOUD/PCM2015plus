@@ -1,8 +1,8 @@
 #ifndef _SAMPLE_PROPERITY_H
 #define _SAMPLE_PROPERITY_H
 #include "basic_types.h"
-#include "sample.h"
 #include "octree.h"
+class Sample;
 namespace SampleManipulation{
 	void compute_normal_all(NormalType& baseline);
 	void compute_normal( IndexType selected_smp, NormalType& baseline );

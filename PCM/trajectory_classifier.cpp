@@ -2,6 +2,7 @@
 #include "globals.h"
 #include "basic_types.h"
 #include "sample.h"
+#include "vertex.h"
 #include <algorithm>
 
 #include <opencv2/core/core.hpp>
@@ -116,13 +117,13 @@ void TrajectoryClassifier::run(){
 	{
 		Logger<<"Using Affine motion  model"<<endl;
 
-// 		vector<PCloudAffModel> totalModel;
-// 		totalModel.clear();
-// 		nonrigid.sampleAffineModel(totalTraj,totalModel,modeNum);
-// 
-// 		J_LinkageAdapter_Matlab<PCloudTraj, PCloudAffModel, Traj2AffModelDistFunc>	algo_adaptor(totalTraj, totalModel, labels, Traj2AffModelDistFunc(threshold),perC);
-// 
-// 		algo_adaptor.compute();
+		vector<PCloudAffModel> totalModel;
+		totalModel.clear();
+		nonrigid.sampleAffineModel(totalTraj,totalModel,modeNum);
+
+		J_LinkageAdapter_Matlab<PCloudTraj, PCloudAffModel, Traj2AffModelDistFunc>	algo_adaptor(totalTraj, totalModel, labels, Traj2AffModelDistFunc(threshold),perC);
+
+		algo_adaptor.compute();
 	}
 
 

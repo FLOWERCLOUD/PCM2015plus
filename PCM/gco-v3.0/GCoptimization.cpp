@@ -7,7 +7,9 @@
 #include <stdlib.h>
 #include <vector>
 #include <algorithm>
-
+#include "sample_set.h"
+#include "sample.h"
+#include "vertex.h"
 #define  USING_CUR
 
 // will leave this one just for the laughs :)

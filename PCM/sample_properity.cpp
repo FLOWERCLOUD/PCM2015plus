@@ -2,6 +2,8 @@
 #include <Eigen/Dense>
 #include "basic_types.h"
 #include "sample_set.h"
+#include "sample.h"
+#include "vertex.h"
 #include <unordered_set>
 #include "multiway_propagation.h"
 using namespace std;

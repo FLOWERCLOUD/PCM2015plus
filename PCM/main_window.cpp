@@ -1,4 +1,5 @@
 #include "main_window.h"
+#include "paint_canvas.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QLabel>
@@ -14,6 +15,7 @@
 #include "file_system.h"
 #include "sample.h"
 #include "sample_set.h"
+#include "vertex.h"
 #include "file_io.h"
 #include "color_table.h"
 #include "time.h"
@@ -28,6 +30,7 @@
 #include "saveSnapshotDialog.h"
 #include "savePLYDialog.h"
 #include "GLLogStream.h"
+#include "render_types.h"
 using namespace qglviewer;
 using namespace std;
 using namespace ANIMATION;
@@ -45,6 +48,8 @@ IndexType LabelGraphDepth = 0;
 QWaitCondition mWaitcond;
 GLLogStream logstream;
 int REAL_TIME_RENDER = 0;
+extern RenderMode::WhichColorMode	which_color_mode_;
+extern RenderMode::RenderType which_render_mode;
 
 main_window::main_window(QWidget *parent)
 	: QMainWindow(parent),
@@ -220,19 +225,19 @@ void main_window::createToolAction()
 
 void main_window::setObjectColorMode()
 {
-	main_canvas_->which_color_mode_ = PaintCanvas::OBJECT_COLOR;
+	which_color_mode_ =  RenderMode::OBJECT_COLOR;
 	main_canvas_->updateGL();
 }
 
 void main_window::setVertexColorMode()
 {
-	main_canvas_->which_color_mode_ = PaintCanvas::VERTEX_COLOR;
+	which_color_mode_ =  RenderMode::VERTEX_COLOR;
 	main_canvas_->updateGL();
 }
 
 void main_window::setLabelColorMode()
 {
-	main_canvas_->which_color_mode_ = PaintCanvas::LABEL_COLOR;
+	which_color_mode_ = RenderMode::LABEL_COLOR;
 	main_canvas_->updateGL();
 }
 
@@ -462,7 +467,7 @@ void  main_window::Show_Graph_WrapBox()
 
 	std::cout<<"Show_Graph_WrapBox"<<std::endl;
 
-	main_canvas_->which_color_mode_ = PaintCanvas::WrapBoxColorMode;
+	which_color_mode_ =  RenderMode::WrapBoxColorMode;
 	//main_canvas_->which_color_mode_ = PaintCanvas::SphereMode;
 	main_canvas_->setGraph_WrapBoxShowOrNot(true);
 
@@ -472,7 +477,7 @@ void  main_window::unShow_Graph_WrapBox()
 {
 	std::cout<<"unShow_Graph_WrapBox"<<std::endl;
 
-	main_canvas_->which_color_mode_ = PaintCanvas::LABEL_COLOR;
+	which_color_mode_ =  RenderMode::LABEL_COLOR;
 	main_canvas_->setGraph_WrapBoxShowOrNot(false);
 	//Tracer::get_instance().clear_records();
 	main_canvas_->updateGL();
@@ -503,13 +508,13 @@ void  main_window::Show_EdgeVertexs()
 {
 	//	main_canvas_->which_color_mode_ = PaintCanvas::LABEL_COLOR;
 	//main_canvas_->updateGL();
-	main_canvas_->which_color_mode_ = PaintCanvas::EdgePointColorMode;
+	which_color_mode_ =  RenderMode::EdgePointColorMode;
 	main_canvas_->setEdgeVertexsShowOrNot(true);
 	main_canvas_->updateGL();
 }
 void  main_window::unShow_EdgeVertexs()
 {	
-	main_canvas_->which_color_mode_ = PaintCanvas::LABEL_COLOR;
+	which_color_mode_ =  RenderMode::LABEL_COLOR;
 	main_canvas_->setEdgeVertexsShowOrNot(false);
 	//Tracer::get_instance().clear_records();
 	main_canvas_->updateGL();
@@ -549,6 +554,10 @@ bool main_window::openFiles()
 		{
 			file_type = FileIO::PLY;
 		}
+		else if(file_info.suffix() == "obj")
+		{
+			file_type = FileIO::OBJ;
+		}
 		else
 		{
 			continue;
@@ -556,7 +565,7 @@ bool main_window::openFiles()
 
 		string file_path = file_info.filePath().toStdString();
 		cur_import_files_attr_.push_back( make_pair(FileSystem::base_name(file_path), 
-													FileSystem::extension(file_path)) );
+			FileSystem::extension(file_path)) );
 
 		Sample* new_sample = FileIO::load_point_cloud_file(file_path, file_type,sample_idx);
 		if (new_sample != nullptr)
@@ -1093,6 +1102,10 @@ void main_window::loadFile(const QString &dir)
 		else if(file_info.suffix() == "ply")
 		{
 			file_type = FileIO::PLY;
+		}
+		else if(file_info.suffix() == "obj")
+		{
+			file_type = FileIO::OBJ;
 		}
 		else
 		{

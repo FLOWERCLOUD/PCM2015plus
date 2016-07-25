@@ -10,6 +10,7 @@
 #endif
 #include <cstring>
 #include"sample_set.h"
+#include "vertex.h"
 #include "bfs_classifier.hpp"
 
 #include"sample_properity.h"
@@ -1599,4 +1600,9 @@ void GraphNodeCtr::calculateNorm()
 		SampleManipulation::compute_normal(frameId,viewpoint);
 	}
 	Logger<<"End calculate normal.\n";
+}
+
+GraphNodeCtr::GraphNodeCtr() :cur_graph_index_(0),allocator_(),m_smpSet(SampleSet::get_instance())
+{
+	m_neigNum = 50;
 }

@@ -8,7 +8,7 @@
 #include <vector>
 #include <set>
 #include "pool_allocator.h"
-#include "sample_set.h"
+//#include "sample_set.h"
 #include "graph_cut_node.h"
 using namespace std;
 

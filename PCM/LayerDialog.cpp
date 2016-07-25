@@ -7,6 +7,7 @@
 #include "ui_layerDialog.h"
 #include "sample_set.h"
 #include "main_window.h"
+#include "paint_canvas.h"
 #include "GLLogStream.h"
 #include "GlobalObject.h"
 using namespace std;

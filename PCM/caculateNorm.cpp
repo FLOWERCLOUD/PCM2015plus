@@ -2,6 +2,7 @@
 #include "sample_properity.h"
 #include "multiway_propagation.h"
 #include "sample_set.h"
+#include "vertex.h"
 namespace SampleManipulation{
 
 	void CaculateNorm::compute_normal_all(NormalType& baseline)

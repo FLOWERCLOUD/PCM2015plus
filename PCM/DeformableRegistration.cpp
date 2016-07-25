@@ -9,8 +9,8 @@
 #include "list"
 #include "ICP/J_linkage.h"
 #include"sample_properity.h"
-
-
+#include "sample_set.h"
+#include "vertex.h"
 
 //#define  PI 3.141592653;
 //#include "ICP.h"

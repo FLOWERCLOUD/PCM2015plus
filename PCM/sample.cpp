@@ -5,14 +5,31 @@
 #include <fstream>
 #include "globals.h"
 #include <assert.h>
-
+#include "render_types.h"
+#include "vertex.h"
+#include "triangle.h"
+Sample::Sample() :vertices_(),allocator_(),kd_tree_(nullptr),
+	kd_tree_should_rebuild_(true),
+	mutex_(QMutex::NonRecursive),clayerDepth_(0)
+{
+	n_vertex = n_normal = n_triangle = 0;
+}
 Sample::~Sample()
 { 
 	vertices_.clear();
+	triangle_array.clear();
 	allocator_.free_all(); 
 	delete	kd_tree_;
 }
-
+void Sample::clear()
+{
+	vertices_.clear();
+	triangle_array.clear();
+	allocator_.free_all(); 
+	delete	kd_tree_;
+	lb_wrapbox_.clear();
+	wrap_box_link_.clear();
+}
 Vertex* Sample::add_vertex(const PointType& pos = NULL_POINT,
 						const NormalType& n = NULL_NORMAL, 
 						const ColorType& c = NULL_COLOR)
@@ -36,7 +53,18 @@ Vertex* Sample::add_vertex(const PointType& pos = NULL_POINT,
 	return new_vtx;
 }
 
-void Sample::draw(ColorMode::ObjectColorMode, const Vec3& bias )
+TriangleType* Sample::add_triangle(const TriangleType& tt)
+{
+	TriangleType*	new_triangle_space = allocator_.allocate<TriangleType>();
+	TriangleType* new_triangle = new(new_triangle_space)TriangleType(tt);
+	if ( !new_triangle )
+	{
+		return nullptr;
+	}
+	triangle_array.push_back(new_triangle);
+	return new_triangle;
+}
+void Sample::draw(ColorMode::ObjectColorMode&, const Vec3& bias )
 {
 	if (!visible_)
 	{
@@ -76,7 +104,7 @@ void Sample::draw(ColorMode::ObjectColorMode, const Vec3& bias )
 
 }
 
-void Sample::draw(ColorMode::VertexColorMode, const Vec3& bias)
+void Sample::draw(ColorMode::VertexColorMode&, const Vec3& bias)
 {
 	if (!visible_)
 	{
@@ -97,7 +125,7 @@ void Sample::draw(ColorMode::VertexColorMode, const Vec3& bias)
 
 }
 
-void Sample::draw(ColorMode::LabelColorMode, const Vec3& bias)
+void Sample::draw(ColorMode::LabelColorMode&, const Vec3& bias)
 {
 	if (!visible_)
 	{
@@ -121,7 +149,7 @@ void Sample::draw(ColorMode::LabelColorMode, const Vec3& bias)
 
 }
 
-void Sample::draw(ColorMode::WrapBoxColorMode,const Vec3& bias)
+void Sample::draw(ColorMode::WrapBoxColorMode&,const Vec3& bias)
 {
 	if (!visible_)
 	{
@@ -144,7 +172,7 @@ void Sample::draw(ColorMode::WrapBoxColorMode,const Vec3& bias)
 	}
 
 }
-void Sample::draw(ColorMode::EdgePointColorMode,const Vec3& bias)
+void Sample::draw(ColorMode::EdgePointColorMode&,const Vec3& bias)
 {
 	if (!visible_)
 	{
@@ -174,12 +202,13 @@ void Sample::draw(ColorMode::EdgePointColorMode,const Vec3& bias)
 
 
 
-void Sample::draw(ColorMode::SphereMode,const Vec3& bias)
+void Sample::draw(ColorMode::SphereMode&,const Vec3& bias)
 {
 	if (!visible_)
 	{
 		return;
 	}
+	glPushAttrib( GL_ALL_ATTRIB_BITS);
 	//if ( selected_ )
 	//glClearColor(0.0, 0.0, 0.0, 0.0);
 	//glViewport(0, 0, (GLsizei)1200, (GLsizei)600);
@@ -196,8 +225,7 @@ void Sample::draw(ColorMode::SphereMode,const Vec3& bias)
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
-		glDisable(GL_LIGHTING);
-			glDisable(GL_LIGHT0);
+
 		glEnable(GL_LIGHTING);
 		 glEnable(GL_LIGHT0);
 
@@ -227,7 +255,87 @@ void Sample::draw(ColorMode::SphereMode,const Vec3& bias)
 		//glEnd();
 		
 		}
+		glDisable(GL_LIGHTING);
+		glDisable(GL_LIGHT0);
+		glDisable(GL_DEPTH_TEST);
+	glPopAttrib();
+}
 
+void Sample::draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r,const Vec3& bias)
+{
+	if (!visible_)
+	{
+		return;
+	}
+	Matrix44 mat = matrix_to_scene_coord();
+	switch(r)
+	{
+		case RenderMode::PointMode:{
+			IndexType i_triangle;
+			IndexType n_triangel = this->n_triangle;
+			glEnable(GL_DEPTH_TEST);
+			for(i_triangle = 0; i_triangle < n_triangel;++i_triangle)
+			{
+	/*			const std::vector<NormalType>& m_norms = _model->normal_array;
+				const std::vector<VertexType>& m_vtxs = _model->vertex_array;*/
+				TriangleType* m_triangle =  this->triangle_array[i_triangle];
+				RenderMode::RenderType rt = RenderMode::PointMode;
+				m_triangle->draw( wcm,rt, mat, bias);
+			}
+			glEnd();
+			glDisable(GL_DEPTH_TEST);	
+			break;
+								   };
+		case RenderMode::SolidMode:{
+			
+			IndexType i_triangle;
+			IndexType n_triangel = this->n_triangle;
+			glEnable(GL_DEPTH_TEST);
+			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+			glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+			glEnable(GL_COLOR_MATERIAL);
+			glEnable(GL_LIGHTING);
+			glEnable(GL_LIGHT0);
+			glShadeModel(GL_SMOOTH);
+			SetMaterial(&material);
+			for(i_triangle = 0; i_triangle < n_triangel;++i_triangle)
+			{
+	/*			const std::vector<NormalType>& m_norms = _model->normal_array;
+				const std::vector<VertexType>& m_vtxs = _model->vertex_array;*/
+				TriangleType* m_triangle =  this->triangle_array[i_triangle];
+				RenderMode::RenderType rt = RenderMode::PointMode;
+				m_triangle->draw( wcm, rt, mat, bias);
+			}
+			glDisable(GL_COLOR_MATERIAL);
+			glDisable(GL_LIGHTING);
+			glDisable(GL_LIGHT0);
+			glEnd();
+			glDisable(GL_DEPTH_TEST);
+			break;
+								   };
+		case RenderMode::WireMode:{
+
+			IndexType i_triangle;
+			IndexType n_triangel = this->n_triangle;
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_CULL_FACE);
+			for(i_triangle = 0; i_triangle < n_triangel;++i_triangle)
+			{
+				TriangleType* m_triangle =  this->triangle_array[i_triangle];
+				RenderMode::RenderType rt = RenderMode::WireMode;
+				m_triangle->draw( wcm, rt, mat, bias);
+			}
+			glDisable(GL_DEPTH_TEST);
+			glDisable(GL_CULL_FACE);
+			break;
+								  };
+		case RenderMode::SmoothMode:{break;};
+		case RenderMode::TextureMode:{break;};
+		case RenderMode::SelectMode:{break;};
+
+
+	}
+	
 }
 
 
@@ -385,4 +493,10 @@ void Sample::delete_vertex_group(const std::vector<IndexType>& idx_grp )
 	build_kdtree();
 
 }
+
+
+
+
+
+
 

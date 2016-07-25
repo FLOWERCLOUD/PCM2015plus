@@ -1,27 +1,33 @@
 #include "paint_canvas.h"
 #include "sample_set.h"
+#include "vertex.h"
 #include "main_window.h"
 #include "basic_types.h"
 #include "tracer.h"
 #include "globals.h"
 #include "tracer.h"
-
+#include "render_types.h"
 #include "savePLYDialog.h"
 #include <fstream>
 using namespace qglviewer;
-
+using namespace RenderMode;
 #ifndef GL_MULTISAMPLE
 #define GL_MULTISAMPLE 0x809D
 #endif
 
 extern int REAL_TIME_RENDER;
+
+RenderMode::WhichColorMode	which_color_mode_;
+RenderMode::RenderType which_render_mode;
 PaintCanvas::PaintCanvas(const QGLFormat& format, QWidget *parent):
 	QGLViewer(format, parent),
-	coord_system_region_size_(150),
-	which_color_mode_(VERTEX_COLOR),
+	coord_system_region_size_(150),	
 	single_operate_tool_(nullptr),
 	show_trajectory_(false)
 {
+	which_color_mode_ =SphereMode/*VERTEX_COLOR*/,
+	which_render_mode =RenderMode::PointMode,
+
 	fov = 60;
 	clipRatioFar = 1;
 	clipRatioNear = 1;
@@ -67,18 +73,18 @@ void PaintCanvas::draw()
 			LOCK(set[i]);
 			switch (which_color_mode_)
 			{
-			case PaintCanvas::VERTEX_COLOR:
+			case VERTEX_COLOR:
 				 glEnable(GL_MULTISAMPLE);
 				set[i].draw(ColorMode::VertexColorMode(),Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
 				glDisable(GL_MULTISAMPLE);
 				break;
-			case PaintCanvas::OBJECT_COLOR:
+			case OBJECT_COLOR:
 				 glEnable(GL_MULTISAMPLE);
 				set[i].draw(ColorMode::ObjectColorMode(), 
 					Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
 				glDisable(GL_MULTISAMPLE);
 				break;
-			case PaintCanvas::LABEL_COLOR:
+			case LABEL_COLOR:
 				 glEnable(GL_MULTISAMPLE);			
 				set[i].draw(ColorMode::LabelColorMode(),
 						 Paint_Param::g_step_size * (ScalarType)(i-centerframeNum) );
@@ -86,7 +92,7 @@ void PaintCanvas::draw()
 				
 				glDisable(GL_MULTISAMPLE);
 				break;
-			case PaintCanvas::WrapBoxColorMode:   //added by huayun
+			case WrapBoxColorMode:   //added by huayun
 				if(show_Graph_WrapBox_){
 					const Vec3& bias = Paint_Param::g_step_size * (ScalarType)(i-centerframeNum);
 					auto camera_look_at = camera()->viewDirection();
@@ -196,7 +202,7 @@ void PaintCanvas::draw()
 					
 				}
 				break;
-			case PaintCanvas::EdgePointColorMode:   //added by huayun
+			case EdgePointColorMode:   //added by huayun
 				glEnable(GL_MULTISAMPLE);
 				if(show_EdgeVertexs_){
 
@@ -208,23 +214,77 @@ void PaintCanvas::draw()
 				}
 				glDisable(GL_MULTISAMPLE);
 				break;
-			case PaintCanvas::SphereMode:
+			case SphereMode:
 			{   //added by huayun	
 				//glEnable(GL_MULTISAMPLE);
-				if(show_Graph_WrapBox_){
+				//if(show_Graph_WrapBox_){
 
 					if(!(set[i].is_visible() ) ){
 						break;
 					}
 					set[i].draw(ColorMode::SphereMode(),
 						Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
-				}
+				//}
 			//	glDisable(GL_MULTISAMPLE);
 				break;
 			}
 			default:
 				break;
 			}
+
+			switch(which_render_mode)
+			{
+				case  RenderMode::PointMode:
+				{
+					glEnable(GL_MULTISAMPLE);
+					RenderMode::RenderType rt = RenderMode::PointMode;
+					set[i].draw(which_color_mode_,rt ,Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
+					glDisable(GL_MULTISAMPLE);
+					break;
+				}
+				case  RenderMode::SolidMode:
+				{
+					glEnable(GL_MULTISAMPLE);
+					RenderMode::RenderType rt = RenderMode::SolidMode;
+					set[i].draw(which_color_mode_,rt ,Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
+					glDisable(GL_MULTISAMPLE);
+					break;
+				}
+				case  RenderMode::WireMode:
+				{
+					glEnable(GL_MULTISAMPLE);
+					RenderMode::RenderType rt = RenderMode::WireMode;
+					set[i].draw(which_color_mode_, rt ,Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
+					glDisable(GL_MULTISAMPLE);
+					break;
+				}
+				case  RenderMode::SmoothMode:
+				{
+					glEnable(GL_MULTISAMPLE);
+					RenderMode::RenderType rt = RenderMode::SmoothMode;
+					set[i].draw(which_color_mode_,rt ,Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
+					glDisable(GL_MULTISAMPLE);
+					break;
+				}
+				case  RenderMode::TextureMode:
+				{
+					glEnable(GL_MULTISAMPLE);
+					RenderMode::RenderType rt  = RenderMode::TextureMode;
+					set[i].draw(which_color_mode_,rt ,Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
+					glDisable(GL_MULTISAMPLE);
+					break;
+				}
+				case  RenderMode::SelectMode:
+				{
+					glEnable(GL_MULTISAMPLE);
+					RenderMode::RenderType rt  = RenderMode::SelectMode;
+					set[i].draw(which_color_mode_,rt ,Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
+					glDisable(GL_MULTISAMPLE);
+					break;
+				}
+				default:{}
+			}
+
 			UNLOCK(set[i]);
 		}
 		glEnable(GL_MULTISAMPLE);

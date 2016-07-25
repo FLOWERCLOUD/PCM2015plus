@@ -1,4 +1,6 @@
 #include "co_segmentation.h"
+#include "sample_set.h"
+#include "vertex.h"
 #include <assert.h>
 #define  INF 1000000
 

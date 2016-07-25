@@ -173,9 +173,6 @@
     <ClCompile Include="caculateNorm.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="propagate_withThread.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_dlg_propagate.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -236,14 +233,32 @@
     <ClCompile Include="GeneratedFiles\Release\moc_savePLYDialog.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="tracer.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="GLLogStream.cpp">
       <Filter>Visualize</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_GLLogStream.cpp">
       <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="triangle.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="tracer.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="render_types.cpp">
+      <Filter>Visualize</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalObject.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="propagate_withThread.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="merge_propagate_write.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="merge_write_utilities.cpp">
+      <Filter>Algorithm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -503,6 +518,12 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_savePlyDialog.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="triangle.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="render_types.h">
+      <Filter>Visualize</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

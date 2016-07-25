@@ -135,20 +135,8 @@ typedef Eigen::Matrix<IndexType,  3,              6>              Matrix36i;
 #define  NULL_POINT PointType(0.,0.,0.)
 #define  NULL_NORMAL NormalType(0.,0.,0.)
 #define	 NULL_COLOR	 ColorType(0.,0.,0.,1.)
-
+#include <iostream>
 #define Logger std::cout
-
-
-//Determine which color render mode
-namespace ColorMode{
-	struct ObjectColorMode{};
-	struct VertexColorMode{};
-	struct LabelColorMode{};
-	struct WrapBoxColorMode{}; //added by huayun
-	struct EdgePointColorMode{};  //added by huayun
-	struct SphereMode{};
-}
-
 
 
 #endif

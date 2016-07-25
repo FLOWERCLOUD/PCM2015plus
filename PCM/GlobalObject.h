@@ -1,13 +1,9 @@
 #pragma  once
 
-#include "main_window.h"
-
+class main_window;
+class PaintCanvas;
 main_window* Global_Window;
 
 PaintCanvas* Global_Canvas;
-void setGlobalWindow( main_window* _window){
-	Global_Window = _window;
-}
-void setGlobalCanvas( PaintCanvas* _canvas){
-	Global_Canvas = _canvas;
-}
+void setGlobalWindow( main_window* _window);
+void setGlobalCanvas( PaintCanvas* _canvas);

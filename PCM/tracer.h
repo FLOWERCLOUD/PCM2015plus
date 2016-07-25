@@ -4,11 +4,8 @@
 #include <vector>
 #include <map>
 #include "basic_types.h"
-#include "sample_set.h"
-#include "sample.h"
-#include "vertex.h"
 #include "globals.h"
-#include "paint_canvas.h"
+
 
 using namespace std;
 

@@ -6,7 +6,6 @@
 #include "snapshotsetting.h"
 #include "savePLYDialog.h"
 
-
 class main_window;
 class SavePlySetting;
 class PaintCanvas: public QGLViewer
@@ -75,8 +74,7 @@ private:
 
 
 public:
-	enum WhichColorMode{ VERTEX_COLOR, OBJECT_COLOR, LABEL_COLOR ,WrapBoxColorMode ,EdgePointColorMode ,SphereMode};
-	WhichColorMode	which_color_mode_;
+	
 
 	Tool*	single_operate_tool_;
 

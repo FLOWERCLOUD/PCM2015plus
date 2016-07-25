@@ -4,7 +4,9 @@
 #include <QThread> 
 #include <set>
 #include "tracer.h"
-#include "sample_set.h"
+class Sample;
+class SampleSet;
+//#include "sample_set.h"
 
 struct LifeSpan
 {

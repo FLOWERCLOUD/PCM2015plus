@@ -13,6 +13,8 @@
 #include "time.h"
 #include <QWaitCondition>
 #include "GlobalObject.h"
+#include "paint_canvas.h"
+#include "vertex.h"
 extern QWaitCondition mWaitcond;
 void PropagateThread::run()
 {

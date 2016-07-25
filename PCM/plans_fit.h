@@ -2,7 +2,7 @@
 #define _PLANS_FIT_H
 
 #include <QThread>
-#include "sample_set.h"
+//#include "sample_set.h"
 #include "point2Plan_distance.h"
 #include <vector>
 #include "globals.h"
@@ -24,6 +24,8 @@
 // #include <pcl/segmentation/sac_segmentation.h>
 //using namespace pcl;
 
+class SampleSet;
+class Sample;
 using namespace std;
 
 
@@ -32,12 +34,7 @@ class PlanClassifier:public QThread
 	//Q_OBJECT//加了之后编译连接错误
 
 public:
-	PlanClassifier(IndexType cFrame):m_smpSet(SampleSet::get_instance())
-	{
-		m_activeFrame = cFrame;
-		m_tradeOff = 0.5;
-		m_floorId.clear();
-	}
+	PlanClassifier(IndexType cFrame);
 
 public:
 	void run(); // Q_DECL_OVERRIDE;

@@ -4,7 +4,7 @@
 #include <QtGui/QMainWindow>
 
 #include "ui_main_window.h"
-#include "paint_canvas.h"
+//#include "paint_canvas.h"
 #include "globals.h"
 #include <string>
 #include <map>
@@ -25,7 +25,7 @@
 //#include "dlg_fitPlan.h"
 
 using namespace std;
-
+class PaintCanvas;
 
 class main_window : public QMainWindow
 {

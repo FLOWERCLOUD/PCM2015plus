@@ -1,4 +1,8 @@
 #include "tracer.h"
+#include "sample.h"
+#include "sample_set.h"
+#include "vertex.h"
+#include "paint_canvas.h"
 
 
 

@@ -1,6 +1,8 @@
 #ifndef _FILE_IO_H
 #define _FILE_IO_H
-#include "sample.h"
+#include "basic_types.h"
+#include <iostream>
+class Sample;
 
 namespace FileIO
 {

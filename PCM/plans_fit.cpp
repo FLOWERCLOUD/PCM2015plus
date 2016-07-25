@@ -3,7 +3,8 @@
 #include"sample_properity.h"
 #include <fstream>
 #include <sstream>
-
+#include "vertex.h"
+#include "sample_set.h"
 
 
  void PlanClassifier::run()
@@ -369,4 +370,11 @@
 // 		 return ;
 // 	 }
 
+ }
+
+ PlanClassifier::PlanClassifier(IndexType cFrame) :m_smpSet(SampleSet::get_instance())
+ {
+	 m_activeFrame = cFrame;
+	 m_tradeOff = 0.5;
+	 m_floorId.clear();
  }

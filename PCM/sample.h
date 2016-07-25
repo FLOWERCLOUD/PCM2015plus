@@ -1,7 +1,7 @@
 #ifndef _EXAMPLE_H
 #define _EXAMPLE_H
 #include "selectable_item.h"
-#include "vertex.h"
+
 #include "pool_allocator.h"
 #include "box.h"
 #include "..\ICP\ICP.h"
@@ -10,31 +10,44 @@
 #include <QMutex>
 
 #include <set>
-
+class Vertex;
+class TriangleType;
 class LinkNode;
-
+namespace ColorMode{
+	struct ObjectColorMode;
+	struct VertexColorMode;
+	struct LabelColorMode;
+	struct WrapBoxColorMode; //added by huayun
+	struct EdgePointColorMode;  //added by huayun
+	struct SphereMode;
+}
+namespace RenderMode
+{
+	enum WhichColorMode;
+	enum RenderType;
+}
 class Sample:public SelectableItem
 {
 public:
-	Sample():vertices_(),allocator_(),kd_tree_(nullptr),
-				kd_tree_should_rebuild_(true),
-				mutex_(QMutex::NonRecursive),clayerDepth_(0){}
+	Sample();
 	~Sample();
+	void clear();
 
 	inline Vertex& operator[]( IndexType i ) const{ return *vertices_[i]; }
 	
 
 	Vertex* add_vertex( const PointType& pos,const NormalType& n,
 		const ColorType& c);
-
+	TriangleType* add_triangle(const TriangleType& tt);
 	void delete_vertex_group( const std::vector<IndexType>& idx_grp );
 
-	void draw(ColorMode::ObjectColorMode, const Vec3& bias = Vec3(0.,0.,0.));
-	void draw(ColorMode::VertexColorMode,const Vec3& bias = Vec3(0.,0.,0.));
-	void draw(ColorMode::LabelColorMode,const Vec3& bias = Vec3(0.,0.,0.));
-	void draw(ColorMode::WrapBoxColorMode, const Vec3& bias = Vec3(0.,0.,0.)); // add by huayun
-	void draw(ColorMode::EdgePointColorMode, const Vec3& bias = Vec3(0.,0.,0.)); // add by huayun
-	void draw(ColorMode::SphereMode,const Vec3& bias  = Vec3(0.,0.,0.));
+	void draw(ColorMode::ObjectColorMode&, const Vec3& bias = Vec3(0.,0.,0.));
+	void draw(ColorMode::VertexColorMode&,const Vec3& bias = Vec3(0.,0.,0.));
+	void draw(ColorMode::LabelColorMode&,const Vec3& bias = Vec3(0.,0.,0.));
+	void draw(ColorMode::WrapBoxColorMode&, const Vec3& bias = Vec3(0.,0.,0.)); // add by huayun
+	void draw(ColorMode::EdgePointColorMode&, const Vec3& bias = Vec3(0.,0.,0.)); // add by huayun
+	void draw(ColorMode::SphereMode&,const Vec3& bias  = Vec3(0.,0.,0.));
+	void draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r ,const Vec3& bias  = Vec3(0.,0.,0.));
 	//vector< map<IndexType,Vertex*> >				lb_wrapbox_;
 	//vector< set<LinkNode> >				wrap_box_link_;
 	//void addWrapBox( std::map<IndexType,Vertex*>  _l){ lb_wrapbox_.push_back(_l);}
@@ -100,11 +113,17 @@ public:
 
 // public:
 // 	QMutex										mutex_;
-
+public:
 	IndexType smpId;  //added by huayun
-
-private:
+	IndexType n_vertex;
+	IndexType n_normal;
+	IndexType n_triangle;
 	std::vector<Vertex*>	vertices_;
+	std::vector<TriangleType*>  triangle_array;
+private:
+
+
+
 
 	PoolAllocator			allocator_;
 	Box						box_;

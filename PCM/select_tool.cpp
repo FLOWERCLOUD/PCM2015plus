@@ -1,5 +1,6 @@
 #include "select_tool.h"
 #include "sample_set.h"
+#include "vertex.h"
 #include "windows.h"
 #include <gl/gl.h>
 #include <gl/glu.h>

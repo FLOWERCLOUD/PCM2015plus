@@ -11,8 +11,8 @@
 #define get_index_from_key(k) (k&0xffff)
 #define get_frame_from_key(k) (k>>16)
 #include "GlobalObject.h"
-
-
+#include "main_window.h"
+#include "vertex.h"
 struct PatchMatch
 {
 	PatchMatch( set<IndexType> _srPatches,set<IndexType> _tgPatches ,ScalarType _Er)
@@ -2811,6 +2811,366 @@ void DualwayPropagation::show_correspondingframeandlabel(std::vector<int>& f , s
 	
 	}
 	
+}
+
+DualwayPropagation& DualwayPropagation::get_instance()
+{
+	static DualwayPropagation	instance;
+	return instance;
+}
+
+DualwayPropagation::~DualwayPropagation()
+{
+	if( downSample){
+		delete downSample;
+	}
+}
+
+DualwayPropagation::DualwayPropagation()
+{
+	downSample = NULL;
+	frameTimer = NULL;
+	currentVisframe = 1;
+	startframe = 1;
+	endframe = 9;
+}
+
+void DualwayPropagation::compute()
+{
+	for (auto citer = components_.begin(); citer!=components_.end(); citer++)
+	{
+		propagate_back_with_link(citer->first);
+		//propagate_back(citer->first);
+
+	}
+
+	//show_corresponding(14);
+
+
+	for (auto citer = components_.rbegin(); citer!=components_.rend(); citer++)
+	{
+		//propagate_front(citer->first);
+	}
+
+
+	for (auto citer = components_.begin(); citer!=components_.end(); citer++)
+	{
+		//propagate_back(citer->first);
+	}
+
+	//for (auto citer = components_.rbegin(); citer!=components_.rend(); citer++)
+	//{
+	//	propagate_front(citer->first);
+	//}
+
+	return;
+}
+
+void DualwayPropagation::write_label_file(std::string filename)
+{
+	FILE* outfile = fopen(filename.c_str(),"w");
+	for ( auto frame_iter = components_.begin();
+		frame_iter != components_.end();
+		frame_iter++ )
+	{
+		CFrame& frame = frame_iter->second;
+		IndexType frame_idx = frame_iter->first;
+		for ( auto label_iter = frame.label_bucket.begin(); 
+			label_iter!=frame.label_bucket.end(); label_iter++  )
+		{
+			CLabel& label = **label_iter;
+			IndexType label_idx = label.label_id;
+			for ( auto vtx_iter = label.vertex_bucket.begin();
+				vtx_iter!=label.vertex_bucket.end();
+				vtx_iter++)
+			{
+				CVertex& vtx = *(vtx_iter->second);
+				fprintf(outfile, "%d %d %d\n", frame_idx, label_idx, vtx.vtx_id);
+			}
+		}
+	}
+
+	fclose(outfile);
+}
+
+void DualwayPropagation::smooth_label(IndexType frame_idx)
+{
+	Sample& orig_smp = SampleSet::get_instance()[frame_idx];
+	Sample* downsmp_ptr = new Sample;
+	map<IndexType, IndexType> idx_mapper;
+	IndexType i=0;
+	for ( auto viter = components_[frame_idx].label_of_vtx.begin();
+		viter != components_[frame_idx].label_of_vtx.end();
+		viter++,i++)
+	{
+		IndexType vtx_idx = viter->first;
+		Vertex& vtx = orig_smp[vtx_idx];
+
+		PointType v( vtx.x(), vtx.y(), vtx.z() );
+		ColorType cv(vtx.r(), vtx.g(), vtx.b(), vtx.alpha());
+		NormalType nv(vtx.nx(), vtx.ny(), vtx.nz());
+
+		downsmp_ptr->add_vertex(v,nv,cv);
+
+		idx_mapper.insert(make_pair(i, vtx_idx));
+	}
+
+	downsmp_ptr->build_kdtree();
+
+	const IndexType k =60;
+	IndexType neighbours[k];
+	ScalarType dist[k];
+	i = 0;
+	map<IndexType, IndexType> old_label_map = components_[frame_idx].label_of_vtx;
+	for ( i=0; i<idx_mapper.size(); i++)
+	{
+		vector<int> label_count( (int)components_[frame_idx].label_bucket.size(), 0 );
+		IndexType real_vtx_idx = idx_mapper[i];
+		downsmp_ptr->neighbours(i, k, neighbours, dist );
+		for ( IndexType neig_id = 0; neig_id<k; neig_id++ )
+		{
+			IndexType real_neig_id = idx_mapper[neighbours[neig_id]];
+			IndexType neig_label = old_label_map[real_neig_id];
+			label_count[neig_label]++;
+		}
+		IndexType max_freq_label = max_element(label_count.begin(), label_count.end()) - label_count.begin();
+		IndexType cur_vtx_label = old_label_map[real_vtx_idx];
+
+		if ( max_freq_label!=cur_vtx_label )
+		{
+			//change label
+			auto vv = components_[frame_idx].label_bucket[cur_vtx_label]->vertex_bucket.find(real_vtx_idx);
+			assert(vv!=components_[frame_idx].label_bucket[cur_vtx_label]->vertex_bucket.end());
+			components_[frame_idx].label_bucket[max_freq_label]->vertex_bucket.insert(*vv);
+			components_[frame_idx].label_bucket[cur_vtx_label]->vertex_bucket.erase(vv);
+			components_[frame_idx].label_of_vtx[real_vtx_idx] = max_freq_label;
+		}
+	}
+
+	delete downsmp_ptr;
+}
+
+void DualwayPropagation::propagate_front(IndexType f)
+{
+	if ( components_.find(f-1)==components_.end() )
+	{
+		return;
+	}
+	CFrame& cur_frame = components_[f];
+	CFrame& prev_frame = components_[f-1];
+
+	set<IndexType> new_label_set;
+	for ( IndexType l=0; l<cur_frame.label_bucket.size(); ++l )
+	{
+		CLabel& cur_label = *(cur_frame.label_bucket[l]);
+		map<IndexType, set<IndexType> > mapper;
+		for (auto v = cur_label.vertex_bucket.begin();
+			v != cur_label.vertex_bucket.end();
+			v++)
+		{
+			CVertex& cur_vtx = *(v->second);
+			CVertex& corr_vtx = *cur_vtx.prev_corr;
+			IndexType corr_label = corr_vtx.label_parent->label_id;
+			auto find_if_exist = mapper.find( corr_label );
+			if ( find_if_exist==mapper.end() )
+			{
+				mapper.insert( make_pair(corr_label, set<IndexType>()) );
+			}
+			mapper[corr_label].insert( corr_vtx.vtx_id );
+		}
+
+		//check whether split two part
+		bool to_spilt = false;
+		map<IndexType, set<IndexType> >::iterator component_to_spilt;
+		if (mapper.size()==1)
+		{
+			component_to_spilt = mapper.begin();
+			to_spilt = true;
+		}
+		else
+		{
+			bool first_encounter_no_new_label = true;
+			for ( auto miter = mapper.begin(); miter != mapper.end(); miter++ )
+			{
+				IndexType l = miter->first;
+				if( new_label_set.find(l)!=new_label_set.end() )
+					continue;
+				if ( first_encounter_no_new_label )
+				{
+					first_encounter_no_new_label = !first_encounter_no_new_label;
+					component_to_spilt = miter;
+					to_spilt = true;
+				}
+				else
+				{
+					// contain two old components
+					to_spilt = false;
+					break;
+				}
+			}
+		}
+
+
+		if( to_spilt )
+		{
+			auto only = component_to_spilt;
+			IndexType map_label = only->first;
+			set<IndexType>& map_bucket = only->second;
+			map<IndexType, CVertex*>&  real_bucket = prev_frame.label_bucket[map_label]->vertex_bucket;
+			if( map_bucket.size() *2 < real_bucket.size() )
+			{
+				//now split
+
+				//now create new component
+				IndexType new_label = (IndexType)prev_frame.label_bucket.size();
+				new_label_set.insert(new_label);
+				prev_frame.label_bucket.push_back( (CLabel*)0 );
+				CLabel* new_label_space = allocator_.allocate<CLabel>();
+				CLabel* new_label_obj = new (new_label_space)CLabel;
+				prev_frame.label_bucket[new_label]	= new_label_obj;			
+				prev_frame.label_bucket[new_label]->label_id = new_label;
+				prev_frame.label_bucket[new_label]->frame_parent = &prev_frame;
+
+				//delete elem from real_bucket that appear in map_bucket
+				auto to_remove = map_bucket.begin();
+				for (auto vv = real_bucket.begin(); vv!=real_bucket.end() && to_remove!=map_bucket.end(); )
+				{
+					IndexType vtx_idx = vv->first;
+					if( *to_remove == vtx_idx )
+					{
+						prev_frame.label_bucket[new_label]->vertex_bucket.insert( *vv );
+						vv = real_bucket.erase( vv );
+						prev_frame.label_of_vtx[ vtx_idx ] = new_label;
+					}
+					else if( *to_remove > vv->first )
+						vv++;
+					else
+						to_remove++;
+				}
+
+				for (auto vv = prev_frame.label_bucket[new_label]->vertex_bucket.begin();
+					vv !=prev_frame.label_bucket[new_label]->vertex_bucket.end(); vv++ )
+				{
+					vv->second->label_parent = prev_frame.label_bucket[new_label];
+				}
+			}
+
+
+		}
+	}
+	smooth_label(f-1);
+}
+
+void DualwayPropagation::propagate_back(IndexType f)
+{
+	if ( components_.find(f+1)==components_.end() )
+	{
+		return;
+	}
+	CFrame& cur_frame = components_[f];
+	CFrame& next_frame = components_[f+1];
+
+	set<IndexType> new_label_set;
+
+	for ( IndexType l=0; l<cur_frame.label_bucket.size(); ++l )
+	{
+		CLabel& cur_label = *(cur_frame.label_bucket[l]);
+		map<IndexType, set<IndexType> > mapper;
+		for (auto v = cur_label.vertex_bucket.begin();
+			v != cur_label.vertex_bucket.end();
+			v++)
+		{
+			CVertex& cur_vtx = *(v->second);
+			CVertex& corr_vtx = *cur_vtx.next_corr;
+			IndexType corr_label = corr_vtx.label_parent->label_id;
+			auto find_if_exist = mapper.find( corr_label );
+			if ( find_if_exist==mapper.end() )
+			{
+				mapper.insert( make_pair(corr_label, set<IndexType>()) );
+			}
+			mapper[corr_label].insert( corr_vtx.vtx_id );
+		}
+
+		//check whether split two part
+		bool to_spilt = false;
+		map<IndexType, set<IndexType> >::iterator component_to_spilt;
+		if (mapper.size()==1)
+		{
+			component_to_spilt = mapper.begin();
+			to_spilt = true;
+		}
+		else
+		{
+			bool first_encounter_no_new_label = true;
+			for ( auto miter = mapper.begin(); miter != mapper.end(); miter++ )
+			{
+				IndexType l = miter->first;
+				if( new_label_set.find(l)!=new_label_set.end() )
+					continue;
+				if ( first_encounter_no_new_label )
+				{
+					first_encounter_no_new_label = !first_encounter_no_new_label;
+					component_to_spilt = miter;
+					to_spilt = true;
+				}
+				else
+				{
+					// contain two old components
+					to_spilt = false;
+					break;
+				}
+			}
+		}
+
+
+		if( to_spilt )
+		{
+			auto only = component_to_spilt;
+			IndexType map_label = only->first;
+			set<IndexType>& map_bucket = only->second;
+			map<IndexType, CVertex*>&  real_bucket = next_frame.label_bucket[map_label]->vertex_bucket;
+			if( map_bucket.size() *2 < real_bucket.size() )
+			{
+				//now split
+
+				//now create new component
+				IndexType new_label = (IndexType)next_frame.label_bucket.size();
+				new_label_set.insert(new_label);
+				next_frame.label_bucket.push_back( (CLabel*)0 );
+				CLabel* new_label_space = allocator_.allocate<CLabel>();
+				CLabel* new_label_obj = new (new_label_space)CLabel;
+				next_frame.label_bucket[new_label]	= new_label_obj;			
+				next_frame.label_bucket[new_label]->label_id = new_label;
+				next_frame.label_bucket[new_label]->frame_parent = &next_frame;
+
+				//delete elem from real_bucket that appear in map_bucket
+				auto to_remove = map_bucket.begin();
+				for (auto vv = real_bucket.begin(); vv!=real_bucket.end() && to_remove!=map_bucket.end(); )
+				{
+					IndexType vtx_idx = vv->first;
+					if( *to_remove == vtx_idx )
+					{
+						next_frame.label_bucket[new_label]->vertex_bucket.insert( *vv );
+						vv = real_bucket.erase( vv );
+						next_frame.label_of_vtx[ vtx_idx ] = new_label;
+					}
+					else if( *to_remove > vv->first )
+						vv++;
+					else
+						to_remove++;
+				}
+
+				for (auto vv = next_frame.label_bucket[new_label]->vertex_bucket.begin();
+					vv !=next_frame.label_bucket[new_label]->vertex_bucket.end(); vv++ )
+				{
+					vv->second->label_parent = next_frame.label_bucket[new_label];
+				}
+			}
+
+
+		}
+	}
+	smooth_label(f+1);
 }
 
 

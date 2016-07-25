@@ -8,7 +8,9 @@
 #include <set>
 #include <map>
 #include "pool_allocator.h"
-#include "sample_set.h"
+class SampleSet;
+class Sample;
+//#include "sample_set.h"
 using namespace std;
 
 // #ifndef frame_index_to_key
@@ -72,10 +74,7 @@ signals:
 	void finish_compute();
 
 public:
-	GraphNodeCtr():cur_graph_index_(0),allocator_(),m_smpSet(SampleSet::get_instance())
-	{
-		m_neigNum = 50;
-	}
+	GraphNodeCtr();
 	~GraphNodeCtr(){}
 	ScalarType dist_inside_frame(GraphCutNode* s_node,GraphCutNode* e_node);
 	ScalarType dist_between_frame(GraphCutNode* s_node,GraphCutNode* e_node);
@@ -135,7 +134,7 @@ private:
 
 //private:
 public:
-	SampleSet & m_smpSet;
+	SampleSet& m_smpSet;
 	IndexType m_neigNum;
 
 private:
