@@ -73,17 +73,28 @@ public:
 		void setObjectColorMode();
 		void setVertexColorMode();
 		void setLabelColorMode();
+		void setBallvertexMode();
 
 		void setSelectToolMode();
 		void setSceneToolMode();
+
+		//render mode
+		void setPointMode();
+		void setFlatMode();
+		void setWireMode();
+		void setFlatWireMode();
+		void setSmoothMode();
+		void setTextureMode();
+		void setSelectMode();
 
 		void showTracer();
 		void clearTracer();
 		//add by huayun
 		//snapshot
 		bool saveSnapshot();
-
 		bool savePLY();
+		bool saveLabelFile();
+		bool getLabelFromFile();
 		void dealtarjlabel();
 		bool wakeUpThread();
 		void logText(QString as,int level);/*char* text ,int mode*/

@@ -40,6 +40,7 @@ public:
 		const ColorType& c);
 	TriangleType* add_triangle(const TriangleType& tt);
 	void delete_vertex_group( const std::vector<IndexType>& idx_grp );
+	void set_vertex_label(const std::vector<IndexType>& idx_grp ,IndexType label);
 
 	void draw(ColorMode::ObjectColorMode&, const Vec3& bias = Vec3(0.,0.,0.));
 	void draw(ColorMode::VertexColorMode&,const Vec3& bias = Vec3(0.,0.,0.));

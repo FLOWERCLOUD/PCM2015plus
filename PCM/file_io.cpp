@@ -163,9 +163,12 @@ namespace FileIO
 							}
 
 						}
-						tt->i_vertex[0]--;tt->i_norm[0]--;
-						tt->i_vertex[1]--;tt->i_norm[1]--;
-						tt->i_vertex[2]--;tt->i_norm[2]--;
+						tt->i_vertex[0]--;
+						tt->i_norm[0] = tt->i_vertex[0];
+						tt->i_vertex[1]--;
+						tt->i_norm[1] = tt->i_vertex[1];
+						tt->i_vertex[2]--;
+						tt->i_norm[2] = tt->i_vertex[2];
 						new_sample->add_triangle(*tt);
 	//					ttv.push_back(tt);
 					}else if(pref[0] =='#')
@@ -179,7 +182,9 @@ namespace FileIO
 					if( i+1 <= nv.size() && i+1 <= cv.size())
 					new_sample->add_vertex(v[i], nv[i], cv[i]);
 					else if(i+1 <= nv.size())
+					{
 						new_sample->add_vertex(v[i], nv[i], RED_COLOR);
+					}
 					else if(i+1 <= cv.size())
 						new_sample->add_vertex(v[i], NULL_NORMAL, cv[i]);
 					else

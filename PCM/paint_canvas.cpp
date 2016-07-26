@@ -216,7 +216,7 @@ void PaintCanvas::draw()
 				break;
 			case SphereMode:
 			{   //added by huayun	
-				//glEnable(GL_MULTISAMPLE);
+				glEnable(GL_MULTISAMPLE);
 				//if(show_Graph_WrapBox_){
 
 					if(!(set[i].is_visible() ) ){
@@ -225,7 +225,7 @@ void PaintCanvas::draw()
 					set[i].draw(ColorMode::SphereMode(),
 						Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
 				//}
-			//	glDisable(GL_MULTISAMPLE);
+				glDisable(GL_MULTISAMPLE);
 				break;
 			}
 			default:
@@ -242,10 +242,10 @@ void PaintCanvas::draw()
 					glDisable(GL_MULTISAMPLE);
 					break;
 				}
-				case  RenderMode::SolidMode:
+				case  RenderMode::FlatMode:
 				{
 					glEnable(GL_MULTISAMPLE);
-					RenderMode::RenderType rt = RenderMode::SolidMode;
+					RenderMode::RenderType rt = RenderMode::FlatMode;
 					set[i].draw(which_color_mode_,rt ,Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
 					glDisable(GL_MULTISAMPLE);
 					break;
@@ -257,6 +257,13 @@ void PaintCanvas::draw()
 					set[i].draw(which_color_mode_, rt ,Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
 					glDisable(GL_MULTISAMPLE);
 					break;
+				}
+				case RenderMode::FlatWireMode:
+				{
+						glEnable(GL_MULTISAMPLE);
+						RenderMode::RenderType rt = RenderMode::FlatWireMode;
+						set[i].draw(which_color_mode_, rt ,Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
+						glDisable(GL_MULTISAMPLE);
 				}
 				case  RenderMode::SmoothMode:
 				{
@@ -563,6 +570,120 @@ void PaintCanvas::keyPressEvent(QKeyEvent * e)
 			updateGL();
 		}
 	}
+	if (single_operate_tool_!=nullptr && 
+		single_operate_tool_->tool_type()==Tool::SELECT_TOOL
+		)
+	{
+		IndexType target_label = 0;
+		switch(e->key() )
+		{
+			case Qt::Key_0 :
+				{
+					target_label = 0;
+					Logger<<"0";
+					break;
+				}
+			case Qt::Key_1 :
+				{
+					target_label = 1;
+					break;
+				}
+			case Qt::Key_2 :
+				{
+					target_label = 2;
+					break;
+
+				}
+			case Qt::Key_3 :
+				{
+					target_label = 3;
+					break;
+				}
+			case Qt::Key_4 :
+				{
+					target_label = 4;
+					break;
+				}
+			case Qt::Key_5:
+				{
+					target_label = 5;
+					break;
+				}
+			case Qt::Key_6 :
+				{
+					target_label = 6;
+					break;
+				}
+			case Qt::Key_7 :
+				{
+					target_label = 7;
+					break;
+				}
+			case Qt::Key_8 :
+				{
+					target_label = 8;
+					break;
+				}
+			case Qt::Key_9 :
+				{
+					target_label = 9;
+					break;
+				}
+			case Qt::Key_A :
+				{
+					target_label = 10;
+					Logger<<"A";
+					break;
+				}
+			case Qt::Key_B :
+				{
+					target_label = 11;
+					break;
+				}
+			case Qt::Key_C :
+				{
+					target_label = 12;
+					break;
+				}
+			case Qt::Key_D :
+				{
+					target_label = 13;
+					break;
+				}
+			case Qt::Key_E:
+				{
+					target_label = 14;
+					break;
+				}
+			case Qt::Key_F :
+				{
+					target_label = 15;
+					break;
+				}
+			default:
+				{
+					target_label = 0;
+				}
+		}
+		SelectTool*	select_tool = dynamic_cast<SelectTool*>(single_operate_tool_);
+
+		const std::vector<IndexType>& selected_items =  select_tool->get_selected_vertex_idx();
+
+		IndexType cur_selected_sample_idx = select_tool->cur_sample_to_operate();
+		Sample& smp = SampleSet::get_instance()[cur_selected_sample_idx];
+
+		smp.lock();
+		Logger<<"selected "<<selected_items.size()<<"  "<<" label"<<target_label;
+		smp.set_vertex_label(selected_items ,target_label);
+		smp.unlock();
+
+		//reset tree widget
+		main_window_->createTreeWidgetItems();
+		updateGL();	
+
+	}
+
+	
 	if ( e->key() == Qt::Key_L &&!e->isAutoRepeat())
 	{
 		
@@ -870,7 +991,7 @@ void PaintCanvas::Logf(int level ,const char* f){}
 
 void PaintCanvas::savePLY(SavePlySetting& ss)
 {
-	QString outfile;
+	//QString outfile;
 	/*outfile=QString("%1/%2%3.png")
 	.arg(ss.outdir).arg(ss.basename)
 	.arg(ss.counter++,2,10,QChar('0'));*/
@@ -911,4 +1032,36 @@ void PaintCanvas::savePLY(SavePlySetting& ss)
 	}
 	
 
+}
+void PaintCanvas::saveLabelFile()
+{
+
+	char fullPath[250];
+	sprintf( fullPath ,"%s","./label.txt");     //必须加入.3d ，使得文件排序正常
+	std::ofstream outfile( fullPath , std::ofstream::out);
+	SampleSet& smpset =  SampleSet::get_instance();
+	for( auto  vtxbitr = smpset[0].begin() ; vtxbitr != smpset[0].end() ;++vtxbitr ){
+		Vertex& vtx = **vtxbitr;
+		outfile<<vtx.label()<<std::endl;
+
+	}
+
+	outfile.close();
+
+}
+void PaintCanvas::getLabelFromFile()
+{
+	char fullPath[250];
+	sprintf( fullPath ,"%s","D:/zzb/zzb_lowrank/new_STED/original/squat2/11label/squat2.seg");     //必须加入.3d ，使得文件排序正常
+	std::ifstream infile( fullPath , std::ofstream::in);
+	SampleSet& smpset =  SampleSet::get_instance();
+	for( auto  vtxbitr = smpset[0].begin() ; vtxbitr != smpset[0].end() ;++vtxbitr ){
+		int label = 0;
+		infile>>label;
+		Vertex& vtx = **vtxbitr;
+		vtx.set_label(label);
+
+	}
+
+	infile.close();
 }

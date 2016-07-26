@@ -230,12 +230,12 @@ void Vertex::draw_with_sphere( const Matrix44& adjust_matrix , const Vec3& bias)
 	//glMaterialfv(GL_FRONT, GL_SPECULAR, qaWhite);
 	//glMaterialf(GL_FRONT, GL_SHININESS, 128.0);
 	//glLightfv(GL_LIGHT0, GL_AMBIENT, qaLowAmbient);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, qaRed);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, qaRed);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, qaWhite);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, qaBlack);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, qaBlack);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, qaBlack);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 50.0);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, qaLowAmbient);
-	glMaterialfv(GL_FRONT_AND_BACK ,GL_EMISSION , emission);
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, qaLowAmbient);
+	//glMaterialfv(GL_FRONT_AND_BACK ,GL_EMISSION , emission);
 	//glColor4f( color(0),color(1),color(2),color(3) );
 	//glNormal3f( normal_(0), normal_(1), normal_(2));
 	Vec4	tmp(position_(0), position_(1), position_(2),1.);
@@ -248,8 +248,8 @@ void Vertex::draw_with_sphere( const Matrix44& adjust_matrix , const Vec3& bias)
 	//glLoadIdentity();
 	glPushMatrix();
 	glTranslatef(point_to_show(0)+bias(0),point_to_show(1)+bias(1), point_to_show(2)+bias(2));
-
-	glColor3f( 1.0  ,0.0 ,0.0);
+	ColorType color2 = Color_Utility::span_color_from_table(label_); 
+	glColor3f( color2(0) ,color2(1) ,color2(2));
 	glutSolidSphere(0.001* Paint_Param::g_point_size, 10, 10);
 	glPopMatrix();
 

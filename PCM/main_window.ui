@@ -34,6 +34,8 @@
     <addaction name="actionImportFiles"/>
     <addaction name="actionSaveSnapshot"/>
     <addaction name="actionSavePly"/>
+    <addaction name="actionsaveLabelFile"/>
+    <addaction name="actionGetlabel_from_file"/>
    </widget>
    <widget class="QMenu" name="menuPaint">
     <property name="title">
@@ -49,6 +51,7 @@
     <addaction name="actionDont_Trace"/>
     <addaction name="actionShow_Graph_WrapBox"/>
     <addaction name="actionShow_EdgeVertexs"/>
+    <addaction name="actionBallvertex"/>
    </widget>
    <widget class="QMenu" name="menuSelect">
     <property name="title">
@@ -56,6 +59,7 @@
     </property>
     <addaction name="actionScene_Mode"/>
     <addaction name="actionSelect_Mode"/>
+    <addaction name="actionPaint_Mode"/>
    </widget>
    <widget class="QMenu" name="menuAlgorithm">
     <property name="title">
@@ -72,10 +76,23 @@
     <addaction name="actionPlanFit"/>
     <addaction name="actionPropagate"/>
    </widget>
+   <widget class="QMenu" name="menuRenderMode">
+    <property name="title">
+     <string>RenderMode</string>
+    </property>
+    <addaction name="actionPoint_mode"/>
+    <addaction name="actionFlat_mode"/>
+    <addaction name="actionWire_mode"/>
+    <addaction name="actionFlatWire_mode"/>
+    <addaction name="actionSmooth_mode"/>
+    <addaction name="actionTexture_mode"/>
+    <addaction name="actionSelect_Mode_render"/>
+   </widget>
    <addaction name="menuFiles"/>
    <addaction name="menuPaint"/>
    <addaction name="menuSelect"/>
    <addaction name="menuAlgorithm"/>
+   <addaction name="menuRenderMode"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -424,6 +441,61 @@
    </property>
    <property name="text">
     <string>wakeWorkThread</string>
+   </property>
+  </action>
+  <action name="actionPoint_mode">
+   <property name="text">
+    <string>Point mode</string>
+   </property>
+  </action>
+  <action name="actionFlat_mode">
+   <property name="text">
+    <string>Flat mode</string>
+   </property>
+  </action>
+  <action name="actionWire_mode">
+   <property name="text">
+    <string>Wire mode</string>
+   </property>
+  </action>
+  <action name="actionSmooth_mode">
+   <property name="text">
+    <string>Smooth mode</string>
+   </property>
+  </action>
+  <action name="actionTexture_mode">
+   <property name="text">
+    <string>Texture mode</string>
+   </property>
+  </action>
+  <action name="actionSelect_Mode_render">
+   <property name="text">
+    <string>Select Mode</string>
+   </property>
+  </action>
+  <action name="actionFlatWire_mode">
+   <property name="text">
+    <string>FlatWire mode</string>
+   </property>
+  </action>
+  <action name="actionPaint_Mode">
+   <property name="text">
+    <string>Paint Mode</string>
+   </property>
+  </action>
+  <action name="actionsaveLabelFile">
+   <property name="text">
+    <string>saveLabelFile</string>
+   </property>
+  </action>
+  <action name="actionGetlabel_from_file">
+   <property name="text">
+    <string>getlabel from file</string>
+   </property>
+  </action>
+  <action name="actionBallvertex">
+   <property name="text">
+    <string>ballvertex</string>
    </property>
   </action>
  </widget>

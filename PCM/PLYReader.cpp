@@ -16,7 +16,7 @@ namespace PCM{
 
 //=== IMPLEMENTATION ==========================================================
 		_PLYReader_::_PLYReader_() {
-			FileIO::register_module(this);		
+//			FileIO::register_module(this);		
 		}
 
 		//naive check

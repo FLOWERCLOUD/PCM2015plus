@@ -260,6 +260,12 @@
     <ClCompile Include="merge_write_utilities.cpp">
       <Filter>Algorithm</Filter>
     </ClCompile>
+    <ClCompile Include="BASEReader.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PLYReader.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="main_window.qrc">
@@ -524,6 +530,15 @@
     </ClInclude>
     <ClInclude Include="render_types.h">
       <Filter>Visualize</Filter>
+    </ClInclude>
+    <ClInclude Include="BASEReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PLYReader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

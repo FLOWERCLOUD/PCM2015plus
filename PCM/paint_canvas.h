@@ -40,6 +40,8 @@ public:
 	//save ply
 	SavePlySetting splys;
 	void savePLY(SavePlySetting& ss);
+	void saveLabelFile();
+	void getLabelFromFile();
 	//show trajectory
 	void showSelectedlabelTraj(std::vector<int>& _selectedlabeltraj);
 	

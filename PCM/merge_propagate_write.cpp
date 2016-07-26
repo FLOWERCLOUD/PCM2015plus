@@ -1,8 +1,9 @@
 #include "merge_propagate_write.h"
 #include "paint_canvas.h"
 #include "sample_set.h"
+#include "sample.h"
 #include "vertex.h"
-
+#include "main_window.h"
 
 void ProxyAjustViewPly::getAllSampleCurrentViewMatrix()
 {

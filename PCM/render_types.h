@@ -12,7 +12,7 @@ namespace ColorMode{
 }
 namespace RenderMode
 {
-	enum RenderType{PointMode,SolidMode,WireMode,SmoothMode,TextureMode,SelectMode};
+	enum RenderType{PointMode,FlatMode,WireMode,FlatWireMode,SmoothMode,TextureMode,SelectMode};
 	//struct PointMode{};
 	//struct SolidMode{};
 	//struct WireMode{};

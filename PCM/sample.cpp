@@ -224,30 +224,30 @@ void Sample::draw(ColorMode::SphereMode&,const Vec3& bias)
 	//glLoadIdentity();
 	//glOrtho(-1.0, 1.0, -1.0, 1.0, -30.0, 30.0);
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		////glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 
-		glEnable(GL_LIGHTING);
-		 glEnable(GL_LIGHT0);
+		//glEnable(GL_LIGHTING);
+		// glEnable(GL_LIGHT0);
 
-		// Set lighting intensity and color
-		GLfloat qaAmbientLight[]	= {0.2, 0.2, 0.2, 1.0};
-		GLfloat qaDiffuseLight[]	= {0.8, 0.8, 0.8, 1.0};
-		GLfloat qaSpecularLight[]	= {1.0, 1.0, 1.0, 1.0};
-		glLightfv(GL_LIGHT0, GL_AMBIENT, qaAmbientLight);
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, qaDiffuseLight);
-		glLightfv(GL_LIGHT0, GL_SPECULAR, qaSpecularLight);
+		//// Set lighting intensity and color
+		//GLfloat qaAmbientLight[]	= {0.2, 0.2, 0.2, 1.0};
+		//GLfloat qaDiffuseLight[]	= {0.8, 0.8, 0.8, 1.0};
+		//GLfloat qaSpecularLight[]	= {1.0, 1.0, 1.0, 1.0};
+		//glLightfv(GL_LIGHT0, GL_AMBIENT, qaAmbientLight);
+		//glLightfv(GL_LIGHT0, GL_DIFFUSE, qaDiffuseLight);
+		//glLightfv(GL_LIGHT0, GL_SPECULAR, qaSpecularLight);
 
-		// Set the light position
-		GLfloat qaLightPosition[]	= {0.0, 1.0, -.5, 0.0};
-		glLightfv(GL_LIGHT0, GL_POSITION, qaLightPosition);
+		//// Set the light position
+		//GLfloat qaLightPosition[]	= {0.0, 1.0, -.5, 0.0};
+		//glLightfv(GL_LIGHT0, GL_POSITION, qaLightPosition);
 	
-		//glDisable(GL_LIGHTING);
-		//glPointSize(Paint_Param::g_point_size);
-		//glEnable(GL_POINT_SMOOTH);
-		//glBegin(GL_POINTS);
-		GLfloat global_ambient[] = { 0.1 ,0.1 ,0.1 ,1.0};
-		glLightModelfv( GL_LIGHT_MODEL_AMBIENT, global_ambient);
+		////glDisable(GL_LIGHTING);
+		////glPointSize(Paint_Param::g_point_size);
+		////glEnable(GL_POINT_SMOOTH);
+		////glBegin(GL_POINTS);
+		//GLfloat global_ambient[] = { 0.1 ,0.1 ,0.1 ,1.0};
+		//glLightModelfv( GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
 		Matrix44 mat = matrix_to_scene_coord();
 		for ( IndexType i = 0; i <  vertices_.size()/* vertices_.size()*/; i++ )
@@ -256,8 +256,8 @@ void Sample::draw(ColorMode::SphereMode&,const Vec3& bias)
 		//glEnd();
 		
 		}
-		glDisable(GL_LIGHTING);
-		glDisable(GL_LIGHT0);
+		//glDisable(GL_LIGHTING);
+		//glDisable(GL_LIGHT0);
 		glDisable(GL_DEPTH_TEST);
 	glPopAttrib();
 }
@@ -287,29 +287,29 @@ void Sample::draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r,co
 			glDisable(GL_DEPTH_TEST);	
 			break;
 								   };
-		case RenderMode::SolidMode:{
+		case RenderMode::FlatMode:{
 			
 			IndexType i_triangle;
 			IndexType n_triangel = this->n_triangle;
 			glEnable(GL_DEPTH_TEST);
-			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-			glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-			glEnable(GL_COLOR_MATERIAL);
-			glEnable(GL_LIGHTING);
-			glEnable(GL_LIGHT0);
-			glShadeModel(GL_SMOOTH);
-			SetMaterial(&material);
+			//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+			//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+			//glEnable(GL_COLOR_MATERIAL);
+			//glEnable(GL_LIGHTING);
+			//glEnable(GL_LIGHT0);
+			//glShadeModel(GL_SMOOTH);
+			//SetMaterial(&material);
 			for(i_triangle = 0; i_triangle < n_triangel;++i_triangle)
 			{
 	/*			const std::vector<NormalType>& m_norms = _model->normal_array;
 				const std::vector<VertexType>& m_vtxs = _model->vertex_array;*/
 				TriangleType* m_triangle =  this->triangle_array[i_triangle];
-				RenderMode::RenderType rt = RenderMode::PointMode;
+				RenderMode::RenderType rt = RenderMode::FlatMode;
 				m_triangle->draw( wcm, rt, mat, bias);
 			}
-			glDisable(GL_COLOR_MATERIAL);
-			glDisable(GL_LIGHTING);
-			glDisable(GL_LIGHT0);
+			//glDisable(GL_COLOR_MATERIAL);
+			//glDisable(GL_LIGHTING);
+			//glDisable(GL_LIGHT0);
 			glEnd();
 			glDisable(GL_DEPTH_TEST);
 			break;
@@ -328,6 +328,22 @@ void Sample::draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r,co
 			}
 			glDisable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
+			break;
+								  };
+		case RenderMode::FlatWireMode:{
+
+			IndexType i_triangle;
+			IndexType n_triangel = this->n_triangle;
+			glEnable(GL_DEPTH_TEST);
+
+			for(i_triangle = 0; i_triangle < n_triangel;++i_triangle)
+			{
+				TriangleType* m_triangle =  this->triangle_array[i_triangle];
+				RenderMode::RenderType rt = RenderMode::FlatWireMode;
+				m_triangle->draw( wcm, rt, mat, bias);
+			}
+			glDisable(GL_DEPTH_TEST);
+
 			break;
 								  };
 		case RenderMode::SmoothMode:{break;};
@@ -492,6 +508,31 @@ void Sample::delete_vertex_group(const std::vector<IndexType>& idx_grp )
 	//kdtree dirty
 	kd_tree_should_rebuild_ = true;
 	build_kdtree();
+
+}
+
+void Sample::set_vertex_label(const std::vector<IndexType>& idx_grp ,IndexType label)
+{
+	IndexType  i=0, j=0;
+	IndexType size = idx_grp.size();
+	if (size==0)
+	{
+		return;
+	}
+	for ( std::vector<Vertex*>::iterator iter = vertices_.begin();
+		iter != vertices_.end(); i++,++iter)
+	{
+		if ( i == idx_grp[j] )
+		{
+			//This is the node to label
+			(*iter)->set_label(label);
+			j++;
+			if ( j>=size )
+			{
+				break;
+			}
+		}
+	}
 
 }
 

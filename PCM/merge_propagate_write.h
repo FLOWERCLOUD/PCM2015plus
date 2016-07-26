@@ -1,10 +1,9 @@
 #pragma once
 #include "merge_write_utilities.h"
-#include "sample_set.h"
-#include "sample.h"
 #include "basic_types.h"
 #include <iostream>
-#include "main_window.h"
+#include <vector>
+//#include "main_window.h"
 #include "GlobalObject.h"
 
 #include "QGLViewer/qglviewer.h"
@@ -20,7 +19,7 @@ class ProxyOricolorSamplePly;
 class ProxyPly;
 class ProxyVisualLabel;
 class ProxyWriteInc;
-
+class PropagateThread;
 
 
 class Proxy
@@ -51,9 +50,9 @@ protected:
 protected:
 	char* output_file_path_ ; // ply
 	char* prefix_;
-	vector< vector<PointType> > SmpSetcoodinates;
-	vector< vector<PointType> > SmpSetnorms;
-	vector< vector<ColorType> > SmpSetColors;
+	std::vector< std::vector<PointType> > SmpSetcoodinates;
+	std::vector< std::vector<PointType> > SmpSetnorms;
+	std::vector< std::vector<ColorType> > SmpSetColors;
 
 
 };
@@ -145,7 +144,7 @@ protected:
 
 	
 
-	void generateStandaraPLY(vector< vector<PointType> >& SmpSetcoodinates ,vector< vector<PointType> >& SmpSetNorms ,vector< vector<ColorType> >& SmpSetColors);
+	void generateStandaraPLY(std::vector< std::vector<PointType> >& SmpSetcoodinates ,std::vector< std::vector<PointType> >& SmpSetNorms ,std::vector< std::vector<ColorType> >& SmpSetColors);
 	void generateStandaraPLY();
 
 	void generateSamplePly( char* _label_filename );

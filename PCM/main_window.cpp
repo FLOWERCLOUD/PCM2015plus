@@ -191,6 +191,18 @@ void main_window::createPaintSettingAction()
 	connect(ui.actionVertex_Color, SIGNAL(triggered()), this, SLOT(setVertexColorMode()));
 	connect(ui.actionLabel_Color, SIGNAL(triggered()), this, SLOT(setLabelColorMode()));
 	connect(ui.actionShow_Tracjectory, SIGNAL(triggered()), this, SLOT(showTracer()));
+	connect(ui.actionBallvertex ,SIGNAL(triggered()), this, SLOT(setBallvertexMode()));
+	//render mode
+	connect(ui.actionPoint_mode, SIGNAL(triggered()), this, SLOT(setPointMode()) );
+	connect(ui.actionFlat_mode, SIGNAL(triggered()), this, SLOT(setFlatMode()) );
+	connect(ui.actionWire_mode, SIGNAL(triggered()), this, SLOT(setWireMode()) );
+	connect(ui.actionFlatWire_mode, SIGNAL(triggered()), this, SLOT(setFlatWireMode()) );
+	connect(ui.actionSmooth_mode, SIGNAL(triggered()), this, SLOT(setSmoothMode()) );
+	connect(ui.actionTexture_mode, SIGNAL(triggered()), this, SLOT(setTextureMode()) );
+	connect(ui.actionSelect_Mode_render, SIGNAL(triggered()), this, SLOT(setSelectMode()) );
+
+
+
 	connect(ui.actionDont_Trace,SIGNAL(triggered()), this, SLOT(clearTracer()));
 	connect(ui.actionShow_Graph_WrapBox ,SIGNAL(triggered()) ,this ,SLOT(chooseGraph_WrapBox_visiable() ));
 	connect(ui.actionShow_EdgeVertexs ,SIGNAL(triggered()) ,this ,SLOT(chooseEdgeVertexs__visiable() ));
@@ -240,7 +252,11 @@ void main_window::setLabelColorMode()
 	which_color_mode_ = RenderMode::LABEL_COLOR;
 	main_canvas_->updateGL();
 }
-
+void main_window::setBallvertexMode()
+{
+	which_color_mode_ = RenderMode::SphereMode;
+	main_canvas_->updateGL();
+}
 void main_window::setSelectToolMode()
 {
 	if (cur_select_sample_idx_==-1)
@@ -266,6 +282,41 @@ void main_window::setSceneToolMode()
 	main_canvas_->updateGL();
 }
 
+void main_window::setPointMode()
+{
+	which_render_mode = RenderMode::PointMode;
+	main_canvas_->updateGL();
+};
+void main_window::setFlatMode()
+{
+	which_render_mode = RenderMode::FlatMode;
+	main_canvas_->updateGL();
+};
+void main_window::setWireMode()
+{
+	which_render_mode = RenderMode::WireMode;
+	main_canvas_->updateGL();
+};
+void main_window::setFlatWireMode()
+{
+	which_render_mode = RenderMode::FlatWireMode;
+	main_canvas_->updateGL();
+};
+void main_window::setSmoothMode()
+{
+	which_render_mode = RenderMode::PointMode;
+	main_canvas_->updateGL();
+};
+void main_window::setTextureMode()
+{
+	which_render_mode = RenderMode::TextureMode;
+	main_canvas_->updateGL();
+};
+void main_window::setSelectMode()
+{
+	which_render_mode = RenderMode::SelectMode;
+	main_canvas_->updateGL();
+};
 void main_window::createFileMenuAction()
 {
 	for (int i = 0; i < MaxRecentFiles; ++i) {
@@ -283,6 +334,8 @@ void main_window::createFileMenuAction()
 	connect(ui.actionImportFiles, SIGNAL(triggered()),this, SLOT(openFiles()));
 	connect(ui.actionSaveSnapshot ,SIGNAL(triggered()) , this ,SLOT(saveSnapshot()));
 	connect(ui.actionSavePly ,SIGNAL(triggered()) , this ,SLOT(savePLY()));
+	connect(ui.actionsaveLabelFile ,SIGNAL(triggered()) , this ,SLOT(saveLabelFile()));
+	connect(ui.actionGetlabel_from_file ,SIGNAL(triggered()) , this ,SLOT(getLabelFromFile()));
 }
 
 bool main_window::openFile()
@@ -1014,7 +1067,16 @@ bool main_window::savePLY()
 
 	return false; 
 }
-
+bool main_window::saveLabelFile()
+{
+	getCanvas()->saveLabelFile();
+	return true;
+}
+bool main_window::getLabelFromFile()
+{
+	getCanvas()->getLabelFromFile();
+	return true;
+}
 bool main_window::wakeUpThread()
 {
 

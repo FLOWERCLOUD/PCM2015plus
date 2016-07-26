@@ -36,14 +36,14 @@ void TriangleType::draw(RenderMode::WhichColorMode& wcm, RenderMode::RenderType&
 		return;
 	}
 	std::vector<Vertex*>& vs = sample_.vertices_;
-	r = RenderMode::SolidMode;
+	//r = RenderMode::PointMode;
 	switch(r)
 	{
 		case RenderMode::PointMode:{
 			
 			break;
 		}
-	case RenderMode::SolidMode:{
+	case RenderMode::FlatMode:{
 
 		glBegin(GL_TRIANGLES);
 		for( int i = 0 ;i <3 ;++i)
@@ -63,7 +63,8 @@ void TriangleType::draw(RenderMode::WhichColorMode& wcm, RenderMode::RenderType&
 				//	(float)vs[this->i_norm[i]]->nz()<<std::endl;
 
 			}
-			glColor3f(	0.5f,0.5f,0.5f
+			ColorType color2 = Color_Utility::span_color_from_table(vs[this->i_vertex[i]]->label()); 
+			glColor3f( color2(0) ,color2(1) ,color2(2)
 				/*				(GLfloat) vs[this->i_vertex[i]]->r(),
 				(GLfloat) vs[this->i_vertex[i]]->g(),
 				(GLfloat) vs[this->i_vertex[i]]->b()*/ );
@@ -100,7 +101,8 @@ void TriangleType::draw(RenderMode::WhichColorMode& wcm, RenderMode::RenderType&
 				normal_to_show(1),
 				normal_to_show(2));
 			}
-			glColor3f(	0.5f,0.5f,0.5f
+			ColorType color2 = Color_Utility::span_color_from_table(vs[this->i_vertex[i]]->label()); 
+			glColor3f( color2(0) ,color2(1) ,color2(2)
 				/*(GLfloat) vs[this->i_vertex[i]]->r(),
 				(GLfloat) vs[this->i_vertex[i]]->g(),
 				(GLfloat) vs[this->i_vertex[i]]->b() */);
@@ -116,6 +118,78 @@ void TriangleType::draw(RenderMode::WhichColorMode& wcm, RenderMode::RenderType&
 
 		break;
 							  }
+	case RenderMode::FlatWireMode:{
+
+			glBegin(GL_TRIANGLES);
+			for( int i = 0 ;i <3 ;++i)
+			{
+				if(this->i_norm[i]!=-1)
+				{
+					Vec4	tmpn( vs[this->i_norm[i]]->nx()  ,  vs[this->i_norm[i]]->ny() ,vs[this->i_norm[i]]->nz() ,1.); 
+					Vec4	normal_to_show = tmpn;//adjust_matrix * tmpn;
+
+
+					glNormal3f( 
+						normal_to_show(0),
+						normal_to_show(1),
+						normal_to_show(2));
+					//Logger<<"NORMAL: "<<(float)vs[this->i_norm[i]]->nx()<<" "<<
+					//	(float)vs[this->i_norm[i]]->ny()<<" "<<
+					//	(float)vs[this->i_norm[i]]->nz()<<std::endl;
+
+				}
+				ColorType color2 = Color_Utility::span_color_from_table(vs[this->i_vertex[i]]->label()); 
+				glColor3f( color2(0) ,color2(1) ,color2(2)
+					/*				(GLfloat) vs[this->i_vertex[i]]->r(),
+					(GLfloat) vs[this->i_vertex[i]]->g(),
+					(GLfloat) vs[this->i_vertex[i]]->b()*/ );
+				//Logger<<"COLOR: "<<vs[this->i_vertex[i]]->r()<<" "<<
+				//	vs[this->i_vertex[i]]->g()<<" "<<
+				//	vs[this->i_vertex[i]]->b()<<std::endl;
+				Vec4	tmpv( vs[this->i_vertex[i]]->x()  ,  vs[this->i_vertex[i]]->y() ,vs[this->i_vertex[i]]->z() ,1.);
+				Vec4	point_to_show = adjust_matrix * tmpv;
+				glVertex3f(	
+					point_to_show(0)+ bias(0),
+					point_to_show(1)+ bias(1),
+					point_to_show(2)+ bias(2) );
+				//Logger<<"VERTEX: "<<vs[this->i_vertex[i]]->x()<<" "<<
+				//	vs[this->i_vertex[i]]->y()<<" "<<
+				//	vs[this->i_vertex[i]]->z()<<std::endl;
+
+			}
+			glEnd();
+
+			glLineWidth(2.0f);
+			glBegin(GL_LINE_LOOP);
+			for( int i = 0 ;i <3 ;++i)
+			{
+				if(this->i_norm[i]!=-1)
+				{
+					Vec4	tmpn( vs[this->i_norm[i]]->nx()  ,  vs[this->i_norm[i]]->ny() ,vs[this->i_norm[i]]->nz() ,1.);
+					Vec4	normal_to_show = adjust_matrix * tmpn;
+
+
+					glNormal3f( 
+					normal_to_show(0),
+					normal_to_show(1),
+					normal_to_show(2));
+				}
+				glColor3f(	0.5f,0.5f,0.5f
+					/*(GLfloat) vs[this->i_vertex[i]]->r(),
+					(GLfloat) vs[this->i_vertex[i]]->g(),
+					(GLfloat) vs[this->i_vertex[i]]->b() */);
+				Vec4	tmpv( vs[this->i_vertex[i]]->x()  ,  vs[this->i_vertex[i]]->y() ,vs[this->i_vertex[i]]->z() ,1.);
+				Vec4	point_to_show = adjust_matrix * tmpv;
+				glVertex3f(	
+					point_to_show(0)+ bias(0),
+					point_to_show(1)+ bias(1),
+					point_to_show(2)+ bias(2) );
+
+			}
+			glEnd();
+
+			break;
+									}
 	case RenderMode::SmoothMode:{			break;}
 	case RenderMode::TextureMode:{			break;}
 	case RenderMode::SelectMode:{			break;}	
