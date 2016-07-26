@@ -73,34 +73,42 @@ void LayerDialog::frameItemClicked(QTreeWidgetItem* _item, int col)
 	if(mItem){
 		int clickedId = mItem->m->smpId;
 		switch(col){
-		case 0:{
-					SampleSet& smpset = SampleSet::get_instance(); 
-					if(QApplication::keyboardModifiers() == Qt::ControlModifier){
+			case 0:{
+						SampleSet& smpset = SampleSet::get_instance(); 
+						if(QApplication::keyboardModifiers() == Qt::ControlModifier){
 
-						foreach( Sample* msmp  , smpset.getSmpVector()){
+							foreach( Sample* msmp  , smpset.getSmpVector()){
 
-							msmp->set_visble(false);
-							
+								msmp->set_visble(false);							
+							}
 						}
+						bool p =smpset[clickedId].is_visible();
+						smpset[clickedId].set_visble(!p);					
+				   }break;
 
-					}
-					bool p =smpset[clickedId].is_visible();
-					smpset[clickedId].set_visble(!p);
-					
+			case 1:
+			{
+					Logger<<"layer dialog "<<1;
+					break;
+			}
+			case 2:
+			{
+				Logger<<"layer dialog "<<2;
 
-
-			   }break;
-
-		case 1:
-
-		case 2:
-
-		case 3:
-			
-			/////
-
-			break;
+				break;
+			}
+			case 3:
+			{
+				Logger<<"layer dialog "<<3;
+				break;
+			}
+			default:
+			{
+					Logger<<"layer dialog default ";
+			}			
+				/////		
 		}
+		Global_Window->setSampleSelectedIndex( clickedId);
 		Global_Window->getCanvas()->updateGL();
 		updateTable(clickedId);
 		// 此处应有更新界面的函数

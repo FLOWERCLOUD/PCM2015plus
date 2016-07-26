@@ -52,6 +52,7 @@
     <addaction name="actionShow_Graph_WrapBox"/>
     <addaction name="actionShow_EdgeVertexs"/>
     <addaction name="actionBallvertex"/>
+    <addaction name="actionShow_normal"/>
    </widget>
    <widget class="QMenu" name="menuSelect">
     <property name="title">
@@ -496,6 +497,11 @@
   <action name="actionBallvertex">
    <property name="text">
     <string>ballvertex</string>
+   </property>
+  </action>
+  <action name="actionShow_normal">
+   <property name="text">
+    <string>show normal</string>
    </property>
   </action>
  </widget>

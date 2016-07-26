@@ -7,7 +7,9 @@
 #include "paint_canvas.h"
 #include "globals.h"
 #include "color_table.h"
-
+#ifndef GL_MULTISAMPLE
+#define GL_MULTISAMPLE 0x809D
+#endif
 void SelectTool::move(QMouseEvent *e)
 {
 	if (left_mouse_button_ == true)
@@ -60,7 +62,8 @@ void SelectTool::draw()
 	Sample& sample = SampleSet::get_instance()[cur_sample_to_operate_];
 	LOCK(sample);
 	Matrix44 adjust_mat = sample.matrix_to_scene_coord();
-
+	glEnable(GL_MULTISAMPLE);
+	glEnable(GL_DEPTH_TEST);
 	glPointSize(Paint_Param::g_point_size);
 	glBegin(GL_POINTS);
 	for ( IndexType v_idx = 0; v_idx < sample.num_vertices(); v_idx++ )
@@ -71,11 +74,17 @@ void SelectTool::draw()
 			c = SELECTED_COLOR;
 		}
 		else
-			c = HIGHTLIGHTED_COLOR;
+		{
+			ColorType color2 = Color_Utility::span_color_from_table( sample[v_idx].label()); 
+			c = color2;
+		}
+		
 		glColor4f(  c(0), c(1), c(2),c(3) );
 		sample[v_idx].draw_without_color(adjust_mat);
 	}
 	glEnd();
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_MULTISAMPLE);
 	UNLOCK(sample);
 
 }

@@ -50,6 +50,7 @@ GLLogStream logstream;
 int REAL_TIME_RENDER = 0;
 extern RenderMode::WhichColorMode	which_color_mode_;
 extern RenderMode::RenderType which_render_mode;
+extern bool isShowNoraml;
 
 main_window::main_window(QWidget *parent)
 	: QMainWindow(parent),
@@ -192,6 +193,7 @@ void main_window::createPaintSettingAction()
 	connect(ui.actionLabel_Color, SIGNAL(triggered()), this, SLOT(setLabelColorMode()));
 	connect(ui.actionShow_Tracjectory, SIGNAL(triggered()), this, SLOT(showTracer()));
 	connect(ui.actionBallvertex ,SIGNAL(triggered()), this, SLOT(setBallvertexMode()));
+	connect(ui.actionShow_normal ,SIGNAL(triggered()), this, SLOT(show_normal()));
 	//render mode
 	connect(ui.actionPoint_mode, SIGNAL(triggered()), this, SLOT(setPointMode()) );
 	connect(ui.actionFlat_mode, SIGNAL(triggered()), this, SLOT(setFlatMode()) );
@@ -255,6 +257,17 @@ void main_window::setLabelColorMode()
 void main_window::setBallvertexMode()
 {
 	which_color_mode_ = RenderMode::SphereMode;
+	main_canvas_->updateGL();
+}
+void main_window::show_normal()
+{
+	if(isShowNoraml) 
+	{
+		isShowNoraml = false;
+	}else
+	{
+		isShowNoraml = true;
+	}
 	main_canvas_->updateGL();
 }
 void main_window::setSelectToolMode()
@@ -437,6 +450,37 @@ void main_window::centerframeChanged(int i)
 {
 	Logger<<"centerframe Öµ¸Ä±ä  "<< i <<std::endl;
 	main_canvas_->centerframeNum = i;
+	main_canvas_->updateGL();
+}
+void main_window::setSampleSelectedIndex(int i)
+{
+	last_select_sample_idx_ = cur_select_sample_idx_;
+	cur_select_sample_idx_ =  i;
+
+	//change the active frame
+	if (m_linkageUi)
+	{
+		m_linkageUi->setCurrentSmp(cur_select_sample_idx_);//
+	}
+
+	if (m_graphCutUi)
+	{
+		m_graphCutUi->setCurrentSmp(cur_select_sample_idx_);
+	}
+	if( m_propagateUi)
+	{
+		m_propagateUi->setCurrentSmp(cur_select_sample_idx_);
+	}
+
+
+	if (last_select_sample_idx_!= -1)
+	{
+		SampleSet::get_instance()[last_select_sample_idx_].set_selected(false);
+	}
+	if ( cur_select_sample_idx_ != -1)
+	{
+		SampleSet::get_instance()[cur_select_sample_idx_].set_selected(true);
+	}
 	main_canvas_->updateGL();
 }
 void main_window::dealtarjlabel()

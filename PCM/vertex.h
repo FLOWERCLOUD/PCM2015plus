@@ -71,6 +71,7 @@ public:
 	inline void draw_without_color(const Matrix44& adjust_matrix, const Vec3& bias);
 	void draw_with_name(unsigned int idx, const Matrix44& adjust_matrix);
 	void draw_with_sphere( const Matrix44& adjust_matrix , const Vec3& bias);
+	void drawNormal( const Matrix44& adjust_matrix , const Vec3& bias);
 protected:
 	PointType position_;
 	NormalType normal_;

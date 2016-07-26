@@ -49,6 +49,7 @@ public:
 	void draw(ColorMode::EdgePointColorMode&, const Vec3& bias = Vec3(0.,0.,0.)); // add by huayun
 	void draw(ColorMode::SphereMode&,const Vec3& bias  = Vec3(0.,0.,0.));
 	void draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r ,const Vec3& bias  = Vec3(0.,0.,0.));
+	void drawNormal(const Vec3& bias  = Vec3(0.,0.,0.) );
 	//vector< map<IndexType,Vertex*> >				lb_wrapbox_;
 	//vector< set<LinkNode> >				wrap_box_link_;
 	//void addWrapBox( std::map<IndexType,Vertex*>  _l){ lb_wrapbox_.push_back(_l);}

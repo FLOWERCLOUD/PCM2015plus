@@ -74,6 +74,7 @@ public:
 		void setVertexColorMode();
 		void setLabelColorMode();
 		void setBallvertexMode();
+		void show_normal();
 
 		void setSelectToolMode();
 		void setSceneToolMode();
@@ -109,7 +110,7 @@ public:
 
 		void layerSpinBoxChanged(int i);
 		void centerframeChanged(int i);
-
+		void setSampleSelectedIndex(int i);
 		void chooseGraph_WrapBox_visiable();
 		void Show_Graph_WrapBox();
 		void unShow_Graph_WrapBox();

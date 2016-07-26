@@ -35,15 +35,46 @@ void  Vertex::draw( const Matrix44& adjust_matrix )
 
 void  Vertex::draw_without_color( const Matrix44& adjust_matrix)
 {
+
+	//glNormal3f( normal_(0), normal_(1), normal_(2));
+	//Vec4	tmp(position_(0), position_(1), position_(2),1.);
+	//Vec4	point_to_show = adjust_matrix * tmp;
+	//glVertex3f( point_to_show(0), point_to_show(1), point_to_show(2) );
+
 	if (!visible_)
 	{
 		return;
 	}
+	ColorType color;
+	ScalarType r = 0.0f;
+	ScalarType g = 1.0f;
+	ScalarType b = 0.0f;
+	color = ColorType(r,g,b,1.);
 
-	glNormal3f( normal_(0), normal_(1), normal_(2));
+	// Set material properties
+	GLfloat qaBlack[] = {0.0, 0.0, 0.0, 1.0};
+	GLfloat qaGreen[] = {0.0, 1.0, 0.0, 1.0};
+	GLfloat qaRed[] = {1.0, 0.0, 0.0, 1.0};
+	GLfloat qaBlue[] = {0.0, 0.0, 1.0, 1.0};
+	GLfloat qaWhite[] = {1.0, 1.0, 1.0, 1.0};
+	GLfloat qaLowAmbient[] = {0.2, 0.2, 0.2, 1.0};
+	GLfloat qaFullAmbient[] = {1.0, 1.0, 1.0, 1.0};
+	GLfloat emission[] = {0.0 ,0.3 ,0.3 ,1.0};
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, qaLowAmbient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, qaBlack);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, qaBlack);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, qaBlack);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 50.0);
+
 	Vec4	tmp(position_(0), position_(1), position_(2),1.);
 	Vec4	point_to_show = adjust_matrix * tmp;
-	glVertex3f( point_to_show(0), point_to_show(1), point_to_show(2) );
+	//glVertex3f( point_to_show(0)+bias(0), point_to_show(1)+bias(1), point_to_show(2)+bias(2) );
+	glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
+	glPushMatrix();
+	glTranslatef(point_to_show(0),point_to_show(1), point_to_show(2));
+	glutSolidSphere(0.001* Paint_Param::g_point_size, 10, 10);
+	glPopMatrix();
 }
 
 void Vertex::draw( const Matrix44& adjust_matrix, const Vec3& bias )
@@ -92,7 +123,7 @@ void Vertex::draw_with_label( const Matrix44& adjust_matrix )
 	//static const IndexType color_step = 47;
 	//IndexType	label_color = (label_ * color_step) % 255;
 	//ColorType color = Color_Utility::color_from_table(label_color);
-	ColorType color = Color_Utility::span_color_from_table(label_); 
+	ColorType color = Color_Utility::span_color_from_hy_table(label_); 
 
 
 	glColor4f( color(0)/255.0,color(1)/255.0,color(2)/255.0,color(3) );
@@ -253,7 +284,24 @@ void Vertex::draw_with_sphere( const Matrix44& adjust_matrix , const Vec3& bias)
 	glutSolidSphere(0.001* Paint_Param::g_point_size, 10, 10);
 	glPopMatrix();
 
-	
-
-
+}
+void Vertex::drawNormal( const Matrix44& adjust_matrix , const Vec3& bias)
+{
+	if (!visible_)
+	{
+		return;
+	}
+	glColor3f( 0.0f , 0.0f ,1.0f );
+	PointType point_end = position_ + 0.01*normal_;
+	Vec4	tmp(position_(0), position_(1), position_(2),1.);
+	Vec4	point_to_show = adjust_matrix * tmp;
+	Vec4	tmp1(point_end(0),point_end(1), point_end(2),1.);
+	Vec4	point_to_show2 = adjust_matrix * tmp1;
+	glLineWidth(2.0f);
+	glBegin(GL_LINES);
+	glVertex3f(point_to_show(0)+bias(0),point_to_show(1)+bias(0),point_to_show(2)+bias(0));
+	glVertex3f(point_to_show2(0)+bias(0),point_to_show2(1)+bias(0),point_to_show2(2)+bias(0) );
+	//Logger<<point_to_show(0)+bias(0)<<point_to_show(1)+bias(0)<<point_to_show(2)+bias(0);
+	//Logger<<point_to_show2(0)+bias(0)<<point_to_show2(1)+bias(0)<<point_to_show2(2)+bias(0);
+	glEnd();
 }

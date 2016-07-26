@@ -276,3 +276,4 @@ x64/Release!/glut.lib
 !x64/Release/glut64.dll
 !x64/Release/QGLViewer2.dll
 !x64/Release/QGLViewer2.lib
+*.seg

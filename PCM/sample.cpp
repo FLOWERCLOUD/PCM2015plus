@@ -355,7 +355,20 @@ void Sample::draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r,co
 	
 }
 
-
+void Sample::drawNormal(const Vec3& bias)
+{
+	if (!visible_)
+	{
+		return;
+	}
+	glEnable(GL_DEPTH_TEST);
+	Matrix44 mat = matrix_to_scene_coord();
+	for( unsigned int idx = 0; idx < vertices_.size(); idx++ )
+	{
+		vertices_[idx]->drawNormal(mat ,bias);
+	}
+	glDisable(GL_DEPTH_TEST);
+}
 
 void Sample::draw_with_name()
 {

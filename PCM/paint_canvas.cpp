@@ -1,6 +1,7 @@
 #include "paint_canvas.h"
 #include "sample_set.h"
 #include "vertex.h"
+#include "triangle.h"
 #include "main_window.h"
 #include "basic_types.h"
 #include "tracer.h"
@@ -19,6 +20,7 @@ extern int REAL_TIME_RENDER;
 
 RenderMode::WhichColorMode	which_color_mode_;
 RenderMode::RenderType which_render_mode;
+bool isShowNoraml = false;
 PaintCanvas::PaintCanvas(const QGLFormat& format, QWidget *parent):
 	QGLViewer(format, parent),
 	coord_system_region_size_(150),	
@@ -66,9 +68,16 @@ void PaintCanvas::draw()
 
 	if ( !set.empty() )
 	{
+
 		glDisable(GL_MULTISAMPLE);
 		for (int i = 0; i <set.size(); i++ )
 		{
+			if(isShowNoraml)
+			{
+				glEnable(GL_MULTISAMPLE);
+				set[i].drawNormal(Paint_Param::g_step_size * (ScalarType)(i-centerframeNum));
+				glDisable(GL_MULTISAMPLE);
+			}
 			//if( i == 0 || i > 9)continue;
 			LOCK(set[i]);
 			switch (which_color_mode_)
@@ -570,6 +579,34 @@ void PaintCanvas::keyPressEvent(QKeyEvent * e)
 			updateGL();
 		}
 	}
+	switch (e->key())
+	{
+		case Qt::Key_Right :
+			{
+				Logger<<"key right";
+			}
+	
+			break ;
+		case Qt::Key_Up :
+			{
+				Logger<<"key up";
+			}
+
+			break ;
+		case Qt::Key_Left :
+			{
+				Logger<<"key left";
+			}
+	
+			break ;
+		case Qt::Key_Down :
+			{
+				Logger<<"key down";
+			}
+			break ;
+		default :
+			break ;
+	}
 	if (single_operate_tool_!=nullptr && 
 		single_operate_tool_->tool_type()==Tool::SELECT_TOOL
 		)
@@ -1018,15 +1055,22 @@ void PaintCanvas::savePLY(SavePlySetting& ss)
 		outfile<<"property   uchar red "<<std::endl;
 		outfile<<"property   uchar   green"<<std::endl;
 		outfile<<"property   uchar  blue"<<std::endl;
+		if(smpset [i].triangle_array.size() ){
+			outfile<<"element face "<< smpset [i].triangle_array.size()<<std::endl;
+			outfile<<"property list uchar int vertex_index"<<std::endl;
+		}
 		outfile<<"end_header"<<std::endl;
 		for( auto  vtxbitr = smpset[i].begin() ; vtxbitr != smpset[i].end() ;++vtxbitr ){
 			Vertex& vtx = **vtxbitr;
-			ColorType pClr = 255*vtx.color();
-
-			outfile<<vtx.x()<<" "<<vtx.y()<<" "<< vtx.z()<<" "<<vtx.nx()<<" "<<vtx.ny()<<" "<<vtx.nz()<<" "<<(int)pClr(0 ,0)<<" "<<(int)pClr(1,0)<<" "<<(int)pClr(2,0)<<std::endl;
+			ColorType pClr = Color_Utility::span_color_from_table(vtx.label()); 
+			//ColorType pClr = 255*vtx.color();
+			outfile<<vtx.x()<<" "<<vtx.y()<<" "<< vtx.z()<<" "<<vtx.nx()<<" "<<vtx.ny()<<" "<<vtx.nz()<<" "<<(int)255*pClr(0)<<" "<<(int)255*pClr(1)<<" "<<(int)255*pClr(2)<<std::endl;
 
 		}
-
+		for(int k = 0 ;k<smpset[i].triangle_array.size() ;++k)
+		{
+			outfile<<3<<" "<<smpset[i].triangle_array[k]->i_vertex[0]<<" "<< smpset[i].triangle_array[k]->i_vertex[1]<<" "<<smpset[i].triangle_array[k]->i_vertex[2]<<std::endl;
+		}
 		outfile.close();
 
 	}
@@ -1037,7 +1081,7 @@ void PaintCanvas::saveLabelFile()
 {
 
 	char fullPath[250];
-	sprintf( fullPath ,"%s","./label.txt");     //必须加入.3d ，使得文件排序正常
+	sprintf( fullPath ,"%s","./squat2_edit.seg");     //必须加入.3d ，使得文件排序正常
 	std::ofstream outfile( fullPath , std::ofstream::out);
 	SampleSet& smpset =  SampleSet::get_instance();
 	for( auto  vtxbitr = smpset[0].begin() ; vtxbitr != smpset[0].end() ;++vtxbitr ){
@@ -1052,7 +1096,7 @@ void PaintCanvas::saveLabelFile()
 void PaintCanvas::getLabelFromFile()
 {
 	char fullPath[250];
-	sprintf( fullPath ,"%s","D:/zzb/zzb_lowrank/new_STED/original/squat2/11label/squat2.seg");     //必须加入.3d ，使得文件排序正常
+	sprintf( fullPath ,"%s","D:/zzb/zzb_lowrank/new_STED/original/squat2/11label/squat2_edit.seg");     //必须加入.3d ，使得文件排序正常
 	std::ifstream infile( fullPath , std::ofstream::in);
 	SampleSet& smpset =  SampleSet::get_instance();
 	for( auto  vtxbitr = smpset[0].begin() ; vtxbitr != smpset[0].end() ;++vtxbitr ){
