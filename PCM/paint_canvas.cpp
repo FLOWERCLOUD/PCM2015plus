@@ -579,34 +579,77 @@ void PaintCanvas::keyPressEvent(QKeyEvent * e)
 			updateGL();
 		}
 	}
-	switch (e->key())
+	if( e->key() == Qt::Key_Right || e->key() == Qt::Key_Left ||e->key() == Qt::Key_Up ||e->key() == Qt::Key_Down)
 	{
+		SampleSet& ss = SampleSet::get_instance();
+		std::vector<IndexType> visbleindex;
+		for( int i = 0 ;i < ss.size() ; ++i)
+		{
+			if(ss[i].is_visible())visbleindex.push_back(i);
+		}
+		IndexType max_index ;
+		IndexType next_index;
+		switch (e->key())
+		{
+
 		case Qt::Key_Right :
 			{
-				Logger<<"key right";
+				if(!visbleindex.size())return;
+				else max_index = visbleindex[visbleindex.size() -1];
+				if( max_index + 1 < ss.size())
+				{
+					next_index = max_index + 1;
+				}else next_index = 0;
+				ss[max_index].set_visble(false);
+				ss[next_index].set_visble(true);
 			}
-	
+
 			break ;
 		case Qt::Key_Up :
 			{
-				Logger<<"key up";
+				if(!visbleindex.size())return;
+				else max_index = visbleindex[0];
+				if( max_index  > 0)
+				{
+					next_index = max_index - 1;
+				}else next_index = ss.size() -1;
+				ss[max_index].set_visble(false);
+				ss[next_index].set_visble(true);
 			}
 
 			break ;
 		case Qt::Key_Left :
 			{
-				Logger<<"key left";
+				if(!visbleindex.size())return;
+				else max_index = visbleindex[0];
+				if( max_index  > 0)
+				{
+					next_index = max_index - 1;
+				}else next_index = ss.size() -1;
+				ss[max_index].set_visble(false);
+				ss[next_index].set_visble(true);
 			}
-	
+
 			break ;
 		case Qt::Key_Down :
 			{
-				Logger<<"key down";
+				if(!visbleindex.size())return;
+				else max_index = visbleindex[visbleindex.size() -1];
+				if( max_index + 1 < ss.size())
+				{
+					next_index = max_index + 1;
+				}else next_index = 0;
+				ss[max_index].set_visble(false);
+				ss[next_index].set_visble(true);
 			}
 			break ;
 		default :
 			break ;
+		}
+		updateGL();	
+		main_window_->getLayerdialog()->updateTable(0);
 	}
+	
 	if (single_operate_tool_!=nullptr && 
 		single_operate_tool_->tool_type()==Tool::SELECT_TOOL
 		)
