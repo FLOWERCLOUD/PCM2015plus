@@ -181,8 +181,9 @@ void LayerDialog::updateTable(int row)
 				item->setForeground(3,QBrush(Qt::blue));
 			}
 			
-
 			ui_->frameTreeWidget->update();
+			//ui_->frameTreeWidget->setItemSelected( ui_->frameTreeWidget->topLevelItem(i) ,true);
+			ui_->frameTreeWidget->scrollTo( ui_->frameTreeWidget->model()->index(i,0));
 		}
 		
 	}
