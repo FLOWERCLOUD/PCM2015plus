@@ -8,25 +8,27 @@
 #include "render_types.h"
 #include "vertex.h"
 #include "triangle.h"
+#include "file_io.h"
 Sample::Sample() :vertices_(),allocator_(),kd_tree_(nullptr),
 	kd_tree_should_rebuild_(true),
 	mutex_(QMutex::NonRecursive),clayerDepth_(0)
 {
-	n_vertex = n_normal = n_triangle = 0;
+	file_type = FileIO::NONE;
+	isload_ = false;
 }
+
 Sample::~Sample()
 { 
-	vertices_.clear();
-	triangle_array.clear();
-	allocator_.free_all(); 
-	delete	kd_tree_;
+	clear();
 }
 void Sample::clear()
 {
+	isload_ = false;
 	vertices_.clear();
 	triangle_array.clear();
 	allocator_.free_all(); 
 	delete	kd_tree_;
+	kd_tree_ = NULL;
 	lb_wrapbox_.clear();
 	wrap_box_link_.clear();
 }
@@ -67,7 +69,7 @@ TriangleType* Sample::add_triangle(const TriangleType& tt)
 }
 void Sample::draw(ColorMode::ObjectColorMode&, const Vec3& bias )
 {
-	if (!visible_)
+	if (!visible_||!isload_)
 	{
 		return;
 	}
@@ -107,7 +109,7 @@ void Sample::draw(ColorMode::ObjectColorMode&, const Vec3& bias )
 
 void Sample::draw(ColorMode::VertexColorMode&, const Vec3& bias)
 {
-	if (!visible_)
+	if (!visible_||!isload_)
 	{
 		return;
 	}
@@ -128,7 +130,7 @@ void Sample::draw(ColorMode::VertexColorMode&, const Vec3& bias)
 
 void Sample::draw(ColorMode::LabelColorMode&, const Vec3& bias)
 {
-	if (!visible_)
+	if (!visible_||!isload_)
 	{
 		return;
 	}
@@ -152,7 +154,7 @@ void Sample::draw(ColorMode::LabelColorMode&, const Vec3& bias)
 
 void Sample::draw(ColorMode::WrapBoxColorMode&,const Vec3& bias)
 {
-	if (!visible_)
+	if (!visible_||!isload_)
 	{
 		return;
 	}
@@ -175,7 +177,7 @@ void Sample::draw(ColorMode::WrapBoxColorMode&,const Vec3& bias)
 }
 void Sample::draw(ColorMode::EdgePointColorMode&,const Vec3& bias)
 {
-	if (!visible_)
+	if (!visible_||!isload_)
 	{
 		return;
 	}
@@ -205,7 +207,7 @@ void Sample::draw(ColorMode::EdgePointColorMode&,const Vec3& bias)
 
 void Sample::draw(ColorMode::SphereMode&,const Vec3& bias)
 {
-	if (!visible_)
+	if (!visible_||!isload_)
 	{
 		return;
 	}
@@ -264,7 +266,7 @@ void Sample::draw(ColorMode::SphereMode&,const Vec3& bias)
 
 void Sample::draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r,const Vec3& bias)
 {
-	if (!visible_)
+	if (!visible_||!isload_)
 	{
 		return;
 	}
@@ -273,7 +275,7 @@ void Sample::draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r,co
 	{
 		case RenderMode::PointMode:{
 			IndexType i_triangle;
-			IndexType n_triangel = this->n_triangle;
+			IndexType n_triangel = this->num_triangles();
 			glEnable(GL_DEPTH_TEST);
 			for(i_triangle = 0; i_triangle < n_triangel;++i_triangle)
 			{
@@ -290,7 +292,7 @@ void Sample::draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r,co
 		case RenderMode::FlatMode:{
 			
 			IndexType i_triangle;
-			IndexType n_triangel = this->n_triangle;
+			IndexType n_triangel = this->num_triangles();
 			glEnable(GL_DEPTH_TEST);
 			//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 			//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
@@ -317,7 +319,7 @@ void Sample::draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r,co
 		case RenderMode::WireMode:{
 
 			IndexType i_triangle;
-			IndexType n_triangel = this->n_triangle;
+			IndexType n_triangel = this->num_triangles();
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_CULL_FACE);
 			for(i_triangle = 0; i_triangle < n_triangel;++i_triangle)
@@ -333,7 +335,7 @@ void Sample::draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r,co
 		case RenderMode::FlatWireMode:{
 
 			IndexType i_triangle;
-			IndexType n_triangel = this->n_triangle;
+			IndexType n_triangel = this->num_triangles();
 			glEnable(GL_DEPTH_TEST);
 
 			for(i_triangle = 0; i_triangle < n_triangel;++i_triangle)
@@ -357,7 +359,7 @@ void Sample::draw( RenderMode::WhichColorMode& wcm ,RenderMode::RenderType& r,co
 
 void Sample::drawNormal(const Vec3& bias)
 {
-	if (!visible_)
+	if (!visible_||!isload_)
 	{
 		return;
 	}
@@ -372,6 +374,10 @@ void Sample::drawNormal(const Vec3& bias)
 
 void Sample::draw_with_name()
 {
+	if (!visible_||!isload_)
+	{
+		return;
+	}
 	Matrix44 mat = matrix_to_scene_coord();
 	for( unsigned int idx = 0; idx < vertices_.size(); idx++ )
 	{
@@ -475,6 +481,10 @@ bool Sample::neighbours(const IndexType query_point_idx, const IndexType num_clo
 
 void Sample::update()
 {
+	if (!isload_)
+	{
+		return;
+	}
 	assert( vtx_matrix_.cols() == vertices_.size() );
 	IndexType v_idx = 0;
 	box_ = Box();
@@ -526,6 +536,10 @@ void Sample::delete_vertex_group(const std::vector<IndexType>& idx_grp )
 
 void Sample::set_vertex_label(const std::vector<IndexType>& idx_grp ,IndexType label)
 {
+	if (!isload_)
+	{
+		return;
+	}
 	IndexType  i=0, j=0;
 	IndexType size = idx_grp.size();
 	if (size==0)
@@ -545,6 +559,39 @@ void Sample::set_vertex_label(const std::vector<IndexType>& idx_grp ,IndexType l
 				break;
 			}
 		}
+	}
+
+}
+
+bool Sample::load()
+{
+	 bool isload = FileIO::load_point_cloud_file(this);
+	 isload_ =isload;
+	 return isload_;
+
+}
+
+bool Sample::unload()
+{
+	return false;
+}
+
+void Sample::set_visble(const bool v)
+{
+	if(v)
+	{		if(isload_)
+			{
+				visible_ = true;
+			}
+			else
+			{
+				if(load())visible_ = true;
+				else visible_ = false;
+			}
+				
+	}else
+	{
+		visible_ = v;
 	}
 
 }

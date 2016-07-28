@@ -7,12 +7,13 @@
 #include "..\ICP\ICP.h"
 #include "Eigen\Dense"
 #include "basic_types.h"
+#include "file_io.h"
 #include <QMutex>
-
 #include <set>
 class Vertex;
 class TriangleType;
 class LinkNode;
+
 namespace ColorMode{
 	struct ObjectColorMode;
 	struct VertexColorMode;
@@ -33,14 +34,24 @@ public:
 	~Sample();
 	void clear();
 
-	inline Vertex& operator[]( IndexType i ) const{ return *vertices_[i]; }
-	
-
+	inline Vertex& operator[]( IndexType i ) 
+	{ 
+		return *vertices_[i]; 	
+	}
+	inline TriangleType& getTriangle(IndexType i)
+	{ 
+		return *triangle_array[i]; 
+	}
 	Vertex* add_vertex( const PointType& pos,const NormalType& n,
 		const ColorType& c);
 	TriangleType* add_triangle(const TriangleType& tt);
 	void delete_vertex_group( const std::vector<IndexType>& idx_grp );
 	void set_vertex_label(const std::vector<IndexType>& idx_grp ,IndexType label);
+
+	virtual bool is_visible() const { return visible_; }
+	virtual void set_visble(const bool v);
+	virtual bool is_selected() const { return selected_; }
+	virtual void set_selected( const bool s ){ selected_ = s; }
 
 	void draw(ColorMode::ObjectColorMode&, const Vec3& bias = Vec3(0.,0.,0.));
 	void draw(ColorMode::VertexColorMode&,const Vec3& bias = Vec3(0.,0.,0.));
@@ -69,6 +80,7 @@ public:
 	void draw_with_name();
 
 	size_t num_vertices() const { return vertices_.size(); }
+	size_t num_triangles() const { return triangle_array.size(); }
 
 	typedef std::vector<Vertex*>::iterator	vtx_iterator;
 
@@ -112,14 +124,18 @@ public:
 	const PointType box_far_corner(){ return box_.high_corner(); }
 	
 	Box getBox(){return box_;}
+	bool load();
+	bool unload();
 
 // public:
 // 	QMutex										mutex_;
 public:
 	IndexType smpId;  //added by huayun
-	IndexType n_vertex;
-	IndexType n_normal;
-	IndexType n_triangle;
+	FileIO::FILE_TYPE file_type;
+	std::string file_path;
+	bool isload_;
+private:
+
 	std::vector<Vertex*>	vertices_;
 	std::vector<TriangleType*>  triangle_array;
 private:

@@ -26,7 +26,7 @@ namespace SampleManipulation{
 		for ( int ii = 0 ; ii<size; ++ii){
 			Sample& smp = SampleSet::get_instance()[ii];
 			std::cout<< "caculate:"<< ii<<std::endl;
-			if( !smp.triangle_array.size())  //only have points
+			if( !smp.num_triangles())  //only have points
 			{
 				for ( IndexType i=0; i < smp.num_vertices(); i++ )
 				{
@@ -74,12 +74,12 @@ namespace SampleManipulation{
 
 			}else
 			{ //has face
-				auto& m_triangles  = smp.triangle_array;
-				for ( IndexType i=0; i <m_triangles.size(); ++i )
+				//auto& m_triangles  = smp.triangle_array;
+				for ( IndexType i=0; i < smp.num_triangles(); ++i )
 				{	
-					IndexType i_vetex1 = m_triangles[i]->i_vertex[0];
-					IndexType i_vetex2 = m_triangles[i]->i_vertex[1];
-					IndexType i_vetex3 = m_triangles[i]->i_vertex[2];
+					IndexType i_vetex1 = smp.getTriangle(i).get_i_vertex(0);
+					IndexType i_vetex2 = smp.getTriangle(i).get_i_vertex(1);
+					IndexType i_vetex3 = smp.getTriangle(i).get_i_vertex(2);
 					PointType vtx1(smp[i_vetex1].x(),smp[i_vetex1].y(),smp[i_vetex1].z());
 					PointType vtx2(smp[i_vetex2].x(),smp[i_vetex2].y(),smp[i_vetex2].z());
 					PointType vtx3(smp[i_vetex3].x(),smp[i_vetex3].y(),smp[i_vetex3].z());
@@ -95,7 +95,7 @@ namespace SampleManipulation{
 					//assign the normal to all the vertex of the triangle
 					for(int x = 0 ; x<3;++x)
 					{
-						IndexType i_normal = m_triangles[i]->i_norm[x];
+						IndexType i_normal = smp.getTriangle(i).get_i_normal(x);
 						//Logger<<"norm: "<<smp[i_normal].nx()<<" "<<smp[i_normal].ny()<<" "<<smp[i_normal].nz()<<std::endl;
 						smp[i_normal].set_normal( 
 							NormalType( smp[i_normal].nx() + vector3(0),smp[i_normal].ny() +vector3(1),smp[i_normal].nz()+vector3(2) ));

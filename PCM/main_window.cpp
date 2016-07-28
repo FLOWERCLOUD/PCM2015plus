@@ -153,6 +153,10 @@ void main_window::resetSampleSet()
 {
 	cur_import_files_attr_.clear();
 	cur_select_sample_idx_ = last_select_sample_idx_ = -1;
+	for( int i = 0 ;i<SampleSet::get_instance().size();++i)
+	{
+
+	}
 	SampleSet::get_instance().clear();
 }
 
@@ -345,6 +349,7 @@ void main_window::createFileMenuAction()
 
 	updateRecentFileActions();
 	connect(ui.actionImportFiles, SIGNAL(triggered()),this, SLOT(openFiles()));
+	connect(ui.actionImportFiles_Lazy, SIGNAL(triggered()),this, SLOT(openFilesLazy()));
 	connect(ui.actionSaveSnapshot ,SIGNAL(triggered()) , this ,SLOT(saveSnapshot()));
 	connect(ui.actionSavePly ,SIGNAL(triggered()) , this ,SLOT(savePLY()));
 	connect(ui.actionsaveLabelFile ,SIGNAL(triggered()) , this ,SLOT(saveLabelFile()));
@@ -671,14 +676,91 @@ bool main_window::openFiles()
 		cur_import_files_attr_.push_back( make_pair(FileSystem::base_name(file_path), 
 			FileSystem::extension(file_path)) );
 
-		Sample* new_sample = FileIO::load_point_cloud_file(file_path, file_type,sample_idx);
+		Sample* new_sample = FileIO::load_point_cloud_file(file_path, file_type);
 		if (new_sample != nullptr)
 		{
-			SampleSet::get_instance().push_back(new_sample);
+			new_sample->isload_ = true;
+			new_sample->set_color( Color_Utility::span_color_from_table( file_idx ) );
+			SampleSet& smpset = SampleSet::get_instance();
+			smpset.push_back(new_sample);
 			new_sample->smpId = sample_idx;
 			sample_idx++;
 		}
 		
+
+	}
+
+
+	createTreeWidgetItems();
+	m_layer->updateTable();
+
+	return true;
+}
+
+bool main_window::openFilesLazy()
+{
+	QSettings settings;
+	QStringList files = settings.value("recentFileList").toStringList();
+	QString dir;
+	if(files.size() >0){
+		dir = QFileDialog::getExistingDirectory(this,tr("Import point cloud files"), files[0]);
+	}
+	else{
+		dir = QFileDialog::getExistingDirectory(this,tr("Import point cloud files") ,QString("./") );
+	}
+
+	if (dir.isEmpty())
+		return false;
+	setCurrentFile(dir);
+
+	resetSampleSet();
+
+	QDir file_dir(dir);
+	if ( !file_dir.exists() )
+	{
+		return false;
+	}
+	file_dir.setFilter(QDir::Files);
+
+	QFileInfoList file_list = file_dir.entryInfoList();
+	IndexType sample_idx = 0;
+	for (IndexType file_idx = 0; file_idx < file_list.size(); file_idx++)
+	{
+		QFileInfo file_info = file_list.at(file_idx);
+		FileIO::FILE_TYPE file_type;
+
+		if (file_info.suffix() == "xyz")
+		{
+			file_type = FileIO::XYZ;
+		}
+		else if(file_info.suffix() == "ply")
+		{
+			file_type = FileIO::PLY;
+		}
+		else if(file_info.suffix() == "obj")
+		{
+			file_type = FileIO::OBJ;
+		}
+		else
+		{
+			continue;
+		}
+
+		string file_path = file_info.filePath().toStdString();
+		cur_import_files_attr_.push_back( make_pair(FileSystem::base_name(file_path), 
+			FileSystem::extension(file_path)) );
+
+		Sample* new_sample = FileIO::lazy_load_point_cloud_file(file_path, file_type);
+		if (new_sample != nullptr)
+		{
+			new_sample->isload_ = false;			
+			new_sample->set_color( Color_Utility::span_color_from_table( file_idx ) );
+			SampleSet& smpset = SampleSet::get_instance();
+			smpset.push_back(new_sample);
+			new_sample->smpId = sample_idx;
+			sample_idx++;
+		}
+
 
 	}
 
@@ -1229,10 +1311,13 @@ void main_window::loadFile(const QString &dir)
 		cur_import_files_attr_.push_back( make_pair(FileSystem::base_name(file_path), 
 			FileSystem::extension(file_path)) );
 
-		Sample* new_sample = FileIO::load_point_cloud_file(file_path, file_type,sample_idx);
+		Sample* new_sample = FileIO::load_point_cloud_file(file_path, file_type);
 		if (new_sample != nullptr)
 		{
-			SampleSet::get_instance().push_back(new_sample);
+			new_sample->isload_ = true;
+			new_sample->set_color( Color_Utility::span_color_from_table( file_idx ) );
+			SampleSet& smpset = SampleSet::get_instance();
+			smpset.push_back(new_sample);					
 			new_sample->smpId = sample_idx;
 			sample_idx++;
 		}

@@ -41,16 +41,31 @@ namespace FileIO
 	}
 	
 
-	Sample* load_point_cloud_file( std::string filename, FILE_TYPE type, IndexType sample_idx )
+	Sample* load_point_cloud_file( std::string filename, FILE_TYPE type )
+	{
+
+
+		Sample* new_sample = new Sample;
+		new_sample->file_path = filename;
+		new_sample->file_type = type;
+		load_point_cloud_file(new_sample);
+		return new_sample;
+
+	}
+
+	bool load_point_cloud_file(Sample* new_sample)
+	{
+		return load_point_cloud_file(new_sample, new_sample->file_path ,new_sample->file_type);
+	}
+
+	bool load_point_cloud_file(Sample* new_sample, std::string filename ,FILE_TYPE type)
 	{
 		FILE* in_file = fopen(filename.c_str(), "r");
 
 		if(in_file==NULL)
-			return nullptr;
-
-		Sample* new_sample = new Sample;
-//		ScalarType vx0,vy0,vz0;
-// 		bool first_vertex = true;
+			return false;
+		//		ScalarType vx0,vy0,vz0;
+		// 		bool first_vertex = true;
 
 		if( type == FileIO::XYZ)
 		{
@@ -81,13 +96,13 @@ namespace FileIO
 
 
 			}
-	
+
 		}else if( type == FileIO::PLY){
-				int vcount=0;
-				int fcount=0;
-				fscanf(in_file,"ply\nformat ascii 1.0\nelement vertex %d\n",&vcount);
-				fscanf(in_file,"property float x\nproperty float y\nproperty float z\nproperty float nx\nproperty float ny\nproperty float nz\nproperty uchar red\nproperty uchar green\nproperty uchar blue\n");
-				fscanf(in_file,"end_header\n");
+			int vcount=0;
+			int fcount=0;
+			fscanf(in_file,"ply\nformat ascii 1.0\nelement vertex %d\n",&vcount);
+			fscanf(in_file,"property float x\nproperty float y\nproperty float z\nproperty float nx\nproperty float ny\nproperty float nz\nproperty uchar red\nproperty uchar green\nproperty uchar blue\n");
+			fscanf(in_file,"end_header\n");
 			while(true){
 
 				ScalarType vx,vy,vz,nx,ny,nz,cx,cy,cz;
@@ -107,8 +122,9 @@ namespace FileIO
 		{
 			char pref[3];
 			new_sample->clear();
-			FILE* fd = get_mesh_model_scale( filename.c_str(), &(new_sample->n_vertex),&(new_sample->n_normal),&(new_sample->n_triangle) );
-			Logger<<"nvertex "<<new_sample->n_vertex<<"nnormal "<<new_sample->n_normal<<"ntriangle"<<new_sample->n_triangle<<std::endl;
+			FILE* fd = in_file ;
+		//	FILE* fd = get_mesh_model_scale( filename.c_str(), &(new_sample->n_vertex),&(new_sample->n_normal),&(new_sample->n_triangle) );
+		//	Logger<<"nvertex "<<new_sample->n_vertex<<"nnormal "<<new_sample->n_normal<<"ntriangle"<<new_sample->n_triangle<<std::endl;
 			if(fd)
 			{
 				ScalarType vx,vy,vz,nx,ny,nz,cx,cy,cz;
@@ -131,7 +147,10 @@ namespace FileIO
 						TriangleType* tt = new TriangleType(*new_sample);
 						for(int i_v = 0; i_v<3 ; i_v++)
 						{
-							fscanf(fd, "%d",&tt->i_vertex[i_v]);
+							IndexType i_temp_v;
+							IndexType i_temp_n;
+							fscanf(fd, "%d",&i_temp_v);
+							tt->set_i_vetex(i_v ,i_temp_v);
 							if((pref[0] = (char)getc(fd)) ==' ')
 							{
 								while( (pref[0] = (char)getc(fd)) ==' ');
@@ -145,6 +164,7 @@ namespace FileIO
 							}
 							else if(pref[0] =='/')
 							{
+
 								if( (pref[0] = (char)getc(fd))!='/')
 								{
 									//while((char)get(fd) ==" ");
@@ -152,25 +172,25 @@ namespace FileIO
 									fscanf(fd ,"%d");
 									if( (pref[0] = (char)getc(fd))!='/')
 									{
-										fscanf(fd,"%d",&tt->i_norm[i_v]);
+										fscanf(fd,"%d",&i_temp_n);
+										tt->set_i_normal(i_v ,i_temp_n);
 									}
 
 								}else{
-									fscanf(fd,"%d",&tt->i_norm[i_v]);
-
+									fscanf(fd,"%d",&i_temp_n);
+									tt->set_i_normal(i_v ,i_temp_n);
 								}								
 
 							}
 
 						}
-						tt->i_vertex[0]--;
-						tt->i_norm[0] = tt->i_vertex[0];
-						tt->i_vertex[1]--;
-						tt->i_norm[1] = tt->i_vertex[1];
-						tt->i_vertex[2]--;
-						tt->i_norm[2] = tt->i_vertex[2];
+						for( int i = 0 ; i < 3 ;++i)
+						{
+							tt->set_i_vetex(i, tt->get_i_vertex(i) - 1);
+							tt->set_i_normal(i ,tt->get_i_vertex(i));  //tricky
+						}
 						new_sample->add_triangle(*tt);
-	//					ttv.push_back(tt);
+						//					ttv.push_back(tt);
 					}else if(pref[0] =='#')
 					{
 						skip_this_line(fd);
@@ -180,7 +200,7 @@ namespace FileIO
 				for(int i = 0 ; i< v.size();++i)
 				{
 					if( i+1 <= nv.size() && i+1 <= cv.size())
-					new_sample->add_vertex(v[i], nv[i], cv[i]);
+						new_sample->add_vertex(v[i], nv[i], cv[i]);
 					else if(i+1 <= nv.size())
 					{
 						new_sample->add_vertex(v[i], nv[i], RED_COLOR);
@@ -190,30 +210,43 @@ namespace FileIO
 					else
 						new_sample->add_vertex(v[i], NULL_NORMAL, RED_COLOR);
 				}
-			//	new_sample->add_triangle(triangle_array= ttv;
+				//	new_sample->add_triangle(triangle_array= ttv;
 				fclose(fd);
 			}else
 			{		
-				return NULL;
+				return false;
 			}
 
 		}
 		else{
 			fclose(in_file);
-			return NULL;
+			return false;
 		}
 
 		fclose(in_file);
-		
+
 
 		//give the new sample a color
 		new_sample->set_visble(false);
-		new_sample->set_color( Color_Utility::span_color_from_table( sample_idx ) );
 		new_sample->build_kdtree();
 		//add by huayun
 		Box box = new_sample->getBox();
 		ScalarType dia_distance = box.diag();
-		return new_sample;
-
+		return true;
 	}
+
+	Sample* lazy_load_point_cloud_file(std::string filename, FILE_TYPE type)
+	{
+		FILE* in_file = fopen(filename.c_str(), "r");
+
+		if(in_file==NULL)
+			return nullptr;
+
+		Sample* new_sample = new Sample;
+		new_sample->file_path = filename;
+		new_sample->file_type = type;
+		new_sample->set_visble(false);
+		return new_sample;
+	}
+
 }

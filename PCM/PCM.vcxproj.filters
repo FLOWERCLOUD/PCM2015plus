@@ -164,9 +164,6 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_maching_state.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="maching_state.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="caculateNorm.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -178,9 +175,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_propagate_withThread.cpp">
       <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="dlg_propagate.cpp">
-      <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="caculateNorm.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -206,26 +200,17 @@
     <ClCompile Include="caculateNorm.cpp">
       <Filter>Algorithm</Filter>
     </ClCompile>
-    <ClCompile Include="LayerDialog.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_LayerDialog.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_LayerDialog.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="saveSnapshotDialog.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_saveSnapshotDialog.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_saveSnapshotDialog.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="savePLYDialog.cpp">
-      <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_savePLYDialog.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -248,9 +233,6 @@
     <ClCompile Include="render_types.cpp">
       <Filter>Visualize</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalObject.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="propagate_withThread.cpp">
       <Filter>Algorithm</Filter>
     </ClCompile>
@@ -260,11 +242,29 @@
     <ClCompile Include="merge_write_utilities.cpp">
       <Filter>Algorithm</Filter>
     </ClCompile>
-    <ClCompile Include="BASEReader.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="PLYReader.cpp">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BASEReader.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="maching_state.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="savePLYDialog.cpp">
+      <Filter>Visualize</Filter>
+    </ClCompile>
+    <ClCompile Include="dlg_propagate.cpp">
+      <Filter>Visualize</Filter>
+    </ClCompile>
+    <ClCompile Include="LayerDialog.cpp">
+      <Filter>Visualize</Filter>
+    </ClCompile>
+    <ClCompile Include="saveSnapshotDialog.cpp">
+      <Filter>Visualize</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalObject.cpp">
+      <Filter>Basic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -510,9 +510,6 @@
     <ClInclude Include="merge_write_utilities.h">
       <Filter>Algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="GlobalObject.h">
-      <Filter>Algorithm</Filter>
-    </ClInclude>
     <ClInclude Include="snapshotsetting.h">
       <Filter>Visualize</Filter>
     </ClInclude>
@@ -539,6 +536,9 @@
     </ClInclude>
     <ClInclude Include="PLYReader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalObject.h">
+      <Filter>Basic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

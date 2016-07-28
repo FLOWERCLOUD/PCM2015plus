@@ -50,6 +50,7 @@ public:
 	public slots:
 		bool openFile();
 		bool openFiles();
+		bool openFilesLazy();
 		void selectedSampleChanged(QTreeWidgetItem * item, int column);
 
 		bool setSampleVisible();

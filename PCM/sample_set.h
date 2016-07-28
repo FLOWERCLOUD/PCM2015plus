@@ -35,7 +35,7 @@ public:
 
 	Vertex&	operator()(IndexType sample_idx, IndexType vertex_idx)
 	{
-		return  (*set_[sample_idx])[vertex_idx] ;
+			return  (*set_[sample_idx])[vertex_idx] ;
 	}
 
 	size_t size(){ return set_.size(); }

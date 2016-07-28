@@ -1098,8 +1098,8 @@ void PaintCanvas::savePLY(SavePlySetting& ss)
 		outfile<<"property   uchar red "<<std::endl;
 		outfile<<"property   uchar   green"<<std::endl;
 		outfile<<"property   uchar  blue"<<std::endl;
-		if(smpset [i].triangle_array.size() ){
-			outfile<<"element face "<< smpset [i].triangle_array.size()<<std::endl;
+		if(smpset [i].num_triangles()){
+			outfile<<"element face "<< smpset [i].num_triangles()<<std::endl;
 			outfile<<"property list uchar int vertex_index"<<std::endl;
 		}
 		outfile<<"end_header"<<std::endl;
@@ -1110,9 +1110,9 @@ void PaintCanvas::savePLY(SavePlySetting& ss)
 			outfile<<vtx.x()<<" "<<vtx.y()<<" "<< vtx.z()<<" "<<vtx.nx()<<" "<<vtx.ny()<<" "<<vtx.nz()<<" "<<(int)255*pClr(0)<<" "<<(int)255*pClr(1)<<" "<<(int)255*pClr(2)<<std::endl;
 
 		}
-		for(int k = 0 ;k<smpset[i].triangle_array.size() ;++k)
+		for(int k = 0 ;k<smpset[i].num_triangles() ;++k)
 		{
-			outfile<<3<<" "<<smpset[i].triangle_array[k]->i_vertex[0]<<" "<< smpset[i].triangle_array[k]->i_vertex[1]<<" "<<smpset[i].triangle_array[k]->i_vertex[2]<<std::endl;
+			outfile<<3<<" "<<smpset[i].getTriangle(k).get_i_vertex(0)<<" "<< smpset[i].getTriangle(k).get_i_vertex(1)<<" "<<smpset[i].getTriangle(k).get_i_vertex(2)<<std::endl;
 		}
 		outfile.close();
 

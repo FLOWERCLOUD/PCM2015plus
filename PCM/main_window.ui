@@ -36,6 +36,7 @@
     <addaction name="actionSavePly"/>
     <addaction name="actionsaveLabelFile"/>
     <addaction name="actionGetlabel_from_file"/>
+    <addaction name="actionImportFiles_Lazy"/>
    </widget>
    <widget class="QMenu" name="menuPaint">
     <property name="title">
@@ -502,6 +503,11 @@
   <action name="actionShow_normal">
    <property name="text">
     <string>show normal</string>
+   </property>
+  </action>
+  <action name="actionImportFiles_Lazy">
+   <property name="text">
+    <string>importFiles_Lazy</string>
    </property>
   </action>
  </widget>
