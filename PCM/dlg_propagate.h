@@ -5,7 +5,6 @@
 #include "basic_types.h"
 
 #include "ui_papagate_dialog.h"
-#include "propagate_withThread.h"
 
 class PropagateUI : public QDialog
 {

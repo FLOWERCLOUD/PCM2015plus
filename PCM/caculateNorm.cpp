@@ -1,6 +1,5 @@
 #include "caculateNorm.h"
 #include "sample_properity.h"
-#include "multiway_propagation.h"
 #include "sample_set.h"
 #include "vertex.h"
 #include "triangle.h"

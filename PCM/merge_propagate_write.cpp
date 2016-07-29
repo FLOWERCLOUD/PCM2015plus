@@ -502,39 +502,39 @@ void ProxyVisualLabel::run()
 
 void ProxyVisualLabel::showAllvtxLabel()
 {
-	pt_->visualAllvtx();
+//	pt_->visualAllvtx();
 }
 
 void ProxyVisualLabel::showSampleLabel()
 {
-	pt_->dp_.initialLabelDisplay();
-	pt_->visualCosegmentation(visual_label_filename_);
+//	pt_->dp_.initialLabelDisplay();
+//	pt_->visualCosegmentation(visual_label_filename_);
 }
 
 void ProxyVisualLabel::readCorr(char* _corr_fileName)
 {
 	if(NULL == _corr_fileName)return;
 	visual_corr_filename_ = _corr_fileName;
-	pt_->dp_.read_corres_file_hier(visual_corr_filename_);
+//	pt_->dp_.read_corres_file_hier(visual_corr_filename_);
 }
 
 void ProxyVisualLabel::readCorr()
 {
 	if(NULL == visual_corr_filename_)return;
-	pt_->dp_.read_corres_file_hier(visual_corr_filename_);
+//	pt_->dp_.read_corres_file_hier(visual_corr_filename_);
 }
 
 void ProxyVisualLabel::realabel(char* _label_filename)
 {
 	if( NULL ==_label_filename)return;
 	visual_label_filename_ = _label_filename;
-	pt_->dp_.read_label_file_hier(visual_label_filename_);
+//	pt_->dp_.read_label_file_hier(visual_label_filename_);
 }
 
 void ProxyVisualLabel::realabel()
 {
 	if(NULL == visual_label_filename_)return;
-	pt_->dp_.read_label_file_hier(visual_label_filename_);
+	//pt_->dp_.read_label_file_hier(visual_label_filename_);
 }
 
 ProxyVisualLabel::ProxyVisualLabel(char* _label_filename ,char* _corr_filename /*=NULL*/) : 
@@ -580,7 +580,7 @@ void ProxyProOri::propagateOriAndShow()
 
 void ProxyProOri::propagate2Ori()
 {
-	pt_->propagateLabel2Orignal();
+	//pt_->propagateLabel2Orignal();
 }
 
 ProxyProOri::ProxyProOri(char* label_filename ,char* _corr_fileName /*= NULL*/) :
@@ -746,18 +746,18 @@ void Proxy_Propagate::run()
 
 void Proxy_Propagate::Propagate()
 {
-	pt_->dp_.read_label_file_hier(label_filename_);
-	pt_->dp_.read_corres_file_hier(corr_filename_);
+	//pt_->dp_.read_label_file_hier(label_filename_);
+	//pt_->dp_.read_corres_file_hier(corr_filename_);
 
-	pt_->dp_.init_labeles_graph_hier2();
-	for( int i = centerFrame_ ;i < endFrame_;++i){
-		pt_->split_twoAjacent_graph_next( pt_->dp_,i ,i+1);
+	//pt_->dp_.init_labeles_graph_hier2();
+	//for( int i = centerFrame_ ;i < endFrame_;++i){
+	//	pt_->split_twoAjacent_graph_next( pt_->dp_,i ,i+1);
 
-	}
-	for( int i = centerFrame_ ;i > startFrame_;--i){
-		pt_->split_twoAjacent_graph_prev( pt_->dp_,i-1 ,i);
+	//}
+	//for( int i = centerFrame_ ;i > startFrame_;--i){
+	//	pt_->split_twoAjacent_graph_prev( pt_->dp_,i-1 ,i);
 
-	}
+	//}
 }
 
 void Proxy_Propagate::Propagate(char* _label_filename ,char* _corr_filename , IndexType _startFrame , IndexType _endFrame ,IndexType _centerFrame)
@@ -798,19 +798,19 @@ void Proxy_PropagateAndStepVisual::run()
 {
 	showSampleLabel();
 	//Propagate();
-	pt_->dp_.read_label_file_hier(label_filename_);
-	pt_->dp_.read_corres_file_hier(corr_filename_);
+	//pt_->dp_.read_label_file_hier(label_filename_);
+	//pt_->dp_.read_corres_file_hier(corr_filename_);
 
-	pt_->dp_.init_labeles_graph_hier2();
-	pt_->dp_.init_node_link();
-	for( int i = centerFrame_ ;i < endFrame_;++i){
-		pt_->split_twoAjacent_graph_next( pt_->dp_,i ,i+1);
+	//pt_->dp_.init_labeles_graph_hier2();
+	//pt_->dp_.init_node_link();
+	//for( int i = centerFrame_ ;i < endFrame_;++i){
+	//	pt_->split_twoAjacent_graph_next( pt_->dp_,i ,i+1);
 
-	}
-	for( int i = centerFrame_ ;i > startFrame_;--i){
-		pt_->split_twoAjacent_graph_prev( pt_->dp_,i-1 ,i);
+	//}
+	//for( int i = centerFrame_ ;i > startFrame_;--i){
+	//	pt_->split_twoAjacent_graph_prev( pt_->dp_,i-1 ,i);
 
-	}
+	//}
 }
 
 Proxy_PropagateAndStepVisual::Proxy_PropagateAndStepVisual(char* _label_filename1 , char* _corr_filename2 ,IndexType _startFrame1, IndexType _endFrame1 ,IndexType _centerFrame1) :
@@ -881,7 +881,7 @@ void ProxyWriteMergePropagate::run()
 
 void ProxyWriteMergePropagate::write()
 {
-	pt_->dp_.wirteGraphLablesAtTop(afProFilenames_);
+	//pt_->dp_.wirteGraphLablesAtTop(afProFilenames_);
 	writeMutiSamplePovray(incFileName_ ,afProFilenames_);
 }
 

@@ -5,7 +5,6 @@
 #include "sample.h"
 #include "vertex.h"
 #include <unordered_set>
-#include "multiway_propagation.h"
 using namespace std;
 #include "caculateNorm.h"
 //#define USE_ALL_CURVATURE

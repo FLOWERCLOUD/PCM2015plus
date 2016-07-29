@@ -78,7 +78,7 @@ bool ANIMATION::StateManager::run()
 		frameTimer->start(interval_);
 	}
 	//Logger<<"²Ü"<<i<<std::endl;
-	DualwayPropagation::get_instance().startframeAnimation(frameTimer);
+	//DualwayPropagation::get_instance().startframeAnimation(frameTimer);
 
 	emit stateChanged(cenumstate_ , oldState);
 	return false;

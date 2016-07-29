@@ -3,9 +3,6 @@
 
 #include <QtGui/QDialog>
 #include "basic_types.h"
-//#include "ui_GraphCutsDlg.h" //dialog form error
-#include "GCop.h"
-
 #include "ui_dlg_graphcut.h"
 
 class GraphCutUI :public QDialog
@@ -57,12 +54,6 @@ public slots:
 
 	void run(bool b)
 	{
-		GCop * graphCut = new GCop;
-		graphCut->setParamter(m_nLabels,m_nExpansion,m_nSwap,m_nGraphNeig,m_nCurNeig,m_nTradeOff,m_cSigma,m_dSigma,m_nDiffu,m_centerF);
-
-		connect( graphCut, SIGNAL(finished()), graphCut, SLOT(deleteLater()) );
-
-		graphCut->start();
 
 	}
 

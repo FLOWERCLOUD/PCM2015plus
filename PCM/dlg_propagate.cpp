@@ -21,9 +21,5 @@ void PropagateUI::run(bool b)
 	Logger<<"propagateui run"<<std::endl;
 	is_propagate_front_ = ui_.propagate_front->isChecked();
 	is_propagate_back_ = ui_.propagate_back->isChecked();
-	PropagateThread&  pt = PropagateThread::getInstance();
-	pt.setParameters(selectedSmpIdx_,centerframe_,front_endframe_,back_endframe_ ,is_propagate_front_ ,is_propagate_back_);
-	//Q_ASSERT( connect( &pt ,SIGNAL( finished()) , &pt , SLOT( deleteLater())) );
-	//connect( &pt ,SIGNAL( finished()) , &pt , SLOT( deleteLater())) ;
-	pt.start();
+
 }

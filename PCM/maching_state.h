@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QMainWindow>
 #include <QTimer>
-#include "multiway_propagation.h"
 namespace ANIMATION{
 	enum clickedId{ BACKID, STOPID, LABEL_COLOR ,RUNID ,PAUSEID, NEXTID};
 	enum AState{STOPSTATE ,RUNSTATE, PAUSESTATE ,ERRORSTATE , BUFFERINGSTATE};

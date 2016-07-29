@@ -3,7 +3,6 @@
 
 #include <QtGui/QDialog>
 #include "basic_types.h"
-#include"trajectory_classifier.h"
 //#include "traj_clustering.h"
 #include "ui_JLinkageDlg.h"
 
@@ -48,21 +47,7 @@ public:
 
 		void run(bool b)
 		{
-			//TrajClusteringThread* cluster = new TrajClusteringThread(selectedSmpIdx);
 
-			isRigid = ui.rigid->isChecked();
-
-			isEqual = ui.equal->isChecked();
-
-			TrajectoryClassifier* cluster = new TrajectoryClassifier(selectedSmpIdx);
-			
-			cluster->setNeigNum(neigNum);
-
-			cluster->setParamter(trajLen,resolution,lambda,threshold,modelT,smallLife,isEqual,isRigid);
-
-			connect( cluster, SIGNAL(finished()), cluster, SLOT(deleteLater()) );
-
-			cluster->start();
 		}
 
 		void getTrajLen(const QString& txt)

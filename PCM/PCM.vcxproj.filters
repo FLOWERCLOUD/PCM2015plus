@@ -98,38 +98,8 @@
     <ClCompile Include="select_tool.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_trajectory_classifier.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_trajectory_classifier.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="trajectory_classifier.cpp">
-      <Filter>Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="DeformableRegistration.cpp">
-      <Filter>Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_DeformaleRegistration.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_DeformaleRegistration.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="spectral_clustering.cpp">
-      <Filter>Algorithm</Filter>
-    </ClCompile>
     <ClCompile Include="sample_properity.cpp">
       <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="graph_cut_node.cpp">
-      <Filter>Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="GCop.cpp">
-      <Filter>Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="gco-v3.0\GCoptimization.cpp">
-      <Filter>Algorithm</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_dlg_Jlinkage.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -142,15 +112,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_dlg_graphcuts.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="co_segmentation.cpp">
-      <Filter>Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="plans_fit.cpp">
-      <Filter>Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="multiway_propagation.cpp">
-      <Filter>Algorithm</Filter>
     </ClCompile>
     <ClCompile Include="caculateNorm.cpp">
       <Filter>Algorithm</Filter>
@@ -173,9 +134,6 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_dlg_propagate.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_propagate_withThread.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="caculateNorm.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -192,9 +150,6 @@
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_maching_state.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_propagate_withThread.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="caculateNorm.cpp">
@@ -233,9 +188,6 @@
     <ClCompile Include="render_types.cpp">
       <Filter>Visualize</Filter>
     </ClCompile>
-    <ClCompile Include="propagate_withThread.cpp">
-      <Filter>Algorithm</Filter>
-    </ClCompile>
     <ClCompile Include="merge_propagate_write.cpp">
       <Filter>Algorithm</Filter>
     </ClCompile>
@@ -271,17 +223,11 @@
     <CustomBuild Include="main_window.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="trajectory_classifier.h">
-      <Filter>Algorithm</Filter>
-    </CustomBuild>
     <CustomBuild Include="main_window.h">
       <Filter>Visualize</Filter>
     </CustomBuild>
     <CustomBuild Include="paint_canvas.h">
       <Filter>Visualize</Filter>
-    </CustomBuild>
-    <CustomBuild Include="DeformaleRegistration.h">
-      <Filter>Algorithm</Filter>
     </CustomBuild>
     <CustomBuild Include="GeneratedFiles\ui_dlg_clustering.h">
       <Filter>Generated Files</Filter>
@@ -361,24 +307,6 @@
     <CustomBuild Include="bfs_classifier.hpp">
       <Filter>Algorithm</Filter>
     </CustomBuild>
-    <CustomBuild Include="gco-v3.0\GCoptimization.h">
-      <Filter>Algorithm</Filter>
-    </CustomBuild>
-    <CustomBuild Include="GCop.h">
-      <Filter>Algorithm</Filter>
-    </CustomBuild>
-    <CustomBuild Include="graph_cut_node.h">
-      <Filter>Algorithm</Filter>
-    </CustomBuild>
-    <CustomBuild Include="J_linkage_Matlab.hpp">
-      <Filter>Algorithm</Filter>
-    </CustomBuild>
-    <CustomBuild Include="spectral_clustering.h">
-      <Filter>Algorithm</Filter>
-    </CustomBuild>
-    <CustomBuild Include="traj2model_distance.h">
-      <Filter>Algorithm</Filter>
-    </CustomBuild>
     <CustomBuild Include="dlg_Jlinkage.h">
       <Filter>Visualize</Filter>
     </CustomBuild>
@@ -399,9 +327,6 @@
     </CustomBuild>
     <CustomBuild Include="GeneratedFiles\ui_GraphCutsDlg.h">
       <Filter>Generated Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="co_segmentation.h">
-      <Filter>Algorithm</Filter>
     </CustomBuild>
     <CustomBuild Include="dlg_clustering.ui">
       <Filter>Form Files</Filter>
@@ -427,18 +352,6 @@
     <CustomBuild Include="tt.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="multiway_propagation.h">
-      <Filter>Algorithm</Filter>
-    </CustomBuild>
-    <CustomBuild Include="plans_fit.h">
-      <Filter>Algorithm</Filter>
-    </CustomBuild>
-    <CustomBuild Include="point2Plan_distance.h">
-      <Filter>Algorithm</Filter>
-    </CustomBuild>
-    <CustomBuild Include="RANSAC_PLAN.h">
-      <Filter>Algorithm</Filter>
-    </CustomBuild>
     <CustomBuild Include="dlg_fitPlan.h">
       <Filter>Visualize</Filter>
     </CustomBuild>
@@ -453,9 +366,6 @@
     </CustomBuild>
     <CustomBuild Include="papagate_dialog.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="propagate_withThread.h">
-      <Filter>Algorithm</Filter>
     </CustomBuild>
     <CustomBuild Include="dlg_propagate.h">
       <Filter>Visualize</Filter>
@@ -483,9 +393,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="traj2AffineModel_distance.h">
-      <Filter>Algorithm</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>

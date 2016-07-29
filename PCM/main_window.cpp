@@ -19,13 +19,9 @@
 #include "file_io.h"
 #include "color_table.h"
 #include "time.h"
-#include "trajectory_classifier.h"
-#include "tracer.h"
-#include "DeformaleRegistration.h"
-#include "spectral_clustering.h"
 
+#include "tracer.h"
 #include "sample_properity.h"
-#include "multiway_propagation.h"
 #include "maching_state.h"
 #include "saveSnapshotDialog.h"
 #include "savePLYDialog.h"
@@ -128,14 +124,7 @@ main_window::main_window(QWidget *parent)
 	createAction();
 	createStatusBar();
 
-//	if(m_linkageUi || m_graphCutUi /*|| m_planFitUi*/)
-//	{
-		m_linkageUi  = NULL;
-		m_graphCutUi = NULL;
-		
-		m_propagateUi  =NULL;
-		/*m_planFitUi = NULL;*/
-//	}
+
 
 	//srand(time(NULL));
 
@@ -394,19 +383,6 @@ void main_window::selectedSampleChanged(QTreeWidgetItem * item, int column)
 	cur_select_sample_idx_ = item->text(0).toInt();
 
 	//change the active frame
-	if (m_linkageUi)
-	{
-	  m_linkageUi->setCurrentSmp(cur_select_sample_idx_);//
-	}
-
-	if (m_graphCutUi)
-	{
-	  m_graphCutUi->setCurrentSmp(cur_select_sample_idx_);
-	}
-	if( m_propagateUi)
-	{
-	  m_propagateUi->setCurrentSmp(cur_select_sample_idx_);
-	}
 
 
 	if (last_select_sample_idx_!= -1)
@@ -447,7 +423,6 @@ void main_window::layerSpinBoxChanged(int i)
 		SampleSet::get_instance()[cur_select_sample_idx_].clayerDepth_ = i;
 		emit LabelGraphDepthChanged(i);
 	} 
-	DualwayPropagation::get_instance().changedDepthAndDispaly( i);
 	main_canvas_->updateGL();
 
 }
@@ -461,21 +436,6 @@ void main_window::setSampleSelectedIndex(int i)
 {
 	last_select_sample_idx_ = cur_select_sample_idx_;
 	cur_select_sample_idx_ =  i;
-
-	//change the active frame
-	if (m_linkageUi)
-	{
-		m_linkageUi->setCurrentSmp(cur_select_sample_idx_);//
-	}
-
-	if (m_graphCutUi)
-	{
-		m_graphCutUi->setCurrentSmp(cur_select_sample_idx_);
-	}
-	if( m_propagateUi)
-	{
-		m_propagateUi->setCurrentSmp(cur_select_sample_idx_);
-	}
 
 
 	if (last_select_sample_idx_!= -1)
@@ -508,11 +468,6 @@ void main_window::dealtarjlabel()
 		traj_label_vec.push_back(label);
 	};
 
-
-	//label.push_back(1);
-	
-	//label.push_back(7);
-	DualwayPropagation::get_instance().show_correspondingframeandlabel(frame ,traj_label_vec);
 	main_canvas_->updateGL();
 }
 //connect( ui.actionButtonback, SIGNAL(triggered() ) , this ,SLOT(layerSpinBoxChanged(int)) );
@@ -861,74 +816,33 @@ void main_window::showCoordinateAndIndexUnderMouse( const QPoint& point )
 void main_window::doClustering()
 {
 
-// 	TrajectoryClassifier* classifier = new TrajectoryClassifier(cur_select_sample_idx_);
-// 	connect(classifier, SIGNAL(finish_compute()), this, SLOT(finishClustering()));
-// 	connect(classifier, SIGNAL(finished()), classifier, SLOT(deleteLater() ));
-// 	classifier->start();
 
-// 	JLinkageUI *dlg = new JLinkageUI(cur_select_sample_idx_);
-// 	dlg->init();
-// 	dlg->show();
-
-	m_linkageUi = new JLinkageUI(cur_select_sample_idx_);
-	m_linkageUi->init();
-	m_linkageUi->show();
 
 
 
 }
 void main_window::doRegister()
 {
-	DeformableRegistration* register_ = new DeformableRegistration();
-	connect(register_,SIGNAL(finish_compute()),this,SLOT(finishRegister()));
-	connect(register_,SIGNAL(finished()),register_,SLOT(deleteLater()));
-	register_->start();
+
 }
 void main_window::doGraphCut()
 {
-	GraphNodeCtr* graphCut = new GraphNodeCtr();
-	connect(graphCut, SIGNAL(finish_compute()), this, SLOT(finishGraphCut()));
-	connect(graphCut,SIGNAL(finished()),graphCut,SLOT(deleteLater()));
-	graphCut->start();
+
 }
 
 void main_window::doGCOptimization()
 {
-// 	GCop* gc= new GCop();
-// 	connect(gc,SIGNAL(finish_compute()),this,SLOT(finishGCotimization()));
-// 	connect(gc,SIGNAL(finished()),gc,SLOT(deleteLater()));
-// 	gc->start();
-
- 	m_graphCutUi = new GraphCutUI(cur_select_sample_idx_);
- 	m_graphCutUi->init();
- 	m_graphCutUi->show();
 
 }
 
 void main_window::doPlanFit()
 {
-	PlanClassifier* planF = new PlanClassifier(cur_select_sample_idx_);
-	connect(planF, SIGNAL(finish_compute()), this, SLOT(finishDoPlanFit()) );
-	connect(planF, SIGNAL(finished()),planF,SLOT(deleteLater()));
-	planF->start();
-
-// 	m_planFitUi = new PlanFitUI(cur_select_sample_idx_);
-// 
-// 	m_planFitUi->init();
-// 
-// 	m_planFitUi->show();
-
-
 
 
 }
 
 void main_window::doPropagate()
 {
- Logger<<"init doPropagate"<<std::endl;
-	m_propagateUi = new PropagateUI(cur_select_sample_idx_);
-	m_propagateUi->init();
-	m_propagateUi->show();
 
 }
 
@@ -986,26 +900,17 @@ void main_window::computeSampleNormal()
 
 void main_window::batchTrajClustering()
 {
-	iterate_sample_idx_ = 0;
-	iterateTrajClustering();
+
 }
 
 void main_window::visDistor()
 {
-		TrajectoryClassifier* classifier = new TrajectoryClassifier(cur_select_sample_idx_);
-		classifier->visDistor();
+
 }
 
 void main_window::iterateTrajClustering()
 {
-	if ( iterate_sample_idx_>=SampleSet::get_instance().size() )
-	{
-		return ;
-	}
-	TrajectoryClassifier* cluster = new TrajectoryClassifier(iterate_sample_idx_++);
-	connect( cluster, SIGNAL(finished()), cluster, SLOT(deleteLater()) );
-	connect(cluster,SIGNAL(finish_compute()), this, SLOT(iterateTrajClustering()));
-	cluster->start();
+
 }
 using namespace ANIMATION;
 bool main_window::runOrPause()
@@ -1093,15 +998,11 @@ void main_window::processButtonRunOrPuase()
 	}
 	Logger<<"²Ü"<<i<<std::endl;
 	//if(!REAL_TIME_RENDER)
-	DualwayPropagation::get_instance().startframeAnimation(frameTimer);
 }
 
 void main_window::excFrameAnimation()
 {
-	//if(!REAL_TIME_RENDER)
-	DualwayPropagation::get_instance().excFrameAnimation();
-	//ui.treeWidget->fin
-	//m_layer->updateTable(0);
+
 	main_canvas_->updateGL();
 }
 

@@ -10,16 +10,7 @@
 #include <map>
 #include <QLabel>
 #include "select_tool.h"
-#include "graph_cut_node.h"
-
-#include "plans_fit.h"
-
-#include "GCop.h"
-
-#include"dlg_Jlinkage.h"
-#include "dlg_graphcuts.h"
 #include "maching_state.h"
-
 #include "dlg_propagate.h"
 #include "LayerDialog.h"
 //#include "dlg_fitPlan.h"
@@ -199,8 +190,8 @@ private:
 
 	//UI
 private:
-	JLinkageUI * m_linkageUi;
-	GraphCutUI * m_graphCutUi;
+	//JLinkageUI * m_linkageUi;
+	//GraphCutUI * m_graphCutUi;
 	//PlanFitUI* m_planFitUi;
 	PropagateUI* m_propagateUi;
 	LayerDialog* m_layer;
