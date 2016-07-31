@@ -681,6 +681,11 @@ bool main_window::openFilesLazy()
 	IndexType sample_idx = 0;
 	for (IndexType file_idx = 0; file_idx < file_list.size(); file_idx++)
 	{
+		if(file_idx  == 506)
+		{
+			QFileInfo file_info = file_list.at(file_idx);
+		}
+
 		QFileInfo file_info = file_list.at(file_idx);
 		FileIO::FILE_TYPE file_type;
 
@@ -718,7 +723,7 @@ bool main_window::openFilesLazy()
 
 
 	}
-
+	SampleSet& smpset = SampleSet::get_instance();
 
 	createTreeWidgetItems();
 	m_layer->updateTable();

@@ -237,15 +237,16 @@ namespace FileIO
 
 	Sample* lazy_load_point_cloud_file(std::string filename, FILE_TYPE type)
 	{
-		FILE* in_file = fopen(filename.c_str(), "r");
+		//FILE* in_file = fopen(filename.c_str(), "r");
 
-		if(in_file==NULL)
-			return nullptr;
+		//if(in_file==NULL)
+		//	return nullptr;
 
 		Sample* new_sample = new Sample;
 		new_sample->file_path = filename;
 		new_sample->file_type = type;
 		new_sample->set_visble(false);
+		//fclose(in_file);
 		return new_sample;
 	}
 
