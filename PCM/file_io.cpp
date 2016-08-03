@@ -1,8 +1,12 @@
 #include "file_io.h"
 #include "basic_types.h"
 #include "sample.h"
+#include "sample_set.h"
+#include "vertex.h"
 #include "triangle.h"
 #include "render_types.h"
+#include <fstream>
+#include <string>
 namespace FileIO
 {
 	void skip_this_line(FILE* fd)
@@ -248,6 +252,74 @@ namespace FileIO
 		new_sample->set_visble(false);
 		//fclose(in_file);
 		return new_sample;
+	}
+
+	bool saveFile(std::string fullPath,FILE_TYPE type ,IndexType smp_idx)
+	{
+		std::ofstream outfile( fullPath, std::ofstream::out);
+		FileIO::FILE_TYPE ftype;
+		switch( type)
+		{
+		case FileIO::PLY:
+			{
+				SampleSet& smpset =  SampleSet::get_instance();
+				IndexType frameNum = smpset.size();
+
+					/*char path[100];
+					strcpy(path ,outfile.toStdString().c_str());*/	
+					outfile<<"ply"<<std::endl;
+					outfile<<"format ascii 1.0"<<std::endl;
+					IndexType vtxnum = smpset[smp_idx].num_vertices();
+					outfile<<"element vertex "<< vtxnum<<std::endl;
+					outfile<<"property   float   x"<<std::endl;
+					outfile<<"property   float   y "<<std::endl;
+					outfile<<"property   float   z "<<std::endl;
+					outfile<<"property   float   nx"<<std::endl;
+					outfile<<"property   float   ny "<<std::endl;
+					outfile<<"property   float   nz "<<std::endl;
+					outfile<<"property   uchar red "<<std::endl;
+					outfile<<"property   uchar   green"<<std::endl;
+					outfile<<"property   uchar  blue"<<std::endl;
+					if(smpset [smp_idx].num_triangles()){
+						outfile<<"element face "<< smpset [smp_idx].num_triangles()<<std::endl;
+						outfile<<"property list uchar int vertex_index"<<std::endl;
+					}
+					outfile<<"end_header"<<std::endl;
+					for( auto  vtxbitr = smpset[smp_idx].begin() ; vtxbitr != smpset[smp_idx].end() ;++vtxbitr ){
+						Vertex& vtx = **vtxbitr;
+						ColorType pClr = Color_Utility::span_color_from_table(vtx.label()); 
+						//ColorType pClr = 255*vtx.color();
+						outfile<<vtx.x()<<" "<<vtx.y()<<" "<< vtx.z()<<" "<<vtx.nx()<<" "<<vtx.ny()<<" "<<vtx.nz()<<" "<<(int)255*pClr(0)<<" "<<(int)255*pClr(1)<<" "<<(int)255*pClr(2)<<std::endl;
+
+					}
+					for(int k = 0 ;k<smpset[smp_idx].num_triangles() ;++k)
+					{
+						outfile<<3<<" "<<smpset[smp_idx].getTriangle(k).get_i_vertex(0)<<" "<< smpset[smp_idx].getTriangle(k).get_i_vertex(1)<<" "<<smpset[smp_idx].getTriangle(k).get_i_vertex(2)<<std::endl;
+					}
+					outfile.close();
+
+
+		}
+			break;
+		case FileIO::OBJ:
+			{
+
+			}
+			break;
+		case FileIO::OFF:
+			{
+
+			}
+			break;
+		default:{
+
+				}
+		
+
+	}
+
+
+		return true;
 	}
 
 }

@@ -6,13 +6,14 @@ class Sample;
 
 namespace FileIO
 {
-	enum FILE_TYPE{ XYZ,PLY,OBJ,NONE };
+	enum FILE_TYPE{ XYZ,PLY,OBJ,OFF,NONE };
 
 	Sample* load_point_cloud_file( std::string filename, FILE_TYPE type);
 	bool load_point_cloud_file(Sample*);
 	bool load_point_cloud_file(Sample*, std::string filename ,FILE_TYPE type);
 	bool lazy_load_point_cloud_file(Sample*);
 	Sample* lazy_load_point_cloud_file(std::string filename, FILE_TYPE type);
+	bool saveFile(std::string,FILE_TYPE type ,IndexType smp_idx);
 }
 
 #endif

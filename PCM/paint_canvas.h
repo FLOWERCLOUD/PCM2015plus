@@ -4,7 +4,7 @@
 #include "QGLViewer/qglviewer.h"
 #include "select_tool.h"
 #include "snapshotsetting.h"
-#include "savePLYDialog.h"
+#include "saveplysetting.h"
 
 class main_window;
 class SavePlySetting;

@@ -80,7 +80,7 @@ void Sample::draw(ColorMode::ObjectColorMode&, const Vec3& bias )
 	glEnable(GL_POINT_SMOOTH);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	glEnable(GL_DEPTH_TEST);
 	
 
 	ColorType c;
@@ -104,6 +104,7 @@ void Sample::draw(ColorMode::ObjectColorMode&, const Vec3& bias )
 		vertices_[i]->draw_without_color(mat, bias);
 	}
 	glEnd();
+	glDisable(GL_DEPTH_TEST);
 
 }
 
@@ -113,7 +114,7 @@ void Sample::draw(ColorMode::VertexColorMode&, const Vec3& bias)
 	{
 		return;
 	}
-
+	glEnable(GL_DEPTH_TEST);
 	glPointSize(Paint_Param::g_point_size);
 	glEnable(GL_POINT_SMOOTH);
 	glBegin(GL_POINTS);
@@ -125,7 +126,7 @@ void Sample::draw(ColorMode::VertexColorMode&, const Vec3& bias)
 		vertices_[i]->draw(mat,bias);
 	}
 	glEnd();
-
+	glDisable(GL_DEPTH_TEST);
 }
 
 void Sample::draw(ColorMode::LabelColorMode&, const Vec3& bias)
@@ -137,6 +138,7 @@ void Sample::draw(ColorMode::LabelColorMode&, const Vec3& bias)
 	//if ( selected_ )
 	{
 		//glDisable(GL_LIGHTING);
+		glEnable(GL_DEPTH_TEST);
 		glPointSize(Paint_Param::g_point_size);
 		glEnable(GL_POINT_SMOOTH);
 		glBegin(GL_POINTS);
@@ -147,6 +149,7 @@ void Sample::draw(ColorMode::LabelColorMode&, const Vec3& bias)
 			vertices_[i]->draw_with_label(mat,bias);
 		}
 		glEnd();
+		glDisable(GL_DEPTH_TEST);
 		//glEnable(GL_LIGHTING);
 	}
 

@@ -9,8 +9,8 @@ public:
 	bool isAjustView;
 	bool isOriColor;
 	bool islabeledcor;
-	QString startframe;
-	QString endframe;
+	int startframe;
+	int endframe;
 
 	QString format;
 
@@ -22,11 +22,11 @@ public:
 	{
 		outdir = ".";
 		basename = "snapshot";
-		bool isAjustView = false ;
-		bool isOriColor = true;
-		bool islabeledcor = false;
-		int startframe = 0;
-		int endframe = 0;
+		isAjustView = false ;
+		isOriColor = true;
+		islabeledcor = false;
+		startframe = 0;
+		endframe = 0;
 		format = "ply";
 		/*	transparentBackground = true;
 		snapAllLayers = false;

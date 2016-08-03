@@ -27,8 +27,8 @@ void SavePlyDialog::setValues(const SavePlySetting& ss)
 	ui->checkbox_isadjustview->setChecked(settings.isAjustView);
 	ui->checkBox_isoricolor->setChecked(settings.isOriColor);
 	ui->checkBox_is_labeledcolor->setChecked(settings.islabeledcor);
-	ui->line_startframe->setText(settings.startframe);
-	ui->line_endframe->setText(settings.endframe);
+	ui->line_startframe->setText(QString::number(settings.startframe,10));
+	ui->line_endframe->setText(QString::number(settings.endframe,10));
 	if(settings.format == "ply"){
 		ui->comboBox->setCurrentIndex(0);
 	}
@@ -49,8 +49,8 @@ SavePlySetting SavePlyDialog::getValues()
 	settings.isAjustView = ui->checkbox_isadjustview;
 	settings.isOriColor = ui->checkBox_isoricolor;
 	settings.islabeledcor = ui->checkBox_is_labeledcolor;
-	settings.startframe = ui->line_startframe->text();
-	settings.endframe = ui->line_endframe->text();
+	settings.startframe = ui->line_startframe->text().toInt();
+	settings.endframe = ui->line_endframe->text().toInt();
 	return settings;
 }
 
