@@ -11,32 +11,9 @@ class JLinkageUI : public QDialog
 {
 	Q_OBJECT
 public:
-	JLinkageUI(IndexType _selectedSmpIdx):selectedSmpIdx(_selectedSmpIdx)
-	{
-		ui.setupUi(this);
-	}
+	JLinkageUI(IndexType _selectedSmpIdx);
 
-	void init()
-	{
-		connect( ui.TrajLen, SIGNAL( textEdited(const QString&) ), this, SLOT( getTrajLen(const QString&) ) );
-
-		connect( ui.Resolution, SIGNAL( textEdited(const QString&) ), this, SLOT( getResolution(const QString&) ) );
-
-		connect( ui.Lambda, SIGNAL( valueChanged(int) ), this, SLOT( updateLambda(int) ) );
-
-		connect( ui.Threshold, SIGNAL( valueChanged(int) ), this, SLOT( updateThreshold(int) ) );
-
-		connect( ui.modelT,SIGNAL( textEdited(const QString&)) , this,SLOT(getModelT(const QString&) ) );
-
-		connect( ui.smallLife, SIGNAL (textEdited(const QString&)), this, SLOT(getSmallLife(const QString&) ) );
-
-
-		connect(ui.neigbhorNum,SIGNAL(valueChanged(int)) ,this, SLOT(updateNeigbhorNum(int)) );
-
-		connect( ui.pushButton, SIGNAL(clicked(bool)), this, SLOT(run(bool)) );
-
-	
-	}
+	void init();
 
 	void setCurrentSmp(IndexType _curSmp)
 	{

@@ -11,6 +11,10 @@
 #include <unistd.h>
 #define get_current_dir getcwd
 #endif
+
+#include<fstream>  
+#include <iostream>
+
 using namespace std;
 
 template< class  Point, class Line, class Point2LineDistance >
@@ -68,6 +72,25 @@ public:
 				distMat[ k++ ] = p2l_dist_func_(point_set_[pi], line_set_[li]);
 			}
 		}
+#ifdef J_LINKAGE_DEBUG
+		streambuf *backup;
+		backup = cout.rdbuf(); 
+		ofstream log("G:\\point_data\\hytest\\panda20160314\\pandalabelandcorr\\log.txt");
+		streambuf * oldbuf =  cout.rdbuf(log.rdbuf());  
+		k=0;
+		cout<<"matrix size: "<<ln*pn<<endl;
+		cout<<"lamda: "<<p2l_dist_func_.lamda<<endl;
+		for ( size_t li=0; li<ln; li++  )
+		{
+			for (size_t pi=0; pi<pn; pi++)
+			{
+				cout << distMat[ k++ ]<<"  " ;
+			}
+		}
+		cout <<endl;
+		cout.rdbuf(backup);
+		log.close();
+#endif
 		Logger<< "ps init elapse time: "<<(size_t)((clock()-old_time)/CLOCKS_PER_SEC)<<"s"<<std::endl;
 		Logger<<"open Matlab Engine.\n";
 		old_time = clock();
@@ -97,11 +120,18 @@ public:
 
 		mxArray *mx_dm = mxCreateDoubleMatrix(pn, ln, mxREAL);
 		memcpy((char*)mxGetPr(mx_dm),(char*)distMat, pn*ln*sizeof(P2LDistanceType));
+		Logger<<"sizeof(P2LDistanceType): "<<sizeof(P2LDistanceType)<<endl;
+		Logger<<"pn: "<<pn<<"ln: "<<ln<<endl;
+		Logger<<"matrix size:"<<pn*ln*sizeof(P2LDistanceType)<<endl;
 		engPutVariable(ep, "totd", mx_dm);
 		mxArray *mx_threshold = mxCreateDoubleMatrix(1,1,mxREAL);
 		memcpy((char*)mxGetPr(mx_threshold),(char*)(&p2l_dist_func_.lamda), sizeof(P2LDistanceType));
 		engPutVariable(ep, "threshold", mx_threshold);
 		engEvalString(ep, "[T,Z,Y,totdbin]=clusterPoints(totd,threshold);");
+#ifdef J_LINKAGE_DEBUG
+		engEvalString(ep,"save('G:\\point_data\\hytest\\panda20160314\\pandalabelandcorr\\matrx.mat','totd');");
+		engEvalString(ep,"save('G:\\point_data\\hytest\\panda20160314\\pandalabelandcorr\\t.mat','T');");
+#endif
 		Logger<<result_buffer<<std::endl;
 		mxArray* mx_labels = NULL;
 		mx_labels = engGetVariable( ep, "T" ); 
@@ -124,6 +154,19 @@ public:
 		{
 			label_set_[i] = (int)labels[i];
 		}
+#ifdef J_LINKAGE_DEBUG
+		backup = cout.rdbuf(); 
+		ofstream log2("G:\\point_data\\hytest\\panda20160314\\pandalabelandcorr\\label.txt");
+		oldbuf =  cout.rdbuf(log2.rdbuf());  
+
+		for ( size_t i=0; i<pn; i++ )
+		{
+			cout<<label_set_[i]<<"  ";
+		}
+		cout <<endl;
+		cout.rdbuf(backup);
+		log2.close();
+#endif
 		mxDestroyArray( mx_threshold );
 		mxDestroyArray(mx_dm);
 		engClose(ep);

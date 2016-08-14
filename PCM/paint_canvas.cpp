@@ -27,7 +27,7 @@ PaintCanvas::PaintCanvas(const QGLFormat& format, QWidget *parent):
 	single_operate_tool_(nullptr),
 	show_trajectory_(false)
 {
-	which_color_mode_ =SphereMode/*VERTEX_COLOR*/,
+	which_color_mode_ =VERTEX_COLOR/*VERTEX_COLOR*/,
 	which_render_mode =RenderMode::PointMode,
 
 	fov = 60;

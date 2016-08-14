@@ -266,6 +266,9 @@
     <ClCompile Include="GlobalObject.cpp">
       <Filter>Basic</Filter>
     </ClCompile>
+    <ClCompile Include="dlg_Jlinkage.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="main_window.qrc">

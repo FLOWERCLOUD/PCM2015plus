@@ -12,19 +12,7 @@ class TrajectoryClassifier : public QThread
 	Q_OBJECT
 
 public:
-	TrajectoryClassifier(IndexType cFrame)
-	{
-		centerFrame = cFrame;
-		trajLen = 2;   //1
-		octreeRes = 32;
-		perC = 0.6;
-		threshold = 0.7;
-		modelT = 1;
-		lifeT = 2;
-		isEqual = true;
-		//isEqual = false;
-		isRigid = false;
-	}
+	TrajectoryClassifier(IndexType cFrame);
 
 	void run() ; //Q_DECL_OVERRIDE;
 

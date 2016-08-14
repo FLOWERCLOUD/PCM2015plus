@@ -168,6 +168,7 @@
     <ClCompile Include="console.cpp" />
     <ClCompile Include="co_segmentation.cpp" />
     <ClCompile Include="DeformableRegistration.cpp" />
+    <ClCompile Include="dlg_Jlinkage.cpp" />
     <ClCompile Include="dlg_propagate.cpp" />
     <ClCompile Include="file_io.cpp" />
     <ClCompile Include="gco-v3.0\GCoptimization.cpp" />
@@ -1982,6 +1983,8 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR_64_10)\bin\moc.exe</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Performing Custom Build Tools 5</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Performing Custom Build Tools 5</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR_64_10)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_XML_LIB  "-IC:\Program Files\MATLAB\R2011b\extern\include" "-I.\GeneratedFiles" "-I." "-I$(QTDIR_64_10)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR_64_10)\include\QtCore" "-I$(QTDIR_64_10)\include\QtGui" "-I$(QTDIR_64_10)\include\QtOpenGL" "-I$(QTDIR_64_10)\include\QtWidgets" "-I.\.." "-I$(QTDIR_64_10)\include\QtXml" "-I.\..\eigen-3-1-4" "-IF:\opencv\build\include\opencv" "-IF:\opencv\build\include\opencv2" "-IF:\opencv\build\include"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR_64_10)\bin\moc.exe</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="savePLYDialog.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR_64_10)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_XML_LIB  "-IC:\Program Files\MATLAB\R2011b\extern\include" "-I.\GeneratedFiles" "-I." "-I$(QTDIR_64_10)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR_64_10)\include\QtCore" "-I$(QTDIR_64_10)\include\QtGui" "-I$(QTDIR_64_10)\include\QtOpenGL" "-I$(QTDIR_64_10)\include\QtWidgets" "-I.\.." "-I$(QTDIR_64_10)\include\QtXml" "-I.\..\eigen-3-1-4" "-IF:\opencv\build\include\opencv" "-IF:\opencv\build\include\opencv2" "-IF:\opencv\build\include"</Command>

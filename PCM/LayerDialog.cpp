@@ -88,23 +88,23 @@ void LayerDialog::frameItemClicked(QTreeWidgetItem* _item, int col)
 
 			case 1:
 			{
-					Logger<<"layer dialog "<<1;
+				//	Logger<<"layer dialog "<<1;
 					break;
 			}
 			case 2:
 			{
-				Logger<<"layer dialog "<<2;
+			//	Logger<<"layer dialog "<<2;
 
 				break;
 			}
 			case 3:
 			{
-				Logger<<"layer dialog "<<3;
+			//	Logger<<"layer dialog "<<3;
 				break;
 			}
 			default:
 			{
-					Logger<<"layer dialog default ";
+				//	Logger<<"layer dialog default ";
 			}			
 				/////		
 		}
