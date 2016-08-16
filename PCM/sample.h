@@ -126,16 +126,17 @@ public:
 	Box getBox(){return box_;}
 	bool load();
 	bool unload();
-
+	bool isLoaded(){ return isload_;}
+	void setLoaded(bool _isloaded){ isload_ = _isloaded; }
 // public:
 // 	QMutex										mutex_;
 public:
 	IndexType smpId;  //added by huayun
 	FileIO::FILE_TYPE file_type;
 	std::string file_path;
-	bool isload_;
+	
 private:
-
+	bool isload_;
 	std::vector<Vertex*>	vertices_;
 	std::vector<TriangleType*>  triangle_array;
 private:

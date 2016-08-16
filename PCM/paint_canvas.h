@@ -40,8 +40,8 @@ public:
 	//save ply
 	SavePlySetting splys;
 	void savePLY(SavePlySetting& ss);
-	void saveLabelFile();
-	void getLabelFromFile();
+	void saveLabelFile(std::string filename ,IndexType selected_frame_idx = 0);
+	void getLabelFromFile(std::string filename,IndexType selected_frame_idx = 0);
 	//show trajectory
 	void showSelectedlabelTraj(std::vector<int>& _selectedlabeltraj);
 	

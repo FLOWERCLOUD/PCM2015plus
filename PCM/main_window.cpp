@@ -634,7 +634,7 @@ bool main_window::openFiles()
 		Sample* new_sample = FileIO::load_point_cloud_file(file_path, file_type);
 		if (new_sample != nullptr)
 		{
-			new_sample->isload_ = true;
+			new_sample->setLoaded(true);
 			new_sample->set_color( Color_Utility::span_color_from_table( file_idx ) );
 			SampleSet& smpset = SampleSet::get_instance();
 			smpset.push_back(new_sample);
@@ -713,7 +713,7 @@ bool main_window::openFilesLazy()
 		Sample* new_sample = FileIO::lazy_load_point_cloud_file(file_path, file_type);
 		if (new_sample != nullptr)
 		{
-			new_sample->isload_ = false;			
+			new_sample->setLoaded(false);			
 			new_sample->set_color( Color_Utility::span_color_from_table( file_idx ) );
 			SampleSet& smpset = SampleSet::get_instance();
 			smpset.push_back(new_sample);
@@ -804,6 +804,7 @@ void main_window::showCoordinateAndIndexUnderMouse( const QPoint& point )
 	else
 	{
 		Sample& cur_selected_sample = SampleSet::get_instance()[cur_select_sample_idx_];
+		if(!cur_selected_sample.isLoaded())return;
 		Vec4 v_pre(v.x - Paint_Param::g_step_size(0)*(cur_select_sample_idx_-main_canvas_->centerframeNum),
 			v.y - Paint_Param::g_step_size(1)*(cur_select_sample_idx_-main_canvas_->centerframeNum),
 			v.z - Paint_Param::g_step_size(2)*(cur_select_sample_idx_-main_canvas_->centerframeNum) ,1.);
@@ -1101,12 +1102,42 @@ bool main_window::savePLY()
 }
 bool main_window::saveLabelFile()
 {
-	getCanvas()->saveLabelFile();
+	QSettings settings;
+	QString path ;
+	QStringList files = settings.value("recentFileList").toStringList();
+	QString dir;
+	if(files.size() >0){
+		path = QFileDialog::getSaveFileName(this,tr("save label file"),files[0]+QString("./label.seg"),tr("label Files (*.seg)"));
+		//dir = QFileDialog::getExistingDirectory(this,tr("save label file"), files[0]);
+	}
+	else{
+		path = QFileDialog::getSaveFileName(this,tr("save label file"),QString("./label.seg"),tr("label Files (*.seg)"));
+	}
+
+	if (path.isEmpty())
+		return false;
+	getCanvas()->saveLabelFile(path.toStdString(),cur_select_sample_idx_);
 	return true;
 }
 bool main_window::getLabelFromFile()
 {
-	getCanvas()->getLabelFromFile();
+	QSettings settings;
+	QString path ;
+	QStringList files = settings.value("recentFileList").toStringList();
+	QString dir;
+	if(files.size() >0){
+		path = QFileDialog::getOpenFileName(this,tr("get label file"),files[0],tr("label Files (*.seg)"));
+		//dir = QFileDialog::getExistingDirectory(this,tr("save label file"), files[0]);
+	}
+	else{
+		path = QFileDialog::getOpenFileName(this,tr("get label file"),QString("./"),tr("label Files (*.seg)"));
+	}
+
+	if (path.isEmpty())
+		return false;
+
+
+	getCanvas()->getLabelFromFile(path.toStdString(),cur_select_sample_idx_);
 	return true;
 }
 bool main_window::wakeUpThread()
@@ -1220,7 +1251,7 @@ void main_window::loadFile(const QString &dir)
 		Sample* new_sample = FileIO::load_point_cloud_file(file_path, file_type);
 		if (new_sample != nullptr)
 		{
-			new_sample->isload_ = true;
+			new_sample->setLoaded(true);
 			new_sample->set_color( Color_Utility::span_color_from_table( file_idx ) );
 			SampleSet& smpset = SampleSet::get_instance();
 			smpset.push_back(new_sample);					

@@ -28,7 +28,7 @@ PaintCanvas::PaintCanvas(const QGLFormat& format, QWidget *parent):
 	single_operate_tool_(nullptr),
 	show_trajectory_(false)
 {
-	which_color_mode_ =SphereMode/*VERTEX_COLOR*/,
+	which_color_mode_ =VERTEX_COLOR/*SphereMode*/,
 	which_render_mode =RenderMode::PointMode,
 
 	fov = 60;
@@ -1105,14 +1105,15 @@ void PaintCanvas::savePLY(SavePlySetting& ss)
 	
 
 }
-void PaintCanvas::saveLabelFile()
+void PaintCanvas::saveLabelFile(std::string filename ,IndexType selected_frame_idx)
 {
-
-	char fullPath[250];
-	sprintf( fullPath ,"%s","./squat2_edit.seg");     //必须加入.3d ，使得文件排序正常
-	std::ofstream outfile( fullPath , std::ofstream::out);
+	if(selected_frame_idx <0||selected_frame_idx +1>SampleSet::get_instance().size())return;
+	//char fullPath[250];
+	//sprintf( fullPath ,"%s","./squat2_edit.seg");     //必须加入.3d ，使得文件排序正常
+	std::ofstream outfile( filename , std::ofstream::out);
 	SampleSet& smpset =  SampleSet::get_instance();
-	for( auto  vtxbitr = smpset[0].begin() ; vtxbitr != smpset[0].end() ;++vtxbitr ){
+	smpset[selected_frame_idx].set_visble(true);
+	for( auto  vtxbitr = smpset[selected_frame_idx].begin() ; vtxbitr != smpset[selected_frame_idx].end() ;++vtxbitr ){
 		Vertex& vtx = **vtxbitr;
 		outfile<<vtx.label()<<std::endl;
 
@@ -1121,13 +1122,15 @@ void PaintCanvas::saveLabelFile()
 	outfile.close();
 
 }
-void PaintCanvas::getLabelFromFile()
+void PaintCanvas::getLabelFromFile(std::string filename ,IndexType selected_frame_idx)
 {
-	char fullPath[250];
-	sprintf( fullPath ,"%s","D:/zzb/zzb_lowrank/new_STED/original/squat2/11label/squat2_edit.seg");     //必须加入.3d ，使得文件排序正常
-	std::ifstream infile( fullPath , std::ofstream::in);
+	if(selected_frame_idx <0||selected_frame_idx +1>SampleSet::get_instance().size())return;
+	//char fullPath[250];
+	//sprintf( fullPath ,"%s","D:/zzb/zzb_lowrank/new_STED/original/squat2/11label/squat2_edit.seg");     //必须加入.3d ，使得文件排序正常
+	std::ifstream infile( filename , std::ofstream::in);
 	SampleSet& smpset =  SampleSet::get_instance();
-	for( auto  vtxbitr = smpset[0].begin() ; vtxbitr != smpset[0].end() ;++vtxbitr ){
+	smpset[selected_frame_idx].set_visble(true);
+	for( auto  vtxbitr = smpset[selected_frame_idx].begin() ; vtxbitr != smpset[selected_frame_idx].end() ;++vtxbitr ){
 		int label = 0;
 		infile>>label;
 		Vertex& vtx = **vtxbitr;

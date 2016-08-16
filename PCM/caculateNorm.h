@@ -1,8 +1,7 @@
 #pragma  once
 #include <QThread>
 #include "basic_types.h"
-#include "sample.h"
-#include "octree.h"
+
 namespace SampleManipulation{
 
 	class CaculateNorm :public QThread
