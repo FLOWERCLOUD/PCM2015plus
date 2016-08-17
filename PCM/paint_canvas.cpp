@@ -423,9 +423,15 @@ void PaintCanvas::mousePressEvent(QMouseEvent *e)
 	if (single_operate_tool_!=nullptr && 
 		single_operate_tool_->tool_type()==Tool::SELECT_TOOL)
 	{
-		single_operate_tool_->press(e);
+		if(!(QApplication::keyboardModifiers() == Qt::AltModifier))
+		{
+
+			QGLViewer::mousePressEvent(e);
+		}
+		else
+			single_operate_tool_->press(e);
 	}
-	//else
+	else
 		QGLViewer::mousePressEvent(e);
 
 
@@ -438,7 +444,13 @@ void PaintCanvas::mouseMoveEvent(QMouseEvent *e)
 	if (single_operate_tool_!=nullptr && 
 		single_operate_tool_->tool_type()==Tool::SELECT_TOOL)
 	{
-		single_operate_tool_->move(e);
+
+		if(!(QApplication::keyboardModifiers() == Qt::AltModifier))
+		{
+
+			QGLViewer::mouseMoveEvent(e);
+		}else
+			single_operate_tool_->move(e);
 	}
 	else
 		QGLViewer::mouseMoveEvent(e);
@@ -452,7 +464,12 @@ void PaintCanvas::mouseReleaseEvent(QMouseEvent *e)
 		single_operate_tool_->tool_type()==Tool::SELECT_TOOL
 		)
 	{
-		single_operate_tool_->release(e);
+		if(!(QApplication::keyboardModifiers() == Qt::AltModifier))
+		{
+
+			QGLViewer::mouseReleaseEvent(e);
+		}else
+			single_operate_tool_->release(e);
 	}
 	else
 		QGLViewer::mouseReleaseEvent(e);
