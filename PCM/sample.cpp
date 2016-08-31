@@ -10,6 +10,7 @@
 #include "triangle.h"
 #include "file_io.h"
 #include <set>
+#include <algorithm>
 Sample::Sample() :vertices_(),allocator_(),kd_tree_(nullptr),
 	kd_tree_should_rebuild_(true),
 	mutex_(QMutex::NonRecursive),clayerDepth_(0)
@@ -603,16 +604,16 @@ void Sample::set_visble(const bool v)
 //rearrange the label in order
 void Sample::smoothLabel()
 {
-	std::set<int> labels;
+	std::set<int> labels; //to sort the lable in ascend order
 	for( auto iter = begin() ; iter!=end(); ++iter)
 	{
 		labels.insert( (*iter)->label());
 	}
 	Logger<<"smooth label:\n ";
 
-	std::vector<int> old_label(labels.size());
+	std::vector<int> old_label( labels.size()); 
 	std::copy(labels.begin(),labels.end(), old_label.begin());
-	std::vector<int> labelmap(old_label[old_label.size()-1]);
+	std::vector<int> labelmap( *std::max_element(old_label.begin(),old_label.end()) + 1); //we must use the max label +1as the size
 	int count = 0;
 	for(int i = 0;i<old_label.size();++i)
 	{
