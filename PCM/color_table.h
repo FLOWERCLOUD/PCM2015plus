@@ -2,7 +2,7 @@
 #define _COLOR_TABLE_H
 #include "basic_types.h"
 
-#define SELECTED_COLOR ColorType(1.0f, 0.0f, 0.0f, 1.0f)
+#define SELECTED_COLOR ColorType(0.5f, 0.5f, 0.5f, 1.0f)
 #define HIGHTLIGHTED_COLOR ColorType(0.0f, 0.0f, 0.0f, 1.0f) //edited by huayun ,origin is 1.0f
 
 

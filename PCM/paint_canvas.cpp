@@ -758,9 +758,38 @@ void PaintCanvas::keyPressEvent(QKeyEvent * e)
 					target_label = 15;
 					break;
 				}
+			case Qt::Key_G :
+				{
+					target_label = 16;
+					break;
+				}
+			case Qt::Key_H :
+				{
+					target_label = 17;
+					break;
+				}
+			case Qt::Key_I :
+				{
+					target_label = 18;
+					break;
+				}
+			case Qt::Key_J :
+				{
+					target_label = 19;
+					break;
+				}
+			case Qt::Key_K :
+				{
+					target_label = 20;
+					break;
+				}
+			case Qt::Key_Alt:
+				{
+					return; //ignore it
+				}
 			default:
 				{
-					target_label = 0;
+					return; //target_label = 0;
 				}
 		}
 		SelectTool*	select_tool = dynamic_cast<SelectTool*>(single_operate_tool_);
@@ -771,8 +800,9 @@ void PaintCanvas::keyPressEvent(QKeyEvent * e)
 		Sample& smp = SampleSet::get_instance()[cur_selected_sample_idx];
 
 		smp.lock();
-		Logger<<"selected "<<selected_items.size()<<"  "<<" label"<<target_label;
+		//Logger<<"selected "<<selected_items.size()<<"  "<<" label"<<target_label;
 		smp.set_vertex_label(selected_items ,target_label);
+		smp.smoothLabel();
 		smp.unlock();
 
 		//reset tree widget
@@ -842,6 +872,23 @@ void PaintCanvas::showSelectedTraj()
 	}
 	this->show_trajectory_ = true;
 }
+void PaintCanvas::showSelectedFrameLabel(std::vector<int>& showed_label,int curSelectedFrame)
+{
+	Sample& csmp= SampleSet::get_instance()[curSelectedFrame];
+	for( auto iter = csmp.begin();iter !=csmp.end();++iter)
+	{
+		int label_id = (*iter)->label();
+		int i;
+		for( i = 0; i <showed_label.size() ;++i)
+		{
+			if( label_id == showed_label[i] )break;
+		}
+		if( i == showed_label.size())(*iter)->set_visble(false);
+		else (*iter)->set_visble(true);
+	}
+	Logger<<showed_label.size()<<"  "<<curSelectedFrame;
+
+}
 void PaintCanvas::showSelectedlabelTraj(std::vector<int>& _selectedlabeltraj)
 {
 	/*Tracer& tracer = Tracer::get_instance();
@@ -861,6 +908,8 @@ void PaintCanvas::showSelectedlabelTraj(std::vector<int>& _selectedlabeltraj)
 	}*/
 
 }
+
+
 
 void PaintCanvas::pasteTile()
 {

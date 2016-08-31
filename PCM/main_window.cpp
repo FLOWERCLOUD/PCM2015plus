@@ -79,16 +79,20 @@ main_window::main_window(QWidget *parent)
 	QHBoxLayout* LayerDialoglayout = new QHBoxLayout();
 	QHBoxLayout* centetframelayout = new QHBoxLayout();
 	QHBoxLayout* trj_labelLayout = new QHBoxLayout();
+	QHBoxLayout* frame_labelLayout = new QHBoxLayout();
 	LayerDialoglayout->addWidget(new QLabel("layer") );
 	LayerDialoglayout->addWidget(ui.LayerSpinBox);
 	centetframelayout->addWidget(new QLabel("center frame"));
 	centetframelayout->addWidget(ui.centerframe);
 	trj_labelLayout->addWidget(ui.text_trajectory_label);
 	trj_labelLayout->addWidget(ui.button_traj_label);
+	frame_labelLayout->addWidget(ui.showlabel_lineEdit);
+	frame_labelLayout->addWidget(ui.show_label_Button);
 
 	layerlayout->addLayout(LayerDialoglayout);
 	layerlayout->addLayout(centetframelayout);
 	layerlayout->addLayout(trj_labelLayout);
+	layerlayout->addLayout(frame_labelLayout);
 	multiwidget->setLayout(layerlayout);
 	layerDock->setWidget(multiwidget);
 	this->addDockWidget(static_cast<Qt::DockWidgetArea>(1), layerDock);
@@ -208,6 +212,7 @@ void main_window::createPaintSettingAction()
 	connect( ui.centerframe ,SIGNAL( valueChanged(int)) ,this ,SLOT(centerframeChanged(int)) );
 
 	connect(ui.button_traj_label, SIGNAL(clicked()), this, SLOT(dealtarjlabel()) );
+	connect(ui.show_label_Button, SIGNAL(clicked()), this, SLOT(Framelabel()) );
 	connect(ui.actionWakeWorkThread ,  SIGNAL(triggered()), this, SLOT(wakeUpThread() ) );
 	//connect( ui.actionButton2stop, SIGNAL(triggered() ) , this ,SLOT(layerSpinBoxChanged(int)) );
 	StateManager::getInstance().setWindowrefer(this);
@@ -467,6 +472,31 @@ void main_window::dealtarjlabel()
 	while(istring>>label){
 		traj_label_vec.push_back(label);
 	};
+
+	main_canvas_->updateGL();
+}
+void main_window::Framelabel()
+{
+	std::stringstream istring(ui.showlabel_lineEdit->text().toStdString());
+	static int labelidx = 0;
+	Logger<<"framelabel  "<<std::endl;
+
+//	std::vector<int> frame;
+
+//	frame.push_back(main_canvas_->centerframeNum);
+	/*frame.push_back(52);
+	frame.push_back(53);
+	frame.push_back(54);*/
+	//std::vector<int> traj_label_vec;
+	
+	int label;
+	std::vector<int> frame_label;
+	frame_label.clear();
+	while(istring>>label){
+		frame_label.push_back(label);
+	};
+
+	main_canvas_->showSelectedFrameLabel(frame_label ,cur_select_sample_idx_);
 
 	main_canvas_->updateGL();
 }

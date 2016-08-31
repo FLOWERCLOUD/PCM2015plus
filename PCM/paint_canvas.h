@@ -44,7 +44,7 @@ public:
 	void getLabelFromFile(std::string filename,IndexType selected_frame_idx = 0);
 	//show trajectory
 	void showSelectedlabelTraj(std::vector<int>& _selectedlabeltraj);
-	
+	void showSelectedFrameLabel(std::vector<int>& showed_label,int curSelectedFrame);
 
 	
 protected:
@@ -73,7 +73,7 @@ private:
 	IndexType tileCol ,tileRow , totalCols ,totalRows;
 	IndexType currSnapLayer;  // snapshot; total number of layers and current layer rendered
 	bool is_key_l_pressed;
-
+	std::vector<int> showed_label;
 
 public:
 	

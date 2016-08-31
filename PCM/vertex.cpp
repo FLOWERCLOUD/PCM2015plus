@@ -123,10 +123,10 @@ void Vertex::draw_with_label( const Matrix44& adjust_matrix )
 	//static const IndexType color_step = 47;
 	//IndexType	label_color = (label_ * color_step) % 255;
 	//ColorType color = Color_Utility::color_from_table(label_color);
-	ColorType color = Color_Utility::span_color_from_hy_table(label_); 
+	ColorType color = Color_Utility::span_color_from_table(label_); 
 
-
-	glColor4f( color(0)/255.0,color(1)/255.0,color(2)/255.0,color(3) );
+	glColor4f( color(0),color(1),color(2),color(3) );
+	//glColor4f( color(0)/255.0,color(1)/255.0,color(2)/255.0,color(3) );
 	glNormal3f( normal_(0), normal_(1), normal_(2));
 	Vec4	tmp(position_(0), position_(1), position_(2),1.);
 	Vec4	point_to_show = adjust_matrix * tmp;
@@ -146,10 +146,13 @@ void Vertex::draw_with_label( const Matrix44& adjust_matrix, const Vec3& bias )
 	//IndexType	label_color = (label_ * color_step) % 255;
 	//ColorType color = Color_Utility::color_from_table(label_color);
 //	ColorType color = Color_Utility::span_color_from_table(label_);//可视化标签 7-28 
-	ColorType color = Color_Utility::span_color_from_hy_table(label_);
+	ColorType color = Color_Utility::span_color_from_table(label_); 
+
+	glColor4f( color(0),color(1),color(2),color(3) );
+//	ColorType color = Color_Utility::span_color_from_hy_table(label_);
 	//ColorType color = Color_Utility::color_map_one(val_);//可视化曲率
 
-	glColor4f( color(0)/255.0,color(1)/255.0,color(2)/255.0,color(3) );
+//	glColor4f( color(0)/255.0,color(1)/255.0,color(2)/255.0,color(3) );
 	glNormal3f( normal_(0), normal_(1), normal_(2));
 	Vec4	tmp(position_(0), position_(1), position_(2),1.);
 	Vec4	point_to_show = adjust_matrix * tmp;

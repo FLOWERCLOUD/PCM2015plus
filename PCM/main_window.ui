@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1122</width>
-    <height>656</height>
+    <height>837</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -203,6 +203,29 @@
        <width>131</width>
        <height>31</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="showlabel_lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>540</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="show_label_Button">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>540</y>
+       <width>75</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>show_label</string>
      </property>
     </widget>
    </widget>

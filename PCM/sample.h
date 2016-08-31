@@ -128,6 +128,7 @@ public:
 	bool unload();
 	bool isLoaded(){ return isload_;}
 	void setLoaded(bool _isloaded){ isload_ = _isloaded; }
+	void smoothLabel();
 // public:
 // 	QMutex										mutex_;
 public:

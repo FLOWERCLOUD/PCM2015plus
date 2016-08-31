@@ -89,6 +89,7 @@ public:
 		bool saveLabelFile();
 		bool getLabelFromFile();
 		void dealtarjlabel();
+		void Framelabel();
 		bool wakeUpThread();
 		void logText(QString as,int level);/*char* text ,int mode*/
 

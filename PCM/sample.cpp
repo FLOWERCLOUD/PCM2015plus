@@ -9,6 +9,7 @@
 #include "vertex.h"
 #include "triangle.h"
 #include "file_io.h"
+#include <set>
 Sample::Sample() :vertices_(),allocator_(),kd_tree_(nullptr),
 	kd_tree_should_rebuild_(true),
 	mutex_(QMutex::NonRecursive),clayerDepth_(0)
@@ -563,6 +564,7 @@ void Sample::set_vertex_label(const std::vector<IndexType>& idx_grp ,IndexType l
 			}
 		}
 	}
+	Logger<<"set vertx label groupsize "<<idx_grp.size()<<" label : "<<label<<"\n";
 
 }
 
@@ -598,7 +600,32 @@ void Sample::set_visble(const bool v)
 	}
 
 }
+//rearrange the label in order
+void Sample::smoothLabel()
+{
+	std::set<int> labels;
+	for( auto iter = begin() ; iter!=end(); ++iter)
+	{
+		labels.insert( (*iter)->label());
+	}
+	Logger<<"smooth label:\n ";
 
+	std::vector<int> old_label(labels.size());
+	std::copy(labels.begin(),labels.end(), old_label.begin());
+	std::vector<int> labelmap(old_label[old_label.size()-1]);
+	int count = 0;
+	for(int i = 0;i<old_label.size();++i)
+	{
+		labelmap[ old_label[i]] = count ;		
+		Logger<<"old :"<<old_label[i]<<"new label "<<count<<std::endl;
+		++count;
+	}
+	for( auto iter = begin() ;iter!= end();++iter)
+	{
+		(*iter)->set_label( labelmap[(*iter)->label()]);
+	}
+
+}
 
 
 
