@@ -172,7 +172,13 @@ void SelectTool::end_select()
 	// (selectBuffer())[4*i+3] is the id pushed on the stack.
 	selected_vertex_indices_.clear();
 	for (int i=0; i<nbHits; ++i)
-		selected_vertex_indices_.push_back(select_buffer_[4*i+3]);
+	{
+		IndexType index = select_buffer_[4*i+3];
+		if(set[cur_sample_to_operate_][index].is_visible() )//only select visible point
+			selected_vertex_indices_.push_back(index);
+
+	}
+
 	
 	std::sort( selected_vertex_indices_.begin(), selected_vertex_indices_.end() );
 
